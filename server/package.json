@@ -1,0 +1,39 @@
+{
+  "name": "personal-blog-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon --exec ts-node app.ts",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/ali-oss": "^6.0.7",
+    "@types/axios": "^0.14.0",
+    "@types/koa": "^2.11.8",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-static": "^4.0.1",
+    "@types/koa__cors": "^3.0.2",
+    "@types/koa__multer": "^2.0.2",
+    "@types/koa__router": "^8.0.4",
+    "@types/node": "^14.14.25",
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "@koa/multer": "^3.0.0",
+    "@koa/router": "^10.0.0",
+    "ali-oss": "^6.13.2",
+    "axios": "^0.21.1",
+    "class-transformer": "^0.3.2",
+    "class-validator": "^0.13.1",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-static": "^5.0.0",
+    "markdown-it": "^12.0.4",
+    "multer": "^1.4.2",
+    "reflect-metadata": "^0.1.13"
+  }
+}
