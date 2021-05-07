@@ -4,7 +4,7 @@ import cors from '@koa/cors'
 import koaStatic from 'koa-static'
 import bodyParser from 'koa-bodyparser'
 import 'reflect-metadata'
-import './db/connect'
+import './models/init'
 
 const app = new Koa();
 
