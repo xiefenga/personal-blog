@@ -15,7 +15,8 @@ const sequelize = new Sequelize({
   ...config,
   dialect: 'mysql',
   define: { freezeTableName: true },
-  models: [Article, Category, Tag, ArticleCagtegories, ArticleTags, Comment]
+  models: [Article, Category, Tag, ArticleCagtegories, ArticleTags, Comment],
+  logging: false
 });
 
 export default sequelize
