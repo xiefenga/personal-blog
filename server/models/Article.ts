@@ -3,7 +3,7 @@ import Comment from './Comment'
 import Category from './Category'
 import ArticleTags from './ArticleTags'
 import ArticleCagtegories from './ArticleCategories'
-import { Table, Model, Column, DataType, Unique, AllowNull, BelongsToMany, HasMany } from 'sequelize-typescript'
+import { Table, Model, Column, DataType, Unique, AllowNull, BelongsToMany, HasMany, Default } from 'sequelize-typescript'
 
 @Table({ timestamps: true })
 class Article extends Model {
@@ -16,6 +16,19 @@ class Article extends Model {
   @AllowNull(false)
   @Column(DataType.TEXT)
   public content!: string;
+
+  @AllowNull(false)
+  @Default(0)
+  @Column(DataType.INTEGER.UNSIGNED)
+  public views!: number;
+
+  @AllowNull(false)
+  @Column(DataType.INTEGER.UNSIGNED)
+  public words!: number;
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  public post!: string;
 
   // 下面的都是为了实现模型之间的关系，表中不存在对应的字段
   @BelongsToMany(() => Category, () => ArticleCagtegories)
