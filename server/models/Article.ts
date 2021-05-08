@@ -1,7 +1,9 @@
+import Tag from './Tag'
+import Comment from './Comment'
 import Category from './Category'
+import ArticleTags from './ArticleTags'
 import ArticleCagtegories from './ArticleCategories'
 import { Table, Model, Column, DataType, Unique, AllowNull, BelongsToMany, HasMany } from 'sequelize-typescript'
-import Comment from './Comment';
 
 @Table({ timestamps: true })
 class Article extends Model {
@@ -15,11 +17,15 @@ class Article extends Model {
   @Column(DataType.TEXT)
   public content!: string;
 
+  // 下面的都是为了实现模型之间的关系，表中不存在对应的字段
   @BelongsToMany(() => Category, () => ArticleCagtegories)
-  public categories!: Category[]
+  public categories!: Category[];
+
+  @BelongsToMany(() => Tag, () => ArticleTags)
+  public tags!: Tag[];
 
   @HasMany(() => Comment)
-  public comments!: Comment[]
+  public comments!: Comment[];
 
   // public readonly createdAt!: Date;
   // public readonly updatedAt!: Date;
