@@ -3,9 +3,10 @@ import Comment from './Comment'
 import Category from './Category'
 import ArticleTags from './ArticleTags'
 import ArticleCagtegories from './ArticleCategories'
-import { Table, Model, Column, DataType, Unique, AllowNull, BelongsToMany, HasMany, Default } from 'sequelize-typescript'
-import { IsInt, IsNotEmpty, IsString, Min } from 'class-validator'
 import { Exclude, Expose, Type } from 'class-transformer'
+import { IsInt, IsNotEmpty, IsString, Min } from 'class-validator'
+import { Table, Model, Column, DataType, Unique, AllowNull, BelongsToMany, HasMany, Default } from 'sequelize-typescript'
+
 
 @Table({ timestamps: true })
 class Article extends Model {
@@ -29,7 +30,7 @@ class Article extends Model {
 
   @IsInt({ message: 'views类型错误' })
   @Min(0, { message: 'views不能为负数' })
-  @Exclude()
+  @Exclude() // 阅读数应当只有服务端可以设置，转换时应忽略
   @AllowNull(false)
   @Default(0)
   @Column(DataType.INTEGER.UNSIGNED)
@@ -52,7 +53,7 @@ class Article extends Model {
   public post!: string;
 
   // 下面的都是为了实现模型之间的关系，表中不存在对应的字段
-  // plain-object 转换时应当 skip
+  // plain-object 转换时应当 skip 这些不存在的字段
   @Exclude()
   @BelongsToMany(() => Category, () => ArticleCagtegories)
   public categories!: Category[];
@@ -64,9 +65,6 @@ class Article extends Model {
   @Exclude()
   @HasMany(() => Comment)
   public comments!: Comment[];
-
-  // public readonly createdAt!: Date;
-  // public readonly updatedAt!: Date;
 }
 
 export default Article
