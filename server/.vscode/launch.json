@@ -4,13 +4,34 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch TypeScript",
+      "name": "Launch Current TypeScript",
       "skipFiles": [
         "<node_internals>/**",
         "${workspaceFolder}/node_modules/**"
       ],
       "args": [
         "${relativeFile}"
+      ],
+      "runtimeArgs": [
+        "--inspect",
+        "--nolazy",
+        "-r",
+        "ts-node/register"
+      ],
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch TypeScript Project",
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/node_modules/**"
+      ],
+      "args": [
+        "app.ts"
       ],
       "runtimeArgs": [
         "--inspect",
