@@ -1,14 +1,6 @@
-import { ValidationError } from "class-validator";
+import { objectToArray } from './array'
+import { ValidationError } from 'class-validator'
 
-function objectToArray<T>(object: Object): T[] {
-  const ans: T[] = [];
-  for (const prop in object) {
-    if (Object.prototype.hasOwnProperty.call(object, prop)) {
-      ans.push((object as any)[prop]);
-    }
-  }
-  return ans;
-}
 
 function handleNestedError({ constraints, children }: ValidationError): string[] {
   if (!constraints && children?.length) {
@@ -20,7 +12,7 @@ function handleNestedError({ constraints, children }: ValidationError): string[]
   return [];
 }
 
-const gatherValidationError = (validationError: ValidationError[]): string[] => validationError.map(error => handleNestedError(error)).flat();
+const getValidationErrors = (validationError: ValidationError[]): string[] => validationError.map(error => handleNestedError(error)).flat();
 
 
-export default gatherValidationError;
+export { getValidationErrors, handleNestedError };
