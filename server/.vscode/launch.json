@@ -13,6 +13,7 @@
         "${relativeFile}"
       ],
       "runtimeArgs": [
+        "--inspect",
         "--nolazy",
         "-r",
         "ts-node/register"
