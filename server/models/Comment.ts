@@ -3,6 +3,7 @@ import { AllowNull, BelongsTo, Column, DataType, Default, ForeignKey, Model, Tab
 
 @Table({ timestamps: true })
 class Comment extends Model {
+
   @AllowNull(false)
   @Column(DataType.STRING)
   public content!: string;
@@ -13,7 +14,7 @@ class Comment extends Model {
 
   @Default(null)
   @Column(DataType.INTEGER.UNSIGNED)
-  public replyId!: number | null;
+  public replyId: number | null = null;
 
   @AllowNull(false)
   @Column(DataType.STRING)
