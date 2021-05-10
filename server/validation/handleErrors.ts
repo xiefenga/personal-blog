@@ -1,5 +1,5 @@
-import { objectToArray } from './array'
-import { ValidationError } from 'class-validator'
+import { objectToArray } from '../utils/array'
+import { validate, ValidationError } from 'class-validator'
 
 
 function handleNestedError({ constraints, children }: ValidationError): string[] {
@@ -14,5 +14,7 @@ function handleNestedError({ constraints, children }: ValidationError): string[]
 
 const getValidationErrors = (validationError: ValidationError[]): string[] => validationError.map(error => handleNestedError(error)).flat();
 
+const validateModel = async (obj: Object, skip: boolean = false) => getValidationErrors(await validate(obj, { skipUndefinedProperties: skip }))
 
-export { getValidationErrors, handleNestedError };
+
+export { validateModel, getValidationErrors }

@@ -5,7 +5,6 @@ import { Table, Model, AllowNull, Column, DataType, Default, BelongsToMany } fro
 @Table({ timestamps: true })
 class Category extends Model {
 
-  @Type(() => String)
   @AllowNull(false)
   @Column(DataType.STRING)
   public name!: string;

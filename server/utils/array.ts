@@ -8,20 +8,15 @@ function objectToArray<T>(object: Object): T[] {
   return ans;
 }
 
+type ArrayHelper = (val: unknown[]) => boolean
+
 function dyadicArrayHepler(value: unknown): boolean;
-function dyadicArrayHepler(value: unknown, helper: (val: unknown[]) => boolean): boolean;
-function dyadicArrayHepler(value: unknown, helper?: (val: unknown[]) => boolean): boolean {
-  return Array.isArray(value) && value.every(val => Array.isArray(val) && (helper && helper(val)));
+function dyadicArrayHepler(value: unknown, helper: ArrayHelper): boolean;
+function dyadicArrayHepler(value: unknown, helper?: ArrayHelper): boolean {
+  if (helper) {
+    return Array.isArray(value) && value.every(val => Array.isArray(val) && helper(val));
+  }
+  return Array.isArray(value) && value.every(val => Array.isArray(val));
 }
 
-// 判断是否为二维数组
-function isDyadicArray(value: unknown): boolean {
-  return dyadicArrayHepler(value);
-}
-
-function isDyadicArrayOf(typeFunc: () => Function, value: unknown): boolean {
-  const type = typeFunc();
-  return dyadicArrayHepler(value, val => val.every(v => v instanceof type));
-}
-
-export { objectToArray, isDyadicArray, isDyadicArrayOf, dyadicArrayHepler }
+export { objectToArray, dyadicArrayHepler }
