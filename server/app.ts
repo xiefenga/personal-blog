@@ -1,10 +1,10 @@
+import './db/init'
 import Koa from 'koa'
 import path from 'path'
 import cors from '@koa/cors'
 import koaStatic from 'koa-static'
 import bodyParser from 'koa-bodyparser'
 import 'reflect-metadata'
-import './entities/init'
 import './test'
 
 const app = new Koa();

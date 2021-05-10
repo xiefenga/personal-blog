@@ -1,6 +1,6 @@
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator"
-import Article from "./entities/Article"
+import Article from "./db/entities/Article"
 import { getValidationErrors } from "./utils/validateError";
 const plain = {
   title: 'aaa',
