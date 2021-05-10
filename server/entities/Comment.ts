@@ -1,29 +1,27 @@
-import { Expose, Type } from 'class-transformer'
-import { IsInt, IsNotEmpty, IsString } from 'class-validator'
+import Article from './Article'
+import { AllowNull, BelongsTo, Column, DataType, Default, ForeignKey, Model, Table } from 'sequelize-typescript'
 
-class Comment {
+@Table({ timestamps: true })
+class Comment extends Model {
 
-  @IsString({ message: 'content类型错误' })
-  @IsNotEmpty({ message: 'content不能为空' })
-  @Expose()
-  @Type(() => String)
+  @AllowNull(false)
+  @Column(DataType.STRING)
   public content!: string;
 
-  @IsInt({ message: 'articleId类型有误' })
-  @Expose()
-  @Type(() => Number)
+  @ForeignKey(() => Article)
+  @Column
   public articleId!: number;
 
-  @IsInt({ message: 'replyId类型有误' })
-  @Expose()
-  @Type(() => Number)
+  @Default(null)
+  @Column(DataType.INTEGER.UNSIGNED)
   public replyId: number | null = null;
 
-  @IsString({ message: 'username类型错误' })
-  @IsNotEmpty({ message: 'username不能为空' })
-  @Expose()
-  @Type(() => String)
+  @AllowNull(false)
+  @Column(DataType.STRING)
   public username!: string;
+
+  @BelongsTo(() => Article)
+  public article!: Article;
 }
 
 export default Comment

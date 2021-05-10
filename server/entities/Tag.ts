@@ -1,14 +1,18 @@
-import { Expose, Type } from 'class-transformer'
-import { IsNotEmpty, IsString } from 'class-validator'
+import Article from './Article'
+import ArticleTags from './ArticleTags'
+import { AllowNull, BelongsToMany, Column, DataType, Model, Table } from 'sequelize-typescript'
 
 
-class Tag {
+@Table({ timestamps: true })
+class Tag extends Model {
 
-  @IsString({ message: 'name类型错误' })
-  @IsNotEmpty({ message: 'name不能为空' })
-  @Expose()
-  @Type(() => String)
+  @AllowNull(false)
+  @Column(DataType.STRING)
   public name!: string;
+
+  @BelongsToMany(() => Article, () => ArticleTags)
+  // 根据 sequelize-typescript 文档，为了访问的类型安全
+  public articles!: Array<Article & { ArticleTags: ArticleTags }>
 }
 
 export default Tag

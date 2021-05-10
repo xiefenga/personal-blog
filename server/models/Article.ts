@@ -1,45 +1,48 @@
-import Tag from './Tag'
-import Comment from './Comment'
-import Category from './Category'
-import ArticleTags from './ArticleTags'
-import ArticleCagtegories from './ArticleCategories'
-import { Table, Model, Column, DataType, Unique, AllowNull, BelongsToMany, HasMany, Default } from 'sequelize-typescript'
+import { IsValidURL } from '../validation/url'
+import { DyadicArray } from '../validation/arrary'
+import { Expose, Type, Exclude } from 'class-transformer'
+import { IsInt, IsNotEmpty, IsString, Min, ValidateIf } from 'class-validator'
 
-
-@Table({ timestamps: true })
-class Article extends Model {
-
-  @Unique
-  @AllowNull(false)
-  @Column(DataType.STRING)
+class Article {
+  @IsString({ message: 'title类型错误' })
+  @IsNotEmpty({ message: 'title不能为空' })
+  @Expose()
+  @Type(() => String)
   public title!: string;
 
-  @AllowNull(false)
-  @Column(DataType.TEXT)
+  @IsString({ message: 'content类型错误' })
+  @IsNotEmpty({ message: 'content不能为空' })
+  @Expose()
+  @Type(() => String)
   public content!: string;
 
-  @AllowNull(false)
-  @Default(0)
-  @Column(DataType.INTEGER.UNSIGNED)
+  @IsInt({ message: 'views类型错误' })
+  @Min(0, { message: 'views不能为负数' })
+  @Exclude() // 阅读数应当只有服务端可以设置，如果 plain-object 中含有该字段，转换时应忽略
   public views: number = 0;
 
-  @AllowNull(false)
-  @Column(DataType.INTEGER.UNSIGNED)
+  @ValidateIf((_, value) => value !== undefined)
+  @IsInt({ message: 'words类型错误' })
+  @Min(0, { message: 'words不能为负数' })
+  @Expose()
   public words!: number;
 
-  @AllowNull(false)
-  @Column(DataType.STRING)
+  @IsString({ message: 'post类型错误' })
+  @IsNotEmpty({ message: 'post不能为空' })
+  @IsValidURL({ message: 'post必须为一个合法URL' })
+  @Expose()
+  @Type(() => String)
   public post!: string;
 
-  // 下面的都是为了实现模型之间的关系，表中不存在对应的字段
-  @BelongsToMany(() => Category, () => ArticleCagtegories)
-  public categories!: Category[];
+  @DyadicArray(() => Number, 1, 2, { message: 'categories类型错误' })
+  @Type(() => Number)
+  @Expose()
+  public categories!: number[][];
 
-  @BelongsToMany(() => Tag, () => ArticleTags)
-  public tags!: Tag[];
-
-  @HasMany(() => Comment)
-  public comments!: Comment[];
+  @DyadicArray(() => Number, 1, 2, { message: 'tags类型错误' })
+  @Type(() => Number)
+  @Expose()
+  public tags!: number[][];
 }
 
-export default Article
+export default Article;
