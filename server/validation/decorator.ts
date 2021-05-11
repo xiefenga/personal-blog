@@ -1,8 +1,9 @@
-import { checkType } from '../utils/type'
 import { dyadicArrayHepler } from '../utils/array'
 import { isDataURI, isURL, registerDecorator, ValidationOptions } from 'class-validator'
 
-function DyadicArray(typeFunction: () => Function, minLength: number = 0, maxLength: number, validationOptions?: ValidationOptions) {
+type Checker = (val: unknown) => boolean;
+
+function DyadicArray(typeCheck: Checker, minLength: number = 0, maxLength: number, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'dyadicArray',
@@ -10,7 +11,21 @@ function DyadicArray(typeFunction: () => Function, minLength: number = 0, maxLen
       propertyName: propertyName,
       options: validationOptions,
       validator: {
-        validate: (value: unknown) => dyadicArrayHepler(value, val => val.length <= maxLength && val.length >= minLength && val.every(v => checkType(v, typeFunction)))
+        validate: (value: unknown) => dyadicArrayHepler(value, val => val.length <= maxLength && val.length >= minLength && val.every(v => typeCheck(v)))
+      },
+    })
+  }
+}
+
+function IsArrayOf(typeCheck: Checker, validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      name: 'isArrayOf',
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate: (value: unknown) => Array.isArray(value) && value.every(v => typeCheck(v))
       },
     })
   }
@@ -31,4 +46,4 @@ function IsValidURL(validationOptions?: ValidationOptions) {
 }
 
 
-export { DyadicArray, IsValidURL }
+export { DyadicArray, IsValidURL, IsArrayOf }

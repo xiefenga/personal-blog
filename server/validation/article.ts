@@ -1,3 +1,4 @@
+import TagEntity from '../db/entities/Tag'
 import CategoryEntity from '../db/entities/Category'
 
 async function categoriesCheck(categories: number[][]): Promise<boolean> {
@@ -17,8 +18,9 @@ async function categoriesCheck(categories: number[][]): Promise<boolean> {
   return true;
 }
 
-async function tagsCheck(tags: number[]) {
-
+async function tagsCheck(tags: number[]): Promise<boolean> {
+  const res = await Promise.all(tags.map(id => TagEntity.findByPk(id)));
+  return !res.includes(null);
 }
 
-export { categoriesCheck }
+export { categoriesCheck, tagsCheck }
