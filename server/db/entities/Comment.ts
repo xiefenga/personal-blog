@@ -1,8 +1,9 @@
 import Article from './Article'
 import { AllowNull, BelongsTo, Column, DataType, Default, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { IComment } from '../../types/models'
 
 @Table({ timestamps: true })
-class Comment extends Model {
+class Comment extends Model implements IComment {
 
   @AllowNull(false)
   @Column(DataType.STRING)
@@ -14,7 +15,7 @@ class Comment extends Model {
 
   @Default(null)
   @Column(DataType.INTEGER.UNSIGNED)
-  public replyId: number | null = null;
+  public replyId!: number | null;
 
   @AllowNull(false)
   @Column(DataType.STRING)

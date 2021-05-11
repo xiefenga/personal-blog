@@ -1,8 +1,11 @@
+import { IArticle } from '../types/models'
 import { Expose, Type, Exclude } from 'class-transformer'
-import { IsInt, IsNotEmpty, IsString, Min, IsArray, ArrayNotEmpty, ArrayUnique } from 'class-validator'
-import { IsValidURL, DyadicArray } from '../validation/decorator'
+import { IsValidURL, DyadicArray, IsArrayOf } from '../validation/decorator'
+import { IsInt, IsNotEmpty, IsString, Min, ArrayNotEmpty, ArrayUnique, isInt } from 'class-validator'
 
-class Article {
+
+class Article implements IArticle {
+
   @IsString({ message: 'title类型错误' })
   @IsNotEmpty({ message: 'title不能为空' })
   @Expose()
@@ -32,12 +35,12 @@ class Article {
   @Type(() => String)
   public post!: string;
 
-  @DyadicArray(() => Number, 1, 2, { message: 'categories类型错误' })
+  @DyadicArray(isInt, 1, 2, { message: 'categories类型错误' })
   @Type(() => Number)
   @Expose()
   public categories!: number[][];
 
-  @IsArray({ message: 'tags类型错误' })
+  @IsArrayOf(isInt, { message: 'tags类型错误' })
   @ArrayNotEmpty({ message: 'tags不能为空' })
   @ArrayUnique({ message: 'tags中存在重复项' })
   @Type(() => Number)

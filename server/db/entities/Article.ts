@@ -4,10 +4,11 @@ import Category from './Category'
 import ArticleTags from './ArticleTags'
 import ArticleCagtegories from './ArticleCategories'
 import { Table, Model, Column, DataType, Unique, AllowNull, BelongsToMany, HasMany, Default } from 'sequelize-typescript'
+import { IArticle } from '../../types/models'
 
 
 @Table({ timestamps: true })
-class Article extends Model {
+class Article extends Model implements IArticle {
 
   @Unique
   @AllowNull(false)

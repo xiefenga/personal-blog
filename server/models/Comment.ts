@@ -1,7 +1,8 @@
+import { IComment } from '../types/models'
 import { Expose, Type } from 'class-transformer'
 import { IsInt, IsNotEmpty, IsString } from 'class-validator'
 
-class Comment {
+class Comment implements IComment {
 
   @IsString({ message: 'content类型错误' })
   @IsNotEmpty({ message: 'content不能为空' })
