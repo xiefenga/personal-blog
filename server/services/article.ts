@@ -13,15 +13,18 @@ import ArticleEntity from '../db/entities/Article'
 import { plainTransform } from '../utils/transform'
 import { validateModel } from '../validation/handleErrors'
 import { wordCounts } from '../utils/markdown'
+import ArticleCagtegoriesEntity from '../db/entities/ArticleCategories'
+import { categoriesCheck, tagsCheck } from '../validation/article'
+import ArticleTagsEntity from '../db/entities/ArticleTags'
 import ArticleCagtegories from '../db/entities/ArticleCategories'
-import CategoryEntity from '../db/entities/Category'
+import ArticleTags from '../db/entities/ArticleTags'
 
 
 /**
  * 新增文章，成功返回新添加的信息，失败返回错误消息
  * @param articleObj 添加的文章信息
  */
-const addArticle = async (articleObj: Object): Promise<string[] | ArticleModel> => {
+const addArticle = async (articleObj: Object): Promise<string[] | ArticleEntity> => {
   const article = plainTransform(ArticleModel, articleObj);
   article.words = wordCounts(article.content);
   // 检测数据应当具有的字段和类型
@@ -29,21 +32,28 @@ const addArticle = async (articleObj: Object): Promise<string[] | ArticleModel> 
   if (errors.length) { return errors; }
   // 检测文章对应的类目是否存在以及父子类目关系是否正确
   // 检测文章对应的标签是否存在
+  const [res1, res2] = await Promise.all([categoriesCheck(article.categories), tagsCheck(article.tags)]);
+  !res1 && errors.push('categories数据有误');
+  !res2 && errors.push('tags数据有误');
+  if (errors.length) { return errors; }
+  try {
+    const res = await ArticleEntity.create(article);
+    const { categories, tags } = article;
 
+    const pro1 = categories.flat().map(id => ArticleCagtegoriesEntity.create({
+      articleId: res.id,
+      categoryId: id
+    }));
+    const pro2 = tags.map(id => ArticleTagsEntity.create({
+      articleId: res.id,
+      tagId: id
+    }));
+    await Promise.all<ArticleCagtegories | ArticleTags>([...pro1, ...pro2]);
+    return res;
+  } catch (error) {
+    errors.push('添加失败, 发生错误。请确保文章名唯一');
+  }
 
-  // // ArticleCagtegories.find
-  const res = await ArticleEntity.create(article);
-  console.log(res)
-  // const correct = await Promise.all([checkCategoriesCorrect(article.categories), checkTagExist(article.tags)]);
-  // (!correct[0]) && errors.push('文章类目有误');
-  // (!correct[1]) && errors.push('文章标签有误');
-  // if (errors.length === 0) {
-  //   try {
-  //     return await ArticleModel.create(article);
-  //   } catch (error) {
-  //     errors.push('title已存在');
-  //   }
-  // }
   return errors;
 }
 
