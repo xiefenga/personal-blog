@@ -1,6 +1,6 @@
 import { ICategory } from '../types/models'
-import { Expose, Type } from 'class-transformer'
-import { IsInt, IsNotEmpty, IsString, ValidateIf } from 'class-validator'
+import { Expose, Transform, Type } from 'class-transformer'
+import { isEmpty, IsInt, IsNotEmpty, IsString, ValidateIf } from 'class-validator'
 
 
 class Category implements ICategory {
@@ -10,10 +10,10 @@ class Category implements ICategory {
   @Type(() => String)
   public name!: string;
 
-  @ValidateIf((_, value) => value != undefined)
+  @ValidateIf((_, value) => value !== null)
   @IsInt({ message: 'parentId类型错误' })
   @Expose()
-  @Type(() => Number)
+  @Transform(({ value }) => (isEmpty(value) || value === 'null') ? null : Number(value), { toClassOnly: true })
   public parentId: number | null = null;
 }
 
