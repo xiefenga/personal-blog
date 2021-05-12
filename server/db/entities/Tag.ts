@@ -1,12 +1,13 @@
 import Article from './Article'
 import ArticleTags from './ArticleTags'
-import { AllowNull, BelongsToMany, Column, DataType, Model, Table } from 'sequelize-typescript'
 import { ITag } from '../../types/models'
+import { AllowNull, BelongsToMany, Column, DataType, Model, Table, Unique } from 'sequelize-typescript'
 
 
 @Table({ timestamps: true })
 class Tag extends Model implements ITag {
 
+  @Unique
   @AllowNull(false)
   @Column(DataType.STRING)
   public name!: string;
