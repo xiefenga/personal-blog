@@ -1,13 +1,3 @@
-// import { ArticleModel } from "../db"
-// import { IArticle } from "../db/types"
-// import Article from "../entities/Article"
-// import { plainToClass } from "class-transformer"
-// import validateModel from "../validate/validateModel"
-// import { checkTagExist } from "../validate/validateTag"
-// import { validatePage } from "../validate/validatePage"
-// import { checkCategoriesCorrect } from "../validate/validateCategory"
-
-
 import ArticleModel from '../models/Article'
 import ArticleEntity from '../db/entities/Article'
 import { plainTransform } from '../utils/transform'
@@ -18,29 +8,45 @@ import { categoriesCheck, tagsCheck } from '../validation/article'
 import ArticleTagsEntity from '../db/entities/ArticleTags'
 import ArticleCagtegories from '../db/entities/ArticleCategories'
 import ArticleTags from '../db/entities/ArticleTags'
+import { IArticle } from '../types/models'
 
+
+/**
+ * 分页获取文章
+ * @param page 页数
+ * @param size 页容量
+ */
+const getArticles = async (page: number = 1, size: number = 10): Promise<string | [IArticle[], number]> => {
+
+  const { rows: articles, count } = await ArticleEntity.findAndCountAll({
+    limit: size,
+    offset: (page - 1) * size
+  });
+
+  return [articles, count];
+}
 
 /**
  * 新增文章，成功返回新添加的信息，失败返回错误消息
  * @param articleObj 添加的文章信息
  */
-const addArticle = async (articleObj: Object): Promise<string[] | ArticleEntity> => {
+const addArticle = async (articleObj: Object): Promise<string[] | IArticle> => {
   const article = plainTransform(ArticleModel, articleObj);
   article.words = wordCounts(article.content);
+  console.log(article)
   // 检测数据应当具有的字段和类型
   const errors = await validateModel(article);
   if (errors.length) { return errors; }
-  // 检测文章对应的类目是否存在以及父子类目关系是否正确
-  // 检测文章对应的标签是否存在
+  // 检测文章对应的categories和tags是否存在
   const [res1, res2] = await Promise.all([categoriesCheck(article.categories), tagsCheck(article.tags)]);
   !res1 && errors.push('categories数据有误');
   !res2 && errors.push('tags数据有误');
   if (errors.length) { return errors; }
   try {
     const res = await ArticleEntity.create(article);
-    const { categories, tags } = article;
+    let { categories, tags } = article;
 
-    const pro1 = categories.flat().map(id => ArticleCagtegoriesEntity.create({
+    const pro1 = categories.map(id => ArticleCagtegoriesEntity.create({
       articleId: res.id,
       categoryId: id
     }));
@@ -51,11 +57,13 @@ const addArticle = async (articleObj: Object): Promise<string[] | ArticleEntity>
     await Promise.all<ArticleCagtegories | ArticleTags>([...pro1, ...pro2]);
     return res;
   } catch (error) {
-    errors.push('添加失败, 发生错误。请确保文章名唯一');
+    errors.push('添加失败, 请确保文章名唯一');
   }
 
   return errors;
 }
+
+
 
 // /**
 //  * 修改文章，成功返回 true，失败返回错误消息
@@ -103,21 +111,7 @@ const addArticle = async (articleObj: Object): Promise<string[] | ArticleEntity>
 //   return article || '不存在该文章';
 // }
 
-// /**
-//  * 分页获取文章
-//  * @param page 页数
-//  * @param size 页容量
-//  */
-// const getArticles = async (page: number = 1, size: number = 10): Promise<string | [IArticle[], number]> => {
-//   const error = validatePage(page, size);
-//   if (typeof error === 'string') { return error; }
-//   const count = await ArticleModel.find().countDocuments();
-//   const articles = await ArticleModel.find().sort({ createdAt: -1 }).skip(size * (page - 1)).limit(size).populate({
-//     path: 'categories',
-//     populate: 'topLevel twoLevel'
-//   }).populate('tags');
-//   return [articles, count];
-// }
+
 
 // const getTopLevelArticles = async (id: string, page: number = 1, size: number = 10): Promise<string | [IArticle[], number]> => {
 //   const error = validatePage(page, size);
@@ -164,4 +158,4 @@ const addArticle = async (articleObj: Object): Promise<string[] | ArticleEntity>
 //   getTagArticles
 // }
 
-export { addArticle }
+export { addArticle, getArticles }

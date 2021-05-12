@@ -6,10 +6,11 @@ import { ICategories, ICategory } from '../types/models'
 
 const addCategory = async (categoryObj: Object): Promise<string[] | ICategory> => {
   const category = plainTransform(CategoryModel, categoryObj);
+  console.log(category);
   const errors = await validateModel(category);
   if (errors.length) { return errors; }
   const { parentId } = category;
-  // 需要使用 != 来判断，parentId 可能传递为 0
+  // 需要使用 != null 来判断，parentId 可能传递为 0
   if (parentId !== null) {
     const p = await CategoryEntity.findByPk(parentId);
     !p && errors.push('父类目不存在');
@@ -22,6 +23,10 @@ const addCategory = async (categoryObj: Object): Promise<string[] | ICategory> =
   return c;
 }
 
+/**
+ * 返回所有的类目
+ * @returns 返回的格式是 [...category-props, children: category[]]
+ */
 const getCategories = async (): Promise<[ICategories[], number]> => {
   const { rows, count } = await CategoryEntity.findAndCountAll({ where: { parentId: null } });
   const res = await Promise.all(rows.map(async row => {
