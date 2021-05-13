@@ -6,6 +6,11 @@ interface IArticle {
   post: string;
 }
 
+interface IArticles extends IArticle {
+  categories: ICategory[];
+  tags: ITag[]
+}
+
 interface ICategory {
   name: string;
   parentId: number | null;
@@ -27,4 +32,4 @@ interface IComment {
 }
 
 
-export { IArticle, ICategory, ICategories, ITag, IComment }
+export { IArticle, IArticles, ICategory, ICategories, ITag, IComment }
