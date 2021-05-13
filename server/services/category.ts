@@ -3,10 +3,10 @@ import { plainTransform } from '../utils/transform'
 import CategoryEntity from '../db/entities/Category'
 import { validateModel } from '../validation/handleErrors'
 import { ICategories, ICategory } from '../types/models'
+import ArticleCagtegoriesEntity from '../db/entities/ArticleCategories'
 
 const addCategory = async (categoryObj: Object): Promise<string[] | ICategory> => {
   const category = plainTransform(CategoryModel, categoryObj);
-  console.log(category);
   const errors = await validateModel(category);
   if (errors.length) { return errors; }
   const { parentId } = category;
@@ -36,104 +36,30 @@ const getCategories = async (): Promise<[ICategories[], number]> => {
   return [res, count];
 }
 
-// const addTwoLevelCategory = async (categoryObj: object): Promise<string[] | ITwoLevelCategory> => {
-//   const category = plainToClass(TwoLevelCategory, categoryObj);
-//   const errors = await validateModel(category);
-//   if (errors.length) { return errors; }
-//   // 检测 category 的关系问题
-//   const parent = await TopLevelCategoryModel.findById(category.parent);
-//   if (parent) {
-//     const exist = await checkTwoLevelCategoryExist(category.categoryName, category.parent);
-//     if (exist) {
-//       errors.push('category已存在');
-//     } else {
-//       return await TwoLevelCategoryModel.create(category);
-//     }
-//   } else {
-//     errors.push('parent category不存在');
-//   }
-//   return errors;
-// }
+const deleteCategory = async (id: number): Promise<string[] | boolean> => {
+  if (Number.isNaN(id)) { return ['id非法]' }
+  const [{ count: c1 }, { count: c2 }] = await Promise.all([
+    ArticleCagtegoriesEntity.findAndCountAll({ where: { categoryId: id } }),
+    CategoryEntity.findAndCountAll({ where: { parentId: id } })
+  ]);
+  if (c1 === 0 && c2 === 0) {
+    await CategoryEntity.destroy({ where: { id } });
+    return true;
+  }
+  return ['category非空'];
+}
 
-// const getTopLevelCategory = async (id: string): Promise<string | ITopLevelCategory> => {
-//   const category = await TopLevelCategoryModel.findById(id);
-//   return category || '该类目不存在';
-// }
+const updateCategory = async (id: number, categoryObj: Object): Promise<string[] | boolean> => {
+  if (Number.isNaN(id)) { return ['id非法'] }
+  const category = plainTransform(CategoryModel, categoryObj);
+  const errors = await validateModel(category);
+  if (errors.length) { return errors }
+  if (category.parentId !== null) {
+    const parent = await CategoryEntity.findByPk(category.parentId);
+    if (parent === null) { return ['parentId不存在'] }
+  }
+  await CategoryEntity.update(categoryObj, { where: { id } });
+  return true;
+}
 
-// const getTwoLevelCategory = async (id: string): Promise<string | ITwoLevelCategory> => {
-//   const category = await TwoLevelCategoryModel.findById(id);
-//   return category || '该类目不存在';
-// }
-
-// const getCategories = async (): Promise<ICategory[]> => {
-//   const topLevels = await TopLevelCategoryModel.find();
-//   const categories = await Promise.all(topLevels.map(async parent => ({
-//     topLevel: parent,
-//     twoLevels: await TwoLevelCategoryModel.find({ parent: parent._id }, { parent: 0 })
-//   })));
-//   return categories;
-// }
-
-// const updateTopLevelCategory = async (id: string, update: object): Promise<string[] | boolean> => {
-//   const topLevel = plainToClass(TopLevelCategory, update);
-//   const errors = await validateModel(topLevel);
-//   if (errors.length) { return errors };
-//   const topLevelInfo = await TopLevelCategoryModel.findById(id);
-//   if (topLevelInfo) {
-//     try {
-//       topLevelInfo.categoryName = topLevel.categoryName;
-//       await topLevelInfo.save();
-//     } catch (error) {
-//       return ['category已存在'];
-//     }
-//   }
-//   return true;
-// }
-
-// const updateTwoLevelCategory = async (id: string, update: object): Promise<string[] | boolean> => {
-//   const twoLevel = plainToClass(TwoLevelCategory, update);
-//   if (twoLevel.parent) { return ['不允许修改parent类目']; }
-//   if (!twoLevel.categoryName) { return ['categoryNmae为空']; }
-//   const errors = await validateModel(twoLevel, true);
-//   if (errors.length) { return errors };
-//   const twoLevelInfo = await TwoLevelCategoryModel.findById(id);
-//   if (twoLevelInfo) {
-//     if (twoLevelInfo.categoryName === twoLevel.categoryName) {
-//       return true;
-//     }
-//     const exists = await checkTwoLevelCategoryExist(twoLevel.categoryName, twoLevelInfo.parent)
-//     if (exists) { return ['category已存在']; }
-//     twoLevelInfo.categoryName = twoLevel.categoryName;
-//     await twoLevelInfo.save();
-//   }
-//   return true;
-// }
-
-// const deleteTopLevelCategory = async (id: string): Promise<string | boolean> => {
-//   const count = await ArticleModel.find({ 'categories.topLevel': id }).countDocuments();
-//   if (count) { return '非空category无法删除'; }
-//   await TwoLevelCategoryModel.deleteMany({ parent: id });
-//   await TopLevelCategoryModel.deleteOne({ _id: id });
-//   return true;
-// }
-
-// const deleteTwoLevelCategory = async (id: string): Promise<string | boolean> => {
-//   const count = await ArticleModel.find({ 'categories.twoLevel': id }).countDocuments();
-//   if (count) { return '非空category无法删除'; }
-//   await TwoLevelCategoryModel.deleteOne({ _id: id });
-//   return true;
-// }
-
-// export {
-//   getCategories,
-//   addTopLevelCategory,
-//   addTwoLevelCategory,
-//   getTopLevelCategory,
-//   getTwoLevelCategory,
-//   updateTopLevelCategory,
-//   updateTwoLevelCategory,
-//   deleteTopLevelCategory,
-//   deleteTwoLevelCategory
-// }
-
-export { addCategory, getCategories }
+export { getCategories, addCategory, deleteCategory, updateCategory }
