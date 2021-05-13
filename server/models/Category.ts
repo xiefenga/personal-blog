@@ -13,7 +13,7 @@ class Category implements ICategory {
   @ValidateIf((_, value) => value !== null)
   @IsInt({ message: 'parentId类型错误' })
   @Expose()
-  @Transform(({ value }) => (isEmpty(value) || value === 'null') ? null : Number(value), { toClassOnly: true })
+  @Transform(({ value }) => isEmpty(value) ? null : Number(value), { toClassOnly: true })
   public parentId: number | null = null;
 }
 
