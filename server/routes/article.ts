@@ -28,4 +28,4 @@ router.delete('/:id', async ctx => {
   ctx.body = ctx.url;
 });
 
-export default router;
+export default router

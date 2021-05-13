@@ -17,7 +17,11 @@ import { IArticle } from '../types/models'
  * @param size 页容量
  */
 const getArticles = async (page: number = 1, size: number = 10): Promise<string | [IArticle[], number]> => {
-
+  if (Number.isNaN(page)) {
+    return 'page非法';
+  } else if (Number.isNaN(size)) {
+    return 'size非法';
+  }
   const { rows: articles, count } = await ArticleEntity.findAndCountAll({
     limit: size,
     offset: (page - 1) * size
