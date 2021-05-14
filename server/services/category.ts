@@ -37,7 +37,7 @@ const getCategories = async (): Promise<[ICategories[], number]> => {
 }
 
 const deleteCategory = async (id: number): Promise<string[] | boolean> => {
-  if (Number.isNaN(id)) { return ['id非法]' }
+  if (Number.isNaN(id)) { return ['id非法'] }
   const [{ count: c1 }, { count: c2 }] = await Promise.all([
     ArticleCagtegoriesEntity.findAndCountAll({ where: { categoryId: id } }),
     CategoryEntity.findAndCountAll({ where: { parentId: id } })
