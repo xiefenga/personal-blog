@@ -1,6 +1,6 @@
 import Router from '@koa/router'
 import { addTag, deleteTag, getTags, updateTag } from '../services/tag'
-import { createFailResponse, createSuccessResponse } from '../utils/create'
+import { createFailResponse, createSuccessResponse } from '../utils/response'
 
 const router = new Router();
 

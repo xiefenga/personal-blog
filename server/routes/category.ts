@@ -1,5 +1,5 @@
 import Router from '@koa/router'
-import { createFailResponse, createSuccessResponse } from '../utils/create'
+import { createFailResponse, createSuccessResponse } from '../utils/response'
 import { addCategory, deleteCategory, getCategories, updateCategory } from '../services/category'
 
 const router = new Router();

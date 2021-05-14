@@ -1,21 +1,6 @@
-import { dyadicArrayHepler } from '../utils/array'
 import { isDataURI, isURL, registerDecorator, ValidationOptions } from 'class-validator'
 
 type Checker = (val: unknown) => boolean;
-
-function DyadicArray(typeCheck: Checker, minLength: number = 0, maxLength: number, validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
-    registerDecorator({
-      name: 'dyadicArray',
-      target: object.constructor,
-      propertyName: propertyName,
-      options: validationOptions,
-      validator: {
-        validate: (value: unknown) => dyadicArrayHepler(value, val => val.length <= maxLength && val.length >= minLength && val.every(v => typeCheck(v)))
-      },
-    })
-  }
-}
 
 function IsArrayOf(typeCheck: Checker, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
@@ -46,4 +31,4 @@ function IsValidURL(validationOptions?: ValidationOptions) {
 }
 
 
-export { DyadicArray, IsValidURL, IsArrayOf }
+export { IsValidURL, IsArrayOf }

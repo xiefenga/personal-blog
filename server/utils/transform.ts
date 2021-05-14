@@ -21,12 +21,10 @@ function plainTransform<T, V>(cls: ClassConstructor<T>, plain: V) {
 function queryTransformNumber(query: ParsedUrlQuery, ...props: string[]): (number | undefined)[] {
   return props.map(prop => {
     const val = query[prop];
-    const res = Number(val);
-
-    return val != undefined && !Array.isArray(val)
-      ? Number.isNaN(res)
-        ? undefined
-        : res
+    return val !== undefined
+      ? Array.isArray(val)
+        ? NaN
+        : Number(val)
       : undefined;
   });
 }

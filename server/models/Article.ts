@@ -1,6 +1,6 @@
 import { IArticle } from '../types/models'
 import { Expose, Type, Exclude } from 'class-transformer'
-import { IsValidURL, IsArrayOf } from '../validation/decorator'
+import { IsValidURL, IsArrayOf } from '../validation/decorators'
 import { IsInt, IsNotEmpty, IsString, Min, isInt, ArrayMinSize, ArrayUnique } from 'class-validator'
 
 

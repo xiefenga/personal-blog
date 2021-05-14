@@ -1,6 +1,5 @@
-import { objectToArray } from '../utils/array'
+import { objectToArray } from '../utils/arrays'
 import { validate, ValidationError } from 'class-validator'
-
 
 function handleNestedError({ constraints, children }: ValidationError): string[] {
   if (!constraints && children?.length) {
