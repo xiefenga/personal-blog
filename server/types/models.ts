@@ -7,7 +7,7 @@ interface IArticle {
 }
 
 interface IArticles extends IArticle {
-  categories: ICategory[];
+  categories: ICategory[][];
   tags: ITag[]
 }
 
