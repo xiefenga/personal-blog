@@ -2,12 +2,15 @@ import 'reflect-metadata'
 import Koa from 'koa'
 import path from 'path'
 import cors from '@koa/cors'
-import router from './routes'
 import koaStatic from 'koa-static'
 import bodyParser from 'koa-bodyparser'
+import errorMiddleware from './middlewares/error'
+import router from './middlewares/router'
 import './db/init'
 
 const app = new Koa();
+
+app.use(errorMiddleware());
 
 app.use(cors());
 
