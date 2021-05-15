@@ -1,0 +1,45 @@
+.md-editor {
+  width: 100%;
+  height: 100%;
+}
+
+.md-editor .editor-body {
+  display: flex;
+  width: 100%;
+  height: calc(100% - 20px);
+}
+
+.md-editor .editor-edit {
+  width: 50%;
+}
+
+.md-editor .editor-edit .CodeMirror {
+  padding: 20px 0 0 20px;
+  background: #f5f5f5;
+  box-sizing: border-box;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.md-editor .editor-preview {
+  width: 50%;
+  height: 100%;
+  padding: 20px 20px 0;
+  overflow: hidden auto;
+  box-sizing: border-box;
+}
+
+.md-editor .editor-preview article img {
+  width: 100%;
+}
+
+.md-editor .editor-footer {
+  font-size: 12px;
+  line-height: 20px;
+  padding: 0 20px;
+  user-select: none;
+}
+
+.md-editor .editor-footer span {
+  margin: 0 10px;
+}
