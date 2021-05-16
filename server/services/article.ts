@@ -205,10 +205,8 @@ const updateArticle = async (id: number, miniArticle: Object): Promise<string[] 
 
 const deleteArticle = async (id: number): Promise<void> => {
   if (Number.isNaN(id)) { return; }
-  await Promise.all([
-    ArticleEntity.destroy({ where: { id } }),
-    ArticleCagtegoriesEntity.destroy({ where: { articleId: id } })
-  ]);
+  await ArticleEntity.destroy({ where: { id } });
+  // ArticleCategories 和 ArticleTags 会自动删除
 }
 
 
