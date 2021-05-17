@@ -1,4 +1,4 @@
-import { objectToArray } from '../utils/arrays'
+import { objectToArray } from '../utils/helper'
 import { validate, ValidationError } from 'class-validator'
 
 function handleNestedError({ constraints, children }: ValidationError): string[] {
