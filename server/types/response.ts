@@ -10,7 +10,7 @@ interface ISuccessResponse extends IResponse {
 
 interface IFailResponse extends IResponse {
   state: 'fail';
-  errors: string[]
+  error: string
 }
 
 
