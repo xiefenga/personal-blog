@@ -32,4 +32,10 @@ interface IComment {
 }
 
 
-export { IArticle, IArticles, ICategory, ICategories, ITag, IComment }
+interface IAdmin {
+  username: string;
+  avatar: string
+}
+
+
+export { IArticle, IArticles, ICategory, ICategories, ITag, IComment, IAdmin }
