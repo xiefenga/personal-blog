@@ -8,8 +8,9 @@ function createSuccessResponse(data: any = null, count?: number): ISuccessRespon
   return response;
 }
 
-function createFailResponse(errors: string[]): IFailResponse {
-  const response: IFailResponse = { state: 'fail', errors };
+function createFailResponse(errors: string[] | string): IFailResponse {
+  const error = Array.isArray(errors) ? errors[0] : errors;
+  const response: IFailResponse = { state: 'fail', error };
   return response;
 }
 
