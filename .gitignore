@@ -17,4 +17,5 @@ node_modules/
 # build directory
 dist
 
-*.config.json
+#configs directory
+configs/
