@@ -2,7 +2,8 @@ import ArticleModel from '../models/Article'
 import ArticleEntity from '../db/entities/Article'
 import { plainTransform } from '../utils/transform'
 import { validateModel } from '../validation/handleErrors'
-import { wordCounts } from '../utils/markdown'
+import { wordCounts } from '../utils/helper'
+import { exculdeTimeStame } from '../utils/configs'
 import ArticleCagtegoriesEntity from '../db/entities/ArticleCategories'
 import { categoriesCheck, tagsCheck } from '../validation/dbCheck'
 import ArticleTagsEntity from '../db/entities/ArticleTags'
@@ -13,7 +14,6 @@ import CategoryEntity from '../db/entities/Category'
 import TagEntity from '../db/entities/Tag'
 import { Op } from 'sequelize'
 
-const exculdeTimeStame = { attributes: { exclude: ['createdAt', 'updatedAt'] } };
 
 // 获取归档
 const getArchives = async (page: number = 1, size: number = 10): Promise<string | [IArticle[], number]> => {
