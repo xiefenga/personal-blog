@@ -27,7 +27,7 @@ export const exculdeTimeStame = {
 
 export const jwtIgnore = {
   method: 'GET',
-  path: ['/api/admin']
+  path: [/^\/api\/admin/]
 };
 
 
