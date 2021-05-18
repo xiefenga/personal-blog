@@ -5,7 +5,7 @@ import CodeMirror from '@uiw/react-codemirror'
 import throttle from 'lodash.throttle'
 import { wordsCalc } from '@/utils/helper'
 import { markdownParser } from '@/utils/markdown'
-import { THROTTLE_MD_RENDER_TIME, editorOptions } from '@/utils/constants'
+import { THROTTLE_MD_RENDER_TIME, EDITOR_OPTIONS } from '@/utils/constants'
 import { useRef, useCallback, useState, useMemo, useImperativeHandle, forwardRef, createRef } from 'react'
 import './index.css'
 
@@ -95,7 +95,7 @@ function MarkdownEditor(props) {
             ref={editorRef}
             value={markdown}
             onChange={onChange}
-            options={editorOptions}
+            options={EDITOR_OPTIONS}
             onScroll={handleScroll}
           />
         </div>

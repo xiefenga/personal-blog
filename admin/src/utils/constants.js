@@ -1,6 +1,6 @@
 export const THROTTLE_MD_RENDER_TIME = 100;
 
-export const editorOptions = {
+export const EDITOR_OPTIONS = {
   theme: 'md-mirror',
   keyMap: 'sublime',
   mode: 'markdown',
