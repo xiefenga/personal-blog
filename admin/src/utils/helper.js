@@ -15,6 +15,10 @@ function wordsCalc(data) {
   return count;
 }
 
+// 获取当前年份
+const getYear = () => new Date().getFullYear();
+
+// 防抖
 function debounce(callback, delay) {
   let timer = null;
   return function (...args) {
@@ -23,4 +27,4 @@ function debounce(callback, delay) {
   }
 }
 
-export { wordsCalc, debounce }
+export { wordsCalc, debounce, getYear }
