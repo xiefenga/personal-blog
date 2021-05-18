@@ -4,8 +4,8 @@ export const SET_ADMIN = 'SET_ADMIN';
 
 export const loginAction = values => async dispatch => {
   const resp = await login(values);
-  const { state, data } = resp;
-  if (state === 'success') {
+  const { status, data } = resp;
+  if (status === 'success') {
     dispatch(setAdminAction(data));
   }
   return resp;

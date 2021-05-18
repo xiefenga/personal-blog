@@ -1,8 +1,8 @@
 import { message } from 'antd'
 
 const correctInterceptor = resp => {
-  const { state, error } = resp.data;
-  if (state === 'fail') {
+  const { status, error } = resp.data;
+  if (status === 'fail') {
     message.error(error);
   }
   return resp.data;

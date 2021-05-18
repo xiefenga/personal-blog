@@ -1,15 +1,15 @@
 interface IResponse {
-  state: 'success' | 'fail'
+  status: 'success' | 'fail'
 }
 
 interface ISuccessResponse extends IResponse {
-  state: 'success';
+  status: 'success';
   data: any;
   count?: number;
 }
 
 interface IFailResponse extends IResponse {
-  state: 'fail';
+  status: 'fail';
   error: string
 }
 

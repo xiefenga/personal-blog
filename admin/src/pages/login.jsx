@@ -25,9 +25,9 @@ function Login(props) {
   const onFinish = useCallback(
     async values => {
       setLoading(true);
-      const { state } = await login(values);
+      const { status } = await login(values);
       setLoading(false);
-      if (state === 'success') {
+      if (status === 'success') {
         message.success('登录成功');
         history.replace('/');
       }

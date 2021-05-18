@@ -11,7 +11,7 @@ function Home(props) {
   useEffect(() => {
     if (admin === null) {
       whoAmI().then(res => {
-        if (res.state === 'success') {
+        if (res.status === 'success') {
           updateAdminInfo(res.data);
         } else {
           history.push('/login');
