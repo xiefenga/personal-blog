@@ -12,9 +12,5 @@ const logout = async () => {
   return axios.get('/logout');
 }
 
-window.logout = logout;
-
-window.whoAmI = whoAmI;
-
 export { login, whoAmI, logout }
 
