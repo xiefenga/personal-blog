@@ -11,7 +11,7 @@ const router = new Router();
 router.get('/logout', async ctx => {
   const token = ctx.cookies.get('token');
   if (token) {
-    ctx.cookies.set('token', token, { maxAge: 0, httpOnly: true });
+    ctx.cookies.set('token', null);
   }
   ctx.body = createSuccessResponse(null);
 });
