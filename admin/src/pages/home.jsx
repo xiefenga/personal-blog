@@ -1,9 +1,10 @@
+import { Layout } from 'antd'
 import { useEffect } from 'react'
 import { whoAmI } from '@/api/login'
 import { connect } from 'react-redux'
+import Header from '@/layout/Header'
 import { useHistory } from 'react-router-dom'
 import { setAdminAction } from '@/store/action/admin'
-
 
 function Home(props) {
   const { admin, updateAdminInfo } = props;
@@ -20,9 +21,11 @@ function Home(props) {
     }
   }, [admin, updateAdminInfo, history]);
   return (
-    <div>
-      home
-    </div>
+    <Layout>
+      <Header />
+      {/* <Content />
+    <Footer /> */}
+    </Layout>
   )
 }
 

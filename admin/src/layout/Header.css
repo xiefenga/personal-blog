@@ -1,0 +1,34 @@
+#header {
+  background-image: linear-gradient(to right, #fff1eb 0%, #ace0f9 100%);
+  padding: 0 20px;
+  line-height: 63px;
+  user-select: none;
+}
+
+#header h1, #header .user {
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+#header .header-menu {
+  background-color: transparent;
+}
+
+#header .user {
+  font-size: 18px;
+  line-height: 64px;
+  text-align: right;
+}
+
+#header .user .user-name {
+  margin-left: 5px;
+  vertical-align: middle;
+  display: inline-block;
+  width: calc(100% - 40px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+}
