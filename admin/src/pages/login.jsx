@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { loginAction } from '@/store/action/admin'
 import { Form, Input, Button, Typography, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import Footer from '@/layout/footer'
+import Footer from '@/layout/Footer'
 import './login.css'
 
 const { Title } = Typography;
