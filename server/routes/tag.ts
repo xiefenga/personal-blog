@@ -1,4 +1,5 @@
 import Router from '@koa/router'
+import { getArticlesByTagId } from '../services/article'
 import { addTag, deleteTag, getTags, updateTag } from '../services/tag'
 import { createFailResponse, createSuccessResponse } from '../utils/response'
 
@@ -7,6 +8,14 @@ const router = new Router();
 router.get('/', async ctx => {
   const [data, count] = await getTags();
   ctx.body = createSuccessResponse(data, count);
+});
+
+router.get('/:id', async ctx => {
+  const { id } = ctx.params;
+  const res = await getArticlesByTagId(Number(id));
+  ctx.body = Array.isArray(res)
+    ? createSuccessResponse(res[0], res[1])
+    : createFailResponse(res);
 });
 
 router.post('/', async ctx => {

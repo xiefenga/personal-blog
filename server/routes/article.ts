@@ -1,7 +1,7 @@
 import Router from '@koa/router'
-import { addArticle, deleteArticle, getArticleById, getArticles, getArticlesByCategoryId, getArticlesByTagId, updateArticle } from '../services/article'
-import { createFailResponse, createSuccessResponse } from '../utils/response';
 import { queryTransformNumber } from '../utils/transform'
+import { createFailResponse, createSuccessResponse } from '../utils/response'
+import { addArticle, deleteArticle, getArticleById, getArticles, updateArticle } from '../services/article'
 
 const router = new Router();
 
@@ -19,23 +19,6 @@ router.get('/:id', async ctx => {
   ctx.body = typeof res === 'string'
     ? createFailResponse([res])
     : createSuccessResponse(res);
-});
-
-router.get('/category/:id', async ctx => {
-  const { id } = ctx.params;
-  const res = await getArticlesByCategoryId(Number(id));
-  ctx.body = typeof res === 'string'
-    ? createFailResponse([res])
-    : createSuccessResponse(res[0], res[1]);
-});
-
-
-router.get('/tag/:id', async ctx => {
-  const { id } = ctx.params;
-  const res = await getArticlesByTagId(Number(id));
-  ctx.body = typeof res === 'string'
-    ? createFailResponse([res])
-    : createSuccessResponse(res[0], res[1]);
 });
 
 router.post('/', async ctx => {

@@ -1,4 +1,5 @@
 import Router from '@koa/router'
+import { getArticlesByCategoryId } from '../services/article'
 import { createFailResponse, createSuccessResponse } from '../utils/response'
 import { addCategory, deleteCategory, getCategories, updateCategory } from '../services/category'
 
@@ -7,6 +8,14 @@ const router = new Router();
 router.get('/', async ctx => {
   const [categories, count] = await getCategories();
   ctx.body = createSuccessResponse(categories, count);
+});
+
+router.get('/:id', async ctx => {
+  const { id } = ctx.params;
+  const res = await getArticlesByCategoryId(Number(id));
+  ctx.body = Array.isArray(res)
+    ? createSuccessResponse(res[0], res[1])
+    : createFailResponse(res);
 });
 
 router.post('/', async ctx => {
