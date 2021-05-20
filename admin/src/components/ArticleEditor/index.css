@@ -1,0 +1,8 @@
+.article-editor {
+  height: 100%;
+  width: 100%;
+}
+
+.article-editor .md-editor {
+  height: calc(100% - 50px);
+}

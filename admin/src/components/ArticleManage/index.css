@@ -1,0 +1,8 @@
+.article-manage {
+  height: 100%;
+  display: flex;
+}
+
+.article-manage>[class^="article-"] {
+  width: calc(100% - 80px);
+}

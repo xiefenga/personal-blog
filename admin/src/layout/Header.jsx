@@ -1,40 +1,24 @@
-import { logout } from '@/api/login'
-import { useCallback, useMemo } from 'react'
-import { useHistory } from 'react-router-dom'
-import { Link, useLocation } from 'react-router-dom'
-import { Layout, Row, Col, Avatar, Menu, Modal, message } from 'antd'
-import { UserOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { Link } from 'react-router-dom'
+import { UserOutlined } from '@ant-design/icons'
+import { usePaths, useToHome } from '@/hooks/routes'
+import { useAdmin, useConfirmLogout } from '@/hooks/admin'
+import { Layout, Row, Col, Avatar, Menu } from 'antd'
+
 import './Header.css'
 
 function Header() {
 
-  const history = useHistory();
+  const [admin] = useAdmin();
 
-  const location = useLocation();
+  const avatar = admin ? admin.avatar : '';
 
-  const onClick = useCallback(
-    () => history.push('/'),
-    [history]
-  );
+  const username = admin ? admin.username : '';
 
-  const selectedKeys = useMemo(
-    () => [location.pathname.split('/')[1]],
-    [location]
-  );
+  const onClick = useToHome();
 
-  const confirmLogout = useCallback(
-    () => Modal.confirm({
-      title: '确认退出',
-      icon: <QuestionCircleOutlined />,
-      content: '确定退出登录？',
-      onOk: async () => {
-        await logout();
-        message.success('退出登录');
-        history.push('/login');
-      }
-    }),
-    [history]
-  );
+  const selectedKeys = usePaths()[0];
+
+  const confirmLogout = useConfirmLogout(username);
 
   return (
     <Layout.Header id="header">
@@ -42,7 +26,7 @@ function Header() {
         <Col span={4}>
           <h1 onClick={onClick}>个人博客后台</h1>
         </Col>
-        <Col span={8} >
+        <Col span={12} >
           <Menu className="header-menu" mode="horizontal" selectedKeys={selectedKeys}>
             <Menu.Item key="article">
               <Link to="/article">文章管理</Link>
@@ -55,10 +39,10 @@ function Header() {
             </Menu.Item>
           </Menu>
         </Col>
-        <Col span={3} offset={9} >
-          <div className="user" onClick={confirmLogout}>
-            <Avatar className="avatar" size="middle" icon={<UserOutlined />} />
-            <span className="user-name">admin</span>
+        <Col span={3} offset={5} >
+          <div className="admin" onClick={confirmLogout}>
+            <Avatar size="middle" icon={<UserOutlined />} src={avatar} />
+            <span className="username">{username}</span>
           </div>
         </Col>
       </Row>

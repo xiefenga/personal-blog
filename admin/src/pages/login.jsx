@@ -1,11 +1,10 @@
-import { connect } from 'react-redux'
-import { useState, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
-import { loginAction } from '@/store/action/admin'
-import { Form, Input, Button, Typography, message } from 'antd'
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { useState } from 'react'
 import Footer from '@/layout/Footer'
+import { useLogin } from '@/hooks/routes'
+import { Form, Input, Button, Typography } from 'antd'
+import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import './login.css'
+
 
 const { Title } = Typography;
 
@@ -18,22 +17,9 @@ const formLayout = {
 
 const btnLayout = { offset: 4, span: 16 };
 
-function Login(props) {
-  const { login } = props;
-  const history = useHistory();
+function Login() {
   const [loading, setLoading] = useState(false);
-  const onFinish = useCallback(
-    async values => {
-      setLoading(true);
-      const { status } = await login(values);
-      setLoading(false);
-      if (status === 'success') {
-        message.success('登录成功');
-        history.replace('/');
-      }
-    },
-    [login, history]
-  );
+  const onFinish = useLogin(setLoading);
 
   return (
     <div className="login-box">
@@ -67,9 +53,5 @@ function Login(props) {
   )
 }
 
-const mapDispatchToProps = dispatch => ({
-  login: async values => dispatch(loginAction(values))
-});
 
-
-export default connect(null, mapDispatchToProps)(Login)
+export default Login

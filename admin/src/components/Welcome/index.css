@@ -1,0 +1,19 @@
+.welcome {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 50px;
+}
+
+.welcome article {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.welcome article h1 {
+  text-align: center;
+}
+
+.welcome .paragraph {
+  padding: 20px 0 0 50px;
+}

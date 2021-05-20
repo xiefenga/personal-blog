@@ -16,13 +16,13 @@
   background-color: transparent;
 }
 
-#header .user {
+#header .admin {
   font-size: 18px;
   line-height: 64px;
   text-align: right;
 }
 
-#header .user .user-name {
+#header .admin .username {
   margin-left: 5px;
   vertical-align: middle;
   display: inline-block;

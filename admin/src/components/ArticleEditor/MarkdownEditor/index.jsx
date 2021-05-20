@@ -1,25 +1,19 @@
-import PropTypes from 'prop-types'
 import 'codemirror/keymap/sublime'
 import 'codemirror/theme/monokai.css'
 import CodeMirror from '@uiw/react-codemirror'
 import throttle from 'lodash.throttle'
 import { wordsCalc } from '@/utils/helper'
-import { markdownParser } from '@/utils/markdown'
+import { useRef, useCallback, useMemo } from 'react'
+import { useHTML, useMarkdown } from '@/hooks/article'
 import { THROTTLE_MD_RENDER_TIME, EDITOR_OPTIONS } from '@/utils/constants'
-import { useRef, useCallback, useState, useMemo, useImperativeHandle, forwardRef, createRef } from 'react'
 import './index.css'
 
 
-function MarkdownEditor(props) {
+function MarkdownEditor() {
 
-  const { initMarkdown, infoRef } = props;
+  const [markdown, setMarkdown] = useMarkdown();
 
-  const [markdown, setMarkdown] = useState(initMarkdown);
-
-  const html = useMemo(
-    () => markdownParser.render(markdown),
-    [markdown]
-  );
+  const html = useHTML(markdown);
 
   const lines = useMemo(
     () => markdown.split("\n").length,
@@ -31,18 +25,12 @@ function MarkdownEditor(props) {
     [markdown]
   );
 
-  useImperativeHandle(
-    infoRef,
-    () => ({ markdown, html }),
-    [markdown, html]
-  );
-
   const onChange = useMemo(
     () => throttle(
       editor => setMarkdown(editor.getValue()),
       THROTTLE_MD_RENDER_TIME
     ),
-    []
+    [setMarkdown]
   );
 
   // 用于得到编辑器实例
@@ -117,16 +105,5 @@ function MarkdownEditor(props) {
   )
 }
 
-MarkdownEditor.propTypes = {
-  initMarkdown: PropTypes.string
-}
-
-MarkdownEditor.defaultProps = {
-  initMarkdown: '',
-  infoRef: createRef()
-}
-
-const MarkdownEditorWrapper = forwardRef((props, ref) => <MarkdownEditor {...props} infoRef={ref} />);
-
-export default MarkdownEditorWrapper
+export default MarkdownEditor
 

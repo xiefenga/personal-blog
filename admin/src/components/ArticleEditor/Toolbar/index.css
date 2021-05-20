@@ -1,0 +1,19 @@
+.editor-toolbar {
+  height: 50px;
+  display: flex;
+  background-color: #fff;
+}
+
+.editor-toolbar .editor-title {
+  outline: none;
+  box-sizing: border-box;
+  padding: 10px 0 10px 20px;
+  width: 500px;
+  font-size: 20px;
+  border: none;
+  font-weight: bold;
+}
+
+.editor-toolbar .article-title::placeholder {
+  color: gray;
+}
