@@ -2,8 +2,9 @@ import { Layout } from 'antd'
 import { useEffect } from 'react'
 import Header from '@/layout/Header'
 import Welcome from '@/components/Welcome'
-import { useAuth } from '@/hooks/admin'
+import { useAuth } from '@/hooks/routes'
 import { Switch, Route } from 'react-router-dom'
+import TagManage from '@/components/TagManage'
 import ArticleManage from '@/components/ArticleManage'
 
 const style = { width: '100%', height: '100%' };
@@ -19,7 +20,7 @@ function Home() {
           <Route path="/" component={Welcome} exact />
           <Route path="/article" component={ArticleManage} />
           <Route path="/category" exact />
-          <Route path="/tag" exact />
+          <Route path="/tag" component={TagManage} exact />
         </Switch>
       </Layout.Content>
     </Layout>

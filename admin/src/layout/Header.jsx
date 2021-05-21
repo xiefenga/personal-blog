@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
+import { useAdmin } from '@/hooks/store'
+import { useLogout } from '@/hooks/routes'
 import { UserOutlined } from '@ant-design/icons'
-import { usePaths, useToHome } from '@/hooks/routes'
-import { useAdmin, useConfirmLogout } from '@/hooks/admin'
+import { usePaths, useGoHome } from '@/hooks/routes'
 import { Layout, Row, Col, Avatar, Menu } from 'antd'
-
 import './Header.css'
 
 function Header() {
@@ -14,11 +14,11 @@ function Header() {
 
   const username = admin ? admin.username : '';
 
-  const onClick = useToHome();
+  const onClick = useGoHome();
 
   const selectedKeys = usePaths()[0];
 
-  const confirmLogout = useConfirmLogout(username);
+  const confirmLogout = useLogout(username);
 
   return (
     <Layout.Header id="header">
