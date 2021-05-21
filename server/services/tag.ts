@@ -18,13 +18,13 @@ const addTag = async (tagObj: object): Promise<string[] | ITag> => {
   return t;
 }
 
-const updateTag = async (id: number, tagObj: Object): Promise<string[] | boolean> => {
+const updateTag = async (id: number, tagObj: Object): Promise<string[] | ITag> => {
   if (Number.isNaN(id)) { return ['id非法']; }
   const tag = plainTransform(TagModel, tagObj);
   const errors = await validateModel(tag);
   if (errors.length) { return errors; }
-  await TagEntity.update(tag, { where: { id } });
-  return true;
+  const [, update] = await TagEntity.update(tag, { where: { id } });
+  return update[0];
 }
 
 const deleteTag = async (id: number): Promise<string[] | boolean> => {
