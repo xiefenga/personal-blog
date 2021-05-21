@@ -22,7 +22,7 @@ app.use(bodyParser());
 
 app.use(noAccess());
 
-app.use(jwt({ secret: jwtSecret }).unless(jwtIgnore));
+app.use(jwt({ secret: jwtSecret, cookie: 'token' }).unless(jwtIgnore));
 
 app.use(router.routes());
 
