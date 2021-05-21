@@ -1,4 +1,5 @@
 import { IArticle } from '../types/models'
+import { sitePath } from '../utils/configs'
 import { Expose, Type, Exclude } from 'class-transformer'
 import { IsValidURL, IsArrayOf } from '../validation/decorators'
 import { IsInt, IsNotEmpty, IsString, Min, isInt, ArrayMinSize, ArrayUnique } from 'class-validator'
@@ -33,7 +34,7 @@ class Article implements IArticle {
   @IsValidURL({ message: 'post必须为一个合法URL' })
   @Expose()
   @Type(() => String)
-  public post!: string;
+  public post: string = require(sitePath).defaultPost;
 
   @IsArrayOf(isInt, { message: 'categories类型错误' })
   @ArrayMinSize(1, { message: 'categories不能为空' })
