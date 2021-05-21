@@ -13,7 +13,7 @@ function App() {
 	return (
 		<ConfigProvider locale={zhCN}>
 			<Provider store={store}>
-				<Router>
+				<Router basename="admin">
 					<Switch>
 						<Route path="/login" component={Login} exact />
 						<Route path="/404" component={NotFound} exact />
