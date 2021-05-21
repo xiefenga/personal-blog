@@ -10,6 +10,8 @@ export const adminPath = resolve(configDir, 'admin.config.json');
 
 export const secretPath = resolve(configDir, 'secret.pub');
 
+export const sitePath = resolve(configDir, 'site.config.json');
+
 export const staticPath = resolve(resolve(__dirname, '../public'));
 
 export const dbConfigs: DBConfig = require(dbPath);
