@@ -3,8 +3,9 @@ import 'codemirror/theme/monokai.css'
 import CodeMirror from '@uiw/react-codemirror'
 import throttle from 'lodash.throttle'
 import { wordsCalc } from '@/utils/helper'
+import { useMarkdown } from '@/hooks/store'
+import { markdownParser } from '@/utils/markdown'
 import { useRef, useCallback, useMemo } from 'react'
-import { useHTML, useMarkdown } from '@/hooks/article'
 import { THROTTLE_MD_RENDER_TIME, EDITOR_OPTIONS } from '@/utils/constants'
 import './index.css'
 
@@ -13,7 +14,10 @@ function MarkdownEditor() {
 
   const [markdown, setMarkdown] = useMarkdown();
 
-  const html = useHTML(markdown);
+  const html = useMemo(
+    () => markdownParser.render(markdown),
+    [markdown]
+  );
 
   const lines = useMemo(
     () => markdown.split("\n").length,
@@ -25,9 +29,12 @@ function MarkdownEditor() {
     [markdown]
   );
 
+
+  // change 事件 通过输入和 value 的改变都会触发
   const onChange = useMemo(
     () => throttle(
-      editor => setMarkdown(editor.getValue()),
+      // 通过 focus 来判断是 通过输入触发 change 事件还是 通过 value 触发
+      editor => editor.hasFocus() && setMarkdown(editor.getValue()),
       THROTTLE_MD_RENDER_TIME
     ),
     [setMarkdown]
