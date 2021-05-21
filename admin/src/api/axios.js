@@ -7,6 +7,12 @@ const login = axios.create({
   baseURL: '/api/admin'
 });
 
+const tag = axios.create({
+  baseURL: '/api/tag'
+});
+
 login.interceptors.response.use(correctInterceptor, errorInterceptor);
 
-export { login }
+tag.interceptors.response.use(correctInterceptor, errorInterceptor);
+
+export { login, tag }
