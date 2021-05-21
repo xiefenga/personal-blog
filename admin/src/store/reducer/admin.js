@@ -1,4 +1,4 @@
-import { SET_ADMIN } from '../action/admin';
+import { SET_ADMIN, LOGOUT } from '../action/admin'
 
 const initialState = null;
 
@@ -7,6 +7,9 @@ const reducer = (state = initialState, { type, payload }) => {
 
     case SET_ADMIN:
       return { ...payload }
+
+    case LOGOUT:
+      return initialState
 
     default:
       return state
