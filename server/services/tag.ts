@@ -27,6 +27,7 @@ const updateTag = async (id: number, tagObj: Object): Promise<string[] | ITag> =
   const ins = await TagEntity.findByPk(id);
   if (ins === null) { return ['该标签不存在']; }
   ins.name = tag.name;
+  ins.save();
   return ins;
 }
 
