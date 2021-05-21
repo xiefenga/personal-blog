@@ -23,8 +23,11 @@ const updateTag = async (id: number, tagObj: Object): Promise<string[] | ITag> =
   const tag = plainTransform(TagModel, tagObj);
   const errors = await validateModel(tag);
   if (errors.length) { return errors; }
-  const [, update] = await TagEntity.update(tag, { where: { id } });
-  return update[0];
+  // const res = await TagEntity.update(tag, { where: { id } });
+  const ins = await TagEntity.findByPk(id);
+  if (ins === null) { return ['该标签不存在']; }
+  ins.name = tag.name;
+  return ins;
 }
 
 const deleteTag = async (id: number): Promise<string[] | boolean> => {
