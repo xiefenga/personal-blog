@@ -1,0 +1,40 @@
+.tag-manage {
+  padding: 20px 50px;
+}
+
+.tag-manage .tag-list .ant-tag:hover {
+  transform: scale(1.2);
+}
+
+.tag-manage .ant-tag {
+  cursor: pointer;
+  user-select: none;
+}
+
+.tag-manage .tag-add {
+  margin-top: 10px;
+}
+
+.tag-manage .tag-add input {
+  width: 78px;
+}
+
+.tag-manage .edit-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .1);
+  left: 0;
+  top: 0;
+}
+
+.tag-manage .edit-container input {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  padding: 10px;
+  width: 500px;
+  height: 50px;
+  transform: translate(-60%, -70%);
+}
