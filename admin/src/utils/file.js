@@ -22,18 +22,15 @@ function download(url, fileName) {
   document.body.removeChild(download);
 }
 
-function exportFile(data, fileName, ext) {
-  if (data === '') {
+function exportFile(data, fileName) {
+  if (data == null) {
     throw new Error('导出文件为空');
   } else if (fileName == null || fileName === '') {
-    fileName = Date.now();
-  } else if (ext == null || ext === '') {
-    throw new Error('缺少文件扩展名');
+    throw new Error('缺少文件名');
   }
   const url = createDownloadURL(data);
-  download(url, `${fileName}.${ext}`);
+  download(url, fileName);
   URL.revokeObjectURL(url);
-  return true;
 }
 
 async function importFile(file, extLimits = []) {
