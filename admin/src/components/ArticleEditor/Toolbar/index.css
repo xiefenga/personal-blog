@@ -4,16 +4,13 @@
   background-color: #fff;
 }
 
-.editor-toolbar .editor-title {
-  outline: none;
-  box-sizing: border-box;
-  padding: 10px 0 10px 20px;
-  width: 500px;
-  font-size: 20px;
-  border: none;
-  font-weight: bold;
+.editor-toolbar .btns {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding-right: 50px;
 }
 
-.editor-toolbar .article-title::placeholder {
-  color: gray;
+.editor-toolbar .btns>* {
+  margin: 0 5px;
 }

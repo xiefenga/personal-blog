@@ -1,0 +1,32 @@
+#import-input {
+  display: none;
+}
+
+.file-import {
+  display: flex;
+  align-items: center;
+}
+
+.file-import .import-btn {
+  display: inline-block;
+  cursor: pointer;
+  border: 1px dashed #d9d9d9;
+  color: rgba(0, 0, 0, .85);
+  background: #fff;
+  line-height: 1.5715;
+  white-space: nowrap;
+  text-align: center;
+  box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+  transition: all .3s cubic-bezier(.645, .045, .355, 1);
+  user-select: none;
+  height: 32px;
+  padding: 4px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.file-import .import-btn:hover {
+  color: #40a9ff;
+  background: #fff;
+  border-color: #40a9ff;
+}
