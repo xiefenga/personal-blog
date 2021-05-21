@@ -7,3 +7,9 @@ export const EDITOR_OPTIONS = {
   lineWrapping: true,
   lineNumbers: false,
 }
+
+export const CLICK_DOUBLECLICK_INTERVAL = 200;
+
+export const SUCCESS_STATUS = 'success';
+
+export const FAIL_STATUS = 'fail';

@@ -1,15 +1,16 @@
 import { message } from 'antd'
+import { FAIL_STATUS as FAIL } from '@/utils/constants'
 
 const correctInterceptor = resp => {
   const { status, error } = resp.data;
-  if (status === 'fail') {
+  if (status === FAIL) {
     message.error(error);
   }
   return resp.data;
 };
 
 const errorInterceptor = error => {
-  const resp = { status: 'fail' };
+  const resp = { status: FAIL };
   let msg;
   if (error.response) {
     // 服务端返回的导致 axios 错误，这时是由于状态码 out of the range of 2xx
