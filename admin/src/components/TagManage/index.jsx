@@ -5,6 +5,7 @@ import { Empty, Tag, Input, message, Modal } from 'antd'
 import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { useTags, useGetTags, useAddTag, useUpdateTag, useDeleteTag } from '@/hooks/store'
 import './index.css'
+import EditBox from '../EditBox';
 
 const enter = { scale: 0.8, opacity: 0, type: 'from', duration: 100, onComplete: e => e.target.style = '' };
 
@@ -60,7 +61,7 @@ function TagManage() {
   const onEditPress = useCallback(
     async () => {
       if (editValue === '') {
-        message.error('标签名不能为空');
+        message.error('标签名为空');
         return;
       }
       const success = await updateTag(editId, editValue);
@@ -141,24 +142,17 @@ function TagManage() {
         }
       </div>
       {editVisible && (
-        <div className="edit-container">
-          <Input
-            autoFocus
-            placeholder="请输入标签名称"
-            value={editValue}
-            onKeyDown={editESC}
-            onBlur={hideEditInput}
-            onChange={onEditChange}
-            onPressEnter={onEditPress}
-          />
-        </div>
+        <EditBox
+          placeholder="请输入标签名称"
+          value={editValue}
+          onKeyDown={editESC}
+          onBlur={hideEditInput}
+          onChange={onEditChange}
+          onPressEnter={onEditPress}
+        />
       )}
     </div>
   )
-}
-
-TagManage.propTypes = {
-
 }
 
 export default TagManage
