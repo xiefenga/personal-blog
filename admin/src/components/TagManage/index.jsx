@@ -83,7 +83,8 @@ function TagManage() {
         if (success) {
           message.success('删除成功');
         }
-      }
+      },
+      maskClosable: true
     }),
     [deleteTag]
   );
