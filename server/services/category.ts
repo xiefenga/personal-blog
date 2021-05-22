@@ -19,8 +19,7 @@ const addCategory = async (categoryObj: Object): Promise<string[] | ICategory> =
   const [c, created] = await CategoryEntity.findOrCreate({
     where: { ...category }
   });
-
-  return c;
+  return created ? c : ['该类目已存在'];
 }
 
 /**

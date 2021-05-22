@@ -15,7 +15,7 @@ const addTag = async (tagObj: object): Promise<string[] | ITag> => {
   const errors = await validateModel(tag);
   if (errors.length) { return errors; }
   const [t, created] = await TagEntity.findOrCreate({ where: { ...tag } });
-  return t;
+  return created ? t : ['该标签已存在'];
 }
 
 const updateTag = async (id: number, tagObj: Object): Promise<string[] | ITag> => {
