@@ -10,11 +10,11 @@ class Category implements ICategory {
   @Type(() => String)
   public name!: string;
 
-  @ValidateIf((_, value) => value !== null)
+  @ValidateIf((_, value) => value != null)
   @IsInt({ message: 'parentId类型错误' })
   @Expose()
   @Transform(({ value }) => isEmpty(value) ? null : Number(value), { toClassOnly: true })
-  public parentId: number | null = null;
+  public parentId!: number | null;
 }
 
 export default Category

@@ -30,7 +30,7 @@ router.put('/:id', async ctx => {
   const res = await updateCategory(Number(id), ctx.request.body);
   ctx.body = Array.isArray(res)
     ? createFailResponse(res)
-    : createSuccessResponse();
+    : createSuccessResponse(res);
 });
 
 router.delete('/:id', async ctx => {
