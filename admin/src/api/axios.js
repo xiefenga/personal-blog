@@ -11,8 +11,14 @@ const tag = axios.create({
   baseURL: '/api/tag'
 });
 
+const category = axios.create({
+  baseURL: '/api/category'
+});
+
 login.interceptors.response.use(correctInterceptor, errorInterceptor);
 
 tag.interceptors.response.use(correctInterceptor, errorInterceptor);
 
-export { login, tag }
+category.interceptors.response.use(correctInterceptor, errorInterceptor);
+
+export { login, tag, category }
