@@ -1,0 +1,65 @@
+.category-manage {
+  padding: 30px 0 0 50px;
+  background-color: #fff;
+  font-size: 18px;
+  width: 500px;
+  height: 100%;
+}
+
+.category-manage h1 {
+  margin-bottom: 20px;
+}
+
+.category-manage .category-list {
+  width: 300px;
+}
+
+.category-manage .ant-tree {
+  font-size: 18px;
+  user-select: none;
+}
+
+.category-manage .category-title {
+  margin-right: 30px;
+  display: inline-block;
+  padding: 0 5px;
+}
+
+.category-manage .category-tool {
+  display: none;
+  margin: 0 5px;
+}
+
+.category-manage .category-tool:hover {
+  background-color: lightblue;
+}
+
+/* 覆盖原本样式 */
+
+.category-manage .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background-color: transparent;
+}
+
+.category-manage .ant-tree-node-selected .category-title {
+  background-color: #bae7ff;
+}
+
+.category-manage .ant-tree-node-content-wrapper input {
+  width: 100px;
+}
+
+.category-manage .ant-tree-node-selected .category-tool {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 5px;
+}
+
+.category-manage .add-btn {
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.category-manage .add-btn span.title {
+  margin-left: 5px;
+  vertical-align: 1px;
+}
