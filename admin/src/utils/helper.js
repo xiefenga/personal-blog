@@ -41,6 +41,27 @@ const cancelablePromise = promise => {
   };
 }
 
+const treeDateTransform = (data, map) => ({
+  ...map(data),
+  children: data.children
+    ? data.children.map(c => treeDateTransform(c, map))
+    : []
+});
+
+const findCategoryIndex = (id, categories) => {
+  for (let i = 0; i < categories.length; i++) {
+    const c = categories[i];
+    if (c.id === id) {
+      return [i];
+    } else {
+      const j = c.children.findIndex(c => c.id === id);
+      if (j !== -1) {
+        return [i, j];
+      }
+    }
+  }
+}
+
 export const delay = n => new Promise(resolve => setTimeout(resolve, n));
 
 // 获取当前年份
@@ -48,4 +69,4 @@ export const getYear = () => new Date().getFullYear();
 
 export const isEmpty = value => value == null || value === '';
 
-export { wordsCalc, debounce, cancelablePromise }
+export { wordsCalc, debounce, cancelablePromise, treeDateTransform, findCategoryIndex }
