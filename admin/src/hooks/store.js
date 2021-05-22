@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setArticleAction } from '@/store/action/article'
 import { setAdminAction, loginAction, logoutAction } from '@/store/action/admin'
 import { setTagsAction, getTagsAction, addTagAction, updateTagAction, deleteTagAction } from '@/store/action/tags'
+import { setCategoriesAction, getCategoriesAction, addCategoryAction, updateCategoryAction, deleteCategoryAction } from '@/store/action/categories'
 
 
 function useAdmin() {
@@ -43,6 +44,16 @@ function useTags() {
     [dispatch]
   );
   return [tags, updateTags];
+}
+
+function useCategories() {
+  const categories = useSelector(state => state.categories);
+  const dispatch = useDispatch();
+  const update = useCallback(
+    value => dispatch(setCategoriesAction(value)),
+    [dispatch]
+  );
+  return [categories, update];
 }
 
 function useLogin() {
@@ -93,6 +104,37 @@ function useDeleteTag() {
   );
 }
 
+function useGetCategories() {
+  const dispatch = useDispatch();
+  return useCallback(
+    async () => dispatch(getCategoriesAction()),
+    [dispatch]
+  );
+}
+
+function useAddCategory() {
+  const dispatch = useDispatch();
+  return useCallback(
+    async value => dispatch(addCategoryAction(value)),
+    [dispatch]
+  );
+}
+
+function useUpdateCategory() {
+  const dispatch = useDispatch();
+  return useCallback(
+    async (id, value) => dispatch(updateCategoryAction(id, value)),
+    [dispatch]
+  );
+}
+
+function useDeleteCategory() {
+  const dispatch = useDispatch();
+  return useCallback(
+    async id => dispatch(deleteCategoryAction(id)),
+    [dispatch]
+  );
+}
 
 export {
   useAdmin,
@@ -104,5 +146,10 @@ export {
   useGetTags,
   useAddTag,
   useUpdateTag,
-  useDeleteTag
+  useDeleteTag,
+  useCategories,
+  useGetCategories,
+  useAddCategory,
+  useUpdateCategory,
+  useDeleteCategory
 }
