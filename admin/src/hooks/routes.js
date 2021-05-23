@@ -1,6 +1,6 @@
 import { message, Modal } from 'antd'
-import { useCallback, useMemo } from 'react'
 import { whoAmI, logout } from '@/api/login'
+import { useCallback, useMemo, useState } from 'react'
 import { useAdmin, useLogin, useLogout } from './store'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -31,9 +31,10 @@ function useRedirect(path) {
 
 
 function useAuth() {
+  const [accept, setAccept] = useState(true);
   const history = useHistory();
   const [admin, updateAdminInfo] = useAdmin();
-  return useCallback(
+  return [accept, useCallback(
     () => {
       if (admin === null) {
         whoAmI().then(res => {
@@ -42,11 +43,14 @@ function useAuth() {
           } else {
             history.push('/login');
           }
+          setAccept(false);
         });
+      } else {
+        setAccept(false);
       }
     },
     [history, admin, updateAdminInfo]
-  );
+  )];
 }
 
 
