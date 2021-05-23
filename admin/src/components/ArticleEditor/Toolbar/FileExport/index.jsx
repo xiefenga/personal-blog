@@ -13,6 +13,10 @@ function FileExport(props) {
 
   const onClick = useCallback(
     () => {
+      if (!markdown) {
+        message.error('文章内容为空');
+        return;
+      }
       try {
         exportFile(markdown, title ? `${title}.${ext}` : `${Date.now()}.${ext}`);
       } catch (error) {
