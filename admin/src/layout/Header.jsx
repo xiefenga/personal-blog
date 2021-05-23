@@ -12,7 +12,7 @@ function Header() {
 
   const avatar = admin ? admin.avatar : '';
 
-  const username = admin ? admin.username : '';
+  const username = admin ? admin.username : '登录中';
 
   const onClick = useGoHome();
 
