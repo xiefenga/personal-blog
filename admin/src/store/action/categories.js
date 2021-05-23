@@ -21,7 +21,7 @@ export const addCategoryAction = value => async (dispatch, getState) => {
   if (status === SUCCESS) {
     const { categories } = getState();
     if (!data.parentId) {
-      categories.push(data);
+      categories.push({ ...data, children: [] });
     } else {
       categories.forEach(c => {
         if (data.parentId === c.id) {
