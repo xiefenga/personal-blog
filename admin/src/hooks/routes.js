@@ -82,9 +82,9 @@ function useConfirmLogout(username = '') {
       content: `确定退出登录账号 ${username}？`,
       onOk: async () => {
         await logout();
-        logoutAdmin();
         message.success('退出登录');
         history.push('/login');
+        logoutAdmin();
       }
     }),
     [history, logoutAdmin, username]
