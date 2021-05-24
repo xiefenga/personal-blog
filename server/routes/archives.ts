@@ -1,17 +1,19 @@
 import Router from '@koa/router'
 import { getArchives } from '../services/article'
-import { queryTransformNumber } from '../utils/transform'
-import { createFailResponse, createSuccessResponse } from '../utils/response';
-
+import { query2Number } from '../utils/transform'
+import { createSuccessResponse } from '../utils/helper'
 
 const router = new Router();
 
 router.get('/archives', async ctx => {
-  const [page, size] = queryTransformNumber(ctx.request.query, 'page', 'size');
-  const res = await getArchives(page, size);
-  ctx.body = Array.isArray(res)
-    ? createSuccessResponse(res[0], res[1])
-    : createFailResponse([res]);
+  const [page, size] = query2Number(
+    ctx.request.query,
+    'page',
+    'size'
+  );
+  const archives = await getArchives(page, size);
+  ctx.body = createSuccessResponse(archives);
 });
+
 
 export default router

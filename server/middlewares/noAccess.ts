@@ -1,13 +1,17 @@
-import { createFailResponse } from '../utils/response'
+import { NOT_LOGIN } from '../utils/tips'
+import { createFailResponse } from '../utils/helper'
 import { ParameterizedContext, DefaultState, DefaultContext, Next } from 'koa'
 
 const noAccessMiddleware = () => (
-  async (ctx: ParameterizedContext<DefaultState, DefaultContext>, next: Next) => {
+  async (
+    ctx: ParameterizedContext<DefaultState, DefaultContext>,
+    next: Next
+  ) => {
     try {
       await next();
     } catch (error) {
       if (401 == error.status) {
-        ctx.body = createFailResponse(['还未登录，请先登录']);
+        ctx.body = createFailResponse(NOT_LOGIN);
       } else {
         throw error;
       }

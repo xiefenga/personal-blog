@@ -1,44 +1,37 @@
 import Router from '@koa/router'
+import { createSuccessResponse } from '../utils/helper'
 import { getArticlesByCategoryId } from '../services/article'
-import { createFailResponse, createSuccessResponse } from '../utils/response'
 import { addCategory, deleteCategory, getCategories, updateCategory } from '../services/category'
+
 
 const router = new Router();
 
 router.get('/', async ctx => {
-  const [categories, count] = await getCategories();
-  ctx.body = createSuccessResponse(categories, count);
+  const categoryList = await getCategories();
+  ctx.body = createSuccessResponse(categoryList);
 });
 
 router.get('/:id', async ctx => {
   const { id } = ctx.params;
-  const res = await getArticlesByCategoryId(Number(id));
-  ctx.body = Array.isArray(res)
-    ? createSuccessResponse(res[0], res[1])
-    : createFailResponse(res);
+  const articles = await getArticlesByCategoryId(Number(id));
+  ctx.body = createSuccessResponse(articles);
 });
 
 router.post('/', async ctx => {
-  const res = await addCategory(ctx.request.body);
-  ctx.body = Array.isArray(res)
-    ? createFailResponse(res)
-    : createSuccessResponse(res);
+  const category = await addCategory(ctx.request.body);
+  ctx.body = createSuccessResponse(category);
 });
 
 router.put('/:id', async ctx => {
   const { id } = ctx.params;
-  const res = await updateCategory(Number(id), ctx.request.body);
-  ctx.body = Array.isArray(res)
-    ? createFailResponse(res)
-    : createSuccessResponse(res);
+  const category = await updateCategory(Number(id), ctx.request.body);
+  ctx.body = createSuccessResponse(category);
 });
 
 router.delete('/:id', async ctx => {
   const { id } = ctx.params;
-  const res = await deleteCategory(Number(id));
-  ctx.body = Array.isArray(res)
-    ? createFailResponse(res)
-    : createSuccessResponse();
+  await deleteCategory(Number(id));
+  ctx.body = createSuccessResponse();
 });
 
 export default router

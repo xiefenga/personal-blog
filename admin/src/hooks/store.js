@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setArticleAction } from '@/store/action/article'
+import { setArticleAction, clearArticleAction } from '@/store/action/article'
 import { setAdminAction, loginAction, logoutAction } from '@/store/action/admin'
 import { setTagsAction, getTagsAction, addTagAction, updateTagAction, deleteTagAction } from '@/store/action/tags'
 import { setCategoriesAction, getCategoriesAction, addCategoryAction, updateCategoryAction, deleteCategoryAction } from '@/store/action/categories'
@@ -16,14 +16,26 @@ function useAdmin() {
   return [admin, updateAdmin];
 }
 
-function useMarkdown() {
-  const { markdown = '' } = useSelector(state => state.article);
+// article 相关
+
+const useArticle = () => useSelector(state => state.article);
+
+const useClearArticle = () => {
   const dispatch = useDispatch();
-  const updateMarkdown = useCallback(
-    value => dispatch(setArticleAction({ markdown: value })),
+  return useCallback(
+    () => dispatch(clearArticleAction()),
     [dispatch]
   );
-  return [markdown, updateMarkdown];
+}
+
+function useMarkdown() {
+  const { content = '' } = useSelector(state => state.article);
+  const dispatch = useDispatch();
+  const updateMarkdown = useCallback(
+    value => dispatch(setArticleAction({ content: value })),
+    [dispatch]
+  );
+  return [content, updateMarkdown];
 }
 
 function useTitle() {
@@ -35,6 +47,28 @@ function useTitle() {
   );
   return [title, updateTitle];
 }
+
+function useArticleCategories() {
+  const { categories = [] } = useSelector(state => state.article);
+  const dispatch = useDispatch();
+  const updateTitle = useCallback(
+    value => dispatch(setArticleAction({ categories: value })),
+    [dispatch]
+  );
+  return [categories, updateTitle];
+}
+
+function useArticleTags() {
+  const { tags = [] } = useSelector(state => state.article);
+  const dispatch = useDispatch();
+  const updateTitle = useCallback(
+    value => dispatch(setArticleAction({ tags: value })),
+    [dispatch]
+  );
+  return [tags, updateTitle];
+}
+
+export { useArticle, useClearArticle, useMarkdown, useTitle, useArticleCategories, useArticleTags }
 
 function useTags() {
   const tags = useSelector(state => state.tags);
@@ -138,8 +172,7 @@ function useDeleteCategory() {
 
 export {
   useAdmin,
-  useMarkdown,
-  useTitle,
+
   useTags,
   useLogin,
   useLogout,

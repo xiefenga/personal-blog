@@ -1,35 +1,34 @@
+import { Op } from 'sequelize'
 import ArticleModel from '../models/Article'
 import ArticleEntity from '../db/entities/Article'
 import { plainTransform } from '../utils/transform'
-import { validateModel } from '../validation/handleErrors'
 import { wordCounts } from '../utils/helper'
-import { exculdeTimeStame } from '../utils/configs'
-import ArticleCagtegoriesEntity from '../db/entities/ArticleCategories'
-import { categoriesCheck, tagsCheck } from '../validation/dbCheck'
-import ArticleTagsEntity from '../db/entities/ArticleTags'
-import ArticleCagtegories from '../db/entities/ArticleCategories'
-import ArticleTags from '../db/entities/ArticleTags'
+import { EXCLUDE_TIMESTAME, SITE_CONFIG_PATH } from '../utils/constants'
+import ArticleCagtegoryEntity from '../db/entities/ArticleCategory'
+import ArticleTagEntity from '../db/entities/ArticleTag'
 import { IArticle, IArticles } from '../types/models'
 import CategoryEntity from '../db/entities/Category'
 import TagEntity from '../db/entities/Tag'
-import { Op } from 'sequelize'
+import { UnknowObject } from '../types/helper'
+import { categoriesValidate, emptyModelValidate, idValidate, positiveIntValidate, removeInvalidCId, tagsValidate, validateModel, validateTitleSafe } from '../utils/validate'
+import { ARTICLE_NOT_EXIST, ID_INVALID, PAGE_INVALID, SIZE_INVALID } from '../utils/tips'
+
 
 
 // 获取归档
-const getArchives = async (page: number = 1, size: number = 10): Promise<string | [IArticle[], number]> => {
-  if (Number.isNaN(page) || page < 1) {
-    return 'page非法';
-  } else if (Number.isNaN(size) || size < 1) {
-    return 'size非法';
-  }
-  const { rows, count } = await ArticleEntity.findAndCountAll({
+const getArchives = async (page: number = 1, size: number = 10): Promise<[IArticle[], number]> => {
+  positiveIntValidate(page, PAGE_INVALID);
+  positiveIntValidate(size, SIZE_INVALID);
+
+  const { rows: articles, count } = await ArticleEntity.findAndCountAll({
     limit: size,
     offset: (page - 1) * size,
     order: [
       ['createdAt', 'DESC']
     ]
   });
-  return [rows, count];
+
+  return [articles, count];
 }
 
 /**
@@ -37,12 +36,9 @@ const getArchives = async (page: number = 1, size: number = 10): Promise<string 
  * @param page 页数
  * @param size 页容量
  */
-const getArticles = async (page: number = 1, size: number = 10): Promise<string | [IArticles[], number]> => {
-  if (Number.isNaN(page) || page < 1) {
-    return 'page非法';
-  } else if (Number.isNaN(size) || size < 1) {
-    return 'size非法';
-  }
+const getArticles = async (page: number = 1, size: number = 10): Promise<[IArticles[], number]> => {
+  positiveIntValidate(page, PAGE_INVALID);
+  positiveIntValidate(size, SIZE_INVALID);
   const { rows, count } = await ArticleEntity.findAndCountAll({
     limit: size,
     offset: (page - 1) * size,
@@ -51,170 +47,244 @@ const getArticles = async (page: number = 1, size: number = 10): Promise<string 
     ]
   });
 
-  const articles = await Promise.all(rows.map(article => getArticle(article.id, article) as Promise<IArticles>))
+  const articles = await Promise.all(
+    rows.map(
+      article => fillArticle(article)
+    )
+  );
 
   return [articles, count];
 }
 
-const getArticle = async (id: number, article?: ArticleEntity): Promise<string | IArticles> => {
-  if (Number.isNaN(id)) {
-    return 'id非法';
-  }
-
-  if (!article) {
-    const queryArticle = await ArticleEntity.findByPk(id);
-    if (queryArticle === null) {
-      return 'article不存在';
-    } else {
-      article = queryArticle;
-    }
-  }
-
+const fillArticle = async (article: ArticleEntity): Promise<IArticles> => {
+  const { id } = article;
+  // acs -> article category s
+  // ats -> article tag s
   const [acs, ats] = await Promise.all([
-    ArticleCagtegoriesEntity.findAll({ where: { articleId: id } }),
-    ArticleTagsEntity.findAll({ where: { articleId: id } })
+    ArticleCagtegoryEntity.findAll({ where: { articleId: id } }),
+    ArticleTagEntity.findAll({ where: { articleId: id } })
   ]);
 
-  const cPromise = Promise.all(acs.map(async ac => {
-    const c = (await CategoryEntity.findByPk(ac.categoryId, exculdeTimeStame))!;
-    if (c.parentId !== null) {
-      const pc = (await CategoryEntity.findByPk(c.parentId, exculdeTimeStame))!;
-      return [pc, c];
-    }
-    return [c];
-  }));
+  // cp -> categories promise
+  const cp = Promise.all(
+    acs.map(
+      async ac => {
+        const c = (
+          await CategoryEntity.findByPk(ac.categoryId, EXCLUDE_TIMESTAME)
+        )!;
+        if (c.parentId !== null) {
+          const p = (
+            await CategoryEntity.findByPk(c.parentId, EXCLUDE_TIMESTAME)
+          )!;
+          return [p, c];
+        }
+        return [c];
+      }
+    )
+  );
 
-  const tPromise = Promise.all(ats.map(at => TagEntity.findByPk(at.tagId, exculdeTimeStame) as Promise<TagEntity>));
+  // tp -> tags promise
+  const tp = Promise.all(
+    ats.map(at => TagEntity.findByPk(at.tagId, EXCLUDE_TIMESTAME) as Promise<TagEntity>
+    )
+  );
 
-  const [categories, tags] = await Promise.all([cPromise, tPromise]);
+  const [categories, tags] = await Promise.all([cp, tp]);
 
   return { ...article.get(), categories, tags };
 }
 
-const getArticleById = async (id: number) => getArticle(id);
+const getArticleById = async (id: number): Promise<IArticles> => {
+  idValidate(id, ID_INVALID);
+  const article = emptyModelValidate(
+    await ArticleEntity.findByPk(id),
+    ARTICLE_NOT_EXIST
+  );
+  return await fillArticle(article);
+}
 
 /**
  * 新增文章，成功返回新添加的信息，失败返回错误消息
- * @param articleObj 添加的文章信息
+ * @param value 添加的文章信息
  */
-const addArticle = async (articleObj: Object): Promise<string[] | IArticles> => {
-  const article = plainTransform(ArticleModel, articleObj);
-  article.words = wordCounts(article.content);
+const addArticle = async (value: UnknowObject): Promise<IArticles> => {
+  // 类型转换
+  const article = plainTransform(ArticleModel, value);
   // 检测数据应当具有的字段和类型
-  const errors = await validateModel(article);
-  if (errors.length) { return errors; }
-  // 检测文章对应的categories和tags是否存在
-  const [[res1, cs], res2] = await Promise.all([categoriesCheck(article.categories), tagsCheck(article.tags)]);
-  if (!res1) {
-    return ['categories数据有误'];
-  } else if (!res2) {
-    return ['tags数据有误']
+  await validateModel(article);
+  // 补全可以缺失的属性 cover
+  if (!value.cover) {
+    article.cover = require(SITE_CONFIG_PATH).defaultCover;
   }
+  // 写入正确的字数
+  article.words = wordCounts(article.content);
+
+  const { categories, tags } = article;
+
+  // cs -> categories
+  const [cs] = await Promise.all([
+    categoriesValidate(categories),
+    tagsValidate(tags)
+  ]);
+
+  // ArticleCagtegories 表中的保持数据纯净，不记录 一篇文章和父子类目 的对应关系
+  // 去除 article.categories 多余的数据（同时存在父子类目的父类目）
+  removeInvalidCId(categories, cs);
+
+  // 创建 Article 表中的数据
+  let data: ArticleEntity;
   try {
-    const res = await ArticleEntity.create(article);
-    const { categories, tags } = article;
-    // 使得 categories 中的数据保持纯净
-    for (const { parentId } of cs) {
-      if (parentId !== null) {
-        const index = categories.indexOf(parentId);
-        if (index !== -1) {
-          categories.splice(index, 1);
-        }
-      }
-    }
-    const pro1 = categories.map(id => ArticleCagtegoriesEntity.create({
-      articleId: res.id,
-      categoryId: id
-    }));
-    const pro2 = tags.map(id => ArticleTagsEntity.create({
-      articleId: res.id,
-      tagId: id
-    }));
-    const pro = Promise.all<ArticleCagtegories | ArticleTags>([...pro1, ...pro2]);
-    const articlePro = getArticle(res.id, res);
-    const [_, articleInfo] = await Promise.all([
-      pro,
-      articlePro as Promise<IArticles>
-    ]);
-    return articleInfo;
-  } catch (error) {
-    errors.push('添加失败, 请确保文章名唯一');
+    data = await ArticleEntity.create(article);
+  } catch (_) {
+    throw '添加失败, 请确保文章名唯一';
   }
-  return errors;
+
+  // ArticleCagtegories 和 ArticleTags 表中的数据的创建
+  await Promise.all([
+    Promise.all(
+      categories.map(
+        id => ArticleCagtegoryEntity.create({
+          articleId: data.id,
+          categoryId: id
+        })
+      )
+    ),
+    Promise.all(
+      tags.map(
+        id => ArticleTagEntity.create({
+          articleId: data.id,
+          tagId: id
+        })
+      )
+    )
+  ]);
+  return await fillArticle(data);
 }
 
-const updateArticle = async (id: number, miniArticle: Object): Promise<string[] | IArticles> => {
-  if (Number.isNaN(id)) {
-    return ['id非法'];
+const updateArticle = async (id: number, value: UnknowObject): Promise<IArticles> => {
+
+  idValidate(id, ID_INVALID);
+
+  const article = emptyModelValidate(
+    await ArticleEntity.findByPk(id),
+    ARTICLE_NOT_EXIST
+  );
+
+  const update = plainTransform(ArticleModel, value);
+
+  await validateModel(update, true);
+
+  const { title, categories, tags, content, cover } = value as ArticleModel & UnknowObject;
+
+  // 检查 title 是否重复
+  if (title) {
+    await validateTitleSafe(id, title);
   }
-  const article = await ArticleEntity.findByPk(id);
-  if (article === null) {
-    return ['article不存在'];
-  }
-  const articleUpdate = plainTransform(ArticleModel, miniArticle);
-  const errors = await validateModel(articleUpdate, true);
-  if (errors.length) { return errors; }
-  const { categories, tags } = articleUpdate;
+
   if (categories) {
-    const [res, cs] = await categoriesCheck(categories);
-    if (!res) {
-      return ['categories有误'];
-    }
-    for (const { parentId } of cs) {
-      if (parentId !== null) {
-        const index = categories.indexOf(parentId);
-        if (index !== -1) {
-          categories.splice(index, 1);
+    // 验证 categories 数据
+    const cs = await categoriesValidate(categories);
+    //  去除 article.categories 多余的数据（同时存在父子类目的父类目）
+    removeInvalidCId(categories, cs);
+
+
+    // 所有需要被删除的 article category 关系
+    const acs = await ArticleCagtegoryEntity.findAll({
+      where: {
+        articleId: id,
+        categoryId: {
+          [Op.notIn]: categories
         }
       }
-    }
+    });
 
     await Promise.all([
-      ArticleCagtegoriesEntity.destroy({
-        where: {
-          categoryId: { [Op.notIn]: categories }
-        }
-      }),
-      ArticleCagtegoriesEntity.findOrCreate({
-        where: {
-          categoryId: { [Op.in]: categories }
-        }
-      })
-    ])
-  }
-  if (tags) {
-    const res = await tagsCheck(tags);
-    if (!res) {
-      return ['tags有误'];
-    }
-    await Promise.all([
-      ArticleTagsEntity.destroy({ where: { [Op.notIn]: tags } }),
-      ArticleTagsEntity.findOrCreate({ where: { [Op.in]: tags } })
+      // 删除 不需要的 article category 关系
+      Promise.all(
+        acs.map(ac => ac.destroy())
+      ),
+      // 添加 新的 article category 关系
+      Promise.all(
+        categories.map(c => ArticleCagtegoryEntity.findOrCreate({
+          where: {
+            articleId: id,
+            categoryId: c
+          }
+        }))
+      )
     ]);
   }
-  const { content, post } = articleUpdate;
+
+  if (tags) {
+    // 验证 tags 数据
+    await tagsValidate(tags);
+
+    // 所有需要被删除的 article tag 关系
+    const ats = await ArticleTagEntity.findAll({
+      where: {
+        articleId: id,
+        tagId: {
+          [Op.notIn]: tags
+        }
+      }
+    });
+
+    await Promise.all([
+      // 删除 不需要的 article tag 关系
+      Promise.all(
+        ats.map(at => at.destroy())
+      ),
+      // 添加 新的 article tag 关系
+      Promise.all(
+        tags.map(t => ArticleTagEntity.findOrCreate({
+          where: {
+            articleId: id,
+            tagId: t
+          }
+        }))
+      )
+    ]);
+  }
+
+  if (title) {
+    article.title = title;
+  }
+
   if (content) {
     article.content = content;
     article.words = wordCounts(content);
   }
-  if (post) { article.post = post; }
+  if (cover) {
+    article.cover = cover;
+  }
   article.save();
-  return await getArticle(id, article) as IArticles;
+
+  return await fillArticle(article);
 }
 
 
 const deleteArticle = async (id: number): Promise<void> => {
-  if (Number.isNaN(id)) { return; }
+  try {
+    idValidate(id, ID_INVALID);
+  } catch (__) {
+    // 即使 id 非法，也不返回错误
+    return;
+  }
   await ArticleEntity.destroy({ where: { id } });
   // ArticleCategories 和 ArticleTags 会自动删除
 }
 
 
-const getArticlesByCategoryId = async (id: number): Promise<string | [IArticles[], number]> => {
-  if (Number.isNaN(id)) { return 'id非法'; }
-  const cs = await CategoryEntity.findAll({ where: { parentId: id } });
+const getArticlesByCategoryId = async (id: number): Promise<[IArticles[], number]> => {
+  idValidate(id, ID_INVALID);
+  // cs -> categories 
+  const cs = await CategoryEntity.findAll({
+    where: {
+      parentId: id
+    }
+  });
   const ids: number[] = [id, ...cs.map(c => c.id)];
-  const { rows: acs, count } = await ArticleCagtegoriesEntity.findAndCountAll({
+  const { rows: acs, count } = await ArticleCagtegoryEntity.findAndCountAll({
     where: {
       categoryId: {
         [Op.in]: ids
@@ -222,22 +292,35 @@ const getArticlesByCategoryId = async (id: number): Promise<string | [IArticles[
     }
   });
 
-  const articles = await Promise.all(acs.map(ac => getArticle(ac.articleId) as Promise<IArticles>));
+  const articles = await Promise.all(
+    acs.map(
+      ac => getArticleById(ac.articleId)
+    )
+  );
 
   return [articles, count];
 }
 
-const getArticlesByTagId = async (id: number): Promise<string | [IArticles[], number]> => {
-  if (Number.isNaN(id)) { return 'id非法'; }
-  const { rows: ats, count } = await ArticleTagsEntity.findAndCountAll({ where: { tagId: id } });
-  const articles = await Promise.all(ats.map(at => getArticle(at.articleId) as Promise<IArticles>));
+const getArticlesByTagId = async (id: number): Promise<[IArticles[], number]> => {
+  idValidate(id, ID_INVALID);
+
+  const { rows: ats, count } = await ArticleTagEntity.findAndCountAll({
+    where: {
+      tagId: id
+    }
+  });
+  const articles = await Promise.all(
+    ats.map(
+      at => getArticleById(at.articleId)
+    )
+  );
   return [articles, count];
 }
 
 export {
   getArchives,
-  getArticleById,
   getArticles,
+  getArticleById,
   addArticle,
   updateArticle,
   deleteArticle,

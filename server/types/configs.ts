@@ -10,4 +10,8 @@ interface AdminConfig {
   avatar: string;
 }
 
+interface SiteConfig {
+
+}
+
 export { DBConfig, AdminConfig }

@@ -1,8 +1,8 @@
 import Tag from './Tag'
 import Comment from './Comment'
 import Category from './Category'
-import ArticleTags from './ArticleTags'
-import ArticleCagtegories from './ArticleCategories'
+import ArticleTag from './ArticleTag'
+import ArticleCagtegory from './ArticleCategory'
 import { Table, Model, Column, DataType, Unique, AllowNull, BelongsToMany, HasMany, Default } from 'sequelize-typescript'
 import { IArticle } from '../../types/models'
 
@@ -30,13 +30,13 @@ class Article extends Model implements IArticle {
 
   @AllowNull(false)
   @Column(DataType.STRING)
-  public post!: string;
+  public cover!: string;
 
   // 下面的都是为了实现模型之间的关系，表中不存在对应的字段
-  @BelongsToMany(() => Category, () => ArticleCagtegories)
+  @BelongsToMany(() => Category, () => ArticleCagtegory)
   public categories!: Category[];
 
-  @BelongsToMany(() => Tag, () => ArticleTags)
+  @BelongsToMany(() => Tag, () => ArticleTag)
   public tags!: Tag[];
 
   @HasMany(() => Comment)

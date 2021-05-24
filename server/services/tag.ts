@@ -2,45 +2,56 @@ import TagModel from '../models/Tag'
 import { ITag } from '../types/models'
 import TagEntity from '../db/entities/Tag'
 import { plainTransform } from '../utils/transform'
-import { validateModel } from '../validation/handleErrors'
-import ArticleTagsEntity from '../db/entities/ArticleTags'
+import ArticleTagsEntity from '../db/entities/ArticleTag'
+import { ID_INVALID, TAG_EXISTED, TAG_NOT_EXIST } from '../utils/tips'
+import { emptyModelValidate, idValidate, validateModel } from '../utils/validate'
 
 const getTags = async (): Promise<[ITag[], number]> => {
   const { count, rows: tags } = await TagEntity.findAndCountAll();
   return [tags, count];
 }
 
-const addTag = async (tagObj: object): Promise<string[] | ITag> => {
-  const tag = plainTransform(TagModel, tagObj);
-  const errors = await validateModel(tag);
-  if (errors.length) { return errors; }
+const addTag = async (value: object): Promise<ITag> => {
+  const tag = plainTransform(TagModel, value);
+  await validateModel(tag);
   const [t, created] = await TagEntity.findOrCreate({ where: { ...tag } });
-  return created ? t : ['该标签已存在'];
+  if (!created) {
+    throw TAG_EXISTED;
+  }
+  return t;
 }
-
-const updateTag = async (id: number, tagObj: Object): Promise<string[] | ITag> => {
-  if (Number.isNaN(id)) { return ['id非法']; }
-  const tag = plainTransform(TagModel, tagObj);
-  const errors = await validateModel(tag);
-  if (errors.length) { return errors; }
+const updateTag = async (id: number, value: Object): Promise<ITag> => {
+  idValidate(id, ID_INVALID);
+  const tag = plainTransform(TagModel, value);
+  await validateModel(tag);
   // const res = await TagEntity.update(tag, { where: { id } });
-  const ins = await TagEntity.findByPk(id);
-  if (ins === null) { return ['该标签不存在']; }
+  const ins = emptyModelValidate(
+    await TagEntity.findByPk(id),
+    TAG_NOT_EXIST
+  );
   ins.name = tag.name;
   ins.save();
   return ins;
 }
 
-const deleteTag = async (id: number): Promise<string[] | boolean> => {
-  if (Number.isNaN(id)) { return ['id非法'] };
+const deleteTag = async (id: number): Promise<void> => {
+  idValidate(id, ID_INVALID);
   // 不能直接通过 TagEntity.destroy 直接删
   // ArticleTagsEntity 会自动删除 ForeignKey tagId 为 id 的数据
-  const { count } = await ArticleTagsEntity.findAndCountAll({ where: { tagId: id } });
-  if (count === 0) {
-    await TagEntity.destroy({ where: { id } });
-    return true;
+  // 需要先判断是否能删
+  const { count } = await ArticleTagsEntity.findAndCountAll({
+    where: {
+      tagId: id
+    }
+  });
+  if (count !== 0) {
+    throw '该标签非空';
   }
-  return ['tag非空，无法删除'];
+  await TagEntity.destroy({
+    where: {
+      id
+    }
+  });
 }
 
 export { getTags, addTag, updateTag, deleteTag }

@@ -1,8 +1,13 @@
 import { IArticle } from '../types/models'
-import { sitePath } from '../utils/configs'
 import { Expose, Type, Exclude } from 'class-transformer'
-import { IsValidURL, IsArrayOf } from '../validation/decorators'
-import { IsInt, IsNotEmpty, IsString, Min, isInt, ArrayMinSize, ArrayUnique } from 'class-validator'
+import { IsValidURL, IsArrayOf } from '../utils/decorators'
+import { IsInt, IsNotEmpty, IsString, Min, isInt, ArrayMinSize, ArrayUnique, ValidateIf } from 'class-validator'
+import { UnknowObject } from '../types/helper'
+import { SITE_CONFIG_PATH } from '../utils/constants'
+import { wordCounts } from '../utils/helper'
+import { plainTransform } from '../utils/transform'
+import { validateModel } from '../utils/validate'
+
 
 
 class Article implements IArticle {
@@ -27,14 +32,15 @@ class Article implements IArticle {
   @IsInt({ message: 'words类型错误' })
   @Min(0, { message: 'words不能为负数' })
   @Exclude()  // 文章的字数不让客户端设置，不应当相信客户端传来的数据
-  public words!: number;
+  public words: number = 0;
 
-  @IsString({ message: 'post类型错误' })
-  @IsNotEmpty({ message: 'post不能为空' })
-  @IsValidURL({ message: 'post必须为一个合法URL' })
+  @ValidateIf((_, value) => value != null)
+  @IsString({ message: 'cover类型错误' })
+  @IsNotEmpty({ message: 'cover不能为空' })
+  @IsValidURL({ message: 'cover必须为一个合法URL' })
   @Expose()
   @Type(() => String)
-  public post: string = require(sitePath).defaultPost;
+  public cover!: string;
 
   @IsArrayOf(isInt, { message: 'categories类型错误' })
   @ArrayMinSize(1, { message: 'categories不能为空' })
@@ -52,3 +58,5 @@ class Article implements IArticle {
 }
 
 export default Article;
+
+

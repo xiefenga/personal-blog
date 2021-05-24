@@ -18,7 +18,7 @@ function plainTransform<T, V>(cls: ClassConstructor<T>, plain: V) {
  * @param props 需要转换的属性
  * @returns 
  */
-function queryTransformNumber(query: ParsedUrlQuery, ...props: string[]): (number | undefined)[] {
+function query2Number(query: ParsedUrlQuery, ...props: string[]): (number | undefined)[] {
   return props.map(prop => {
     const val = query[prop];
     return val !== undefined
@@ -29,4 +29,4 @@ function queryTransformNumber(query: ParsedUrlQuery, ...props: string[]): (numbe
   });
 }
 
-export { plainTransform, queryTransformNumber }
+export { plainTransform, query2Number }

@@ -2,6 +2,7 @@ import FileImport from './FileImport'
 import FileExport from './FileExport'
 import ClearButton from './ClearButton'
 import ArticleTitle from './ArticleTitle'
+import ArticlePublish from './ArticlePublish'
 
 import './index.css'
 
@@ -14,6 +15,7 @@ function Toolbar() {
         <ClearButton />
         <FileImport />
         <FileExport />
+        <ArticlePublish />
       </div>
     </div>
   )

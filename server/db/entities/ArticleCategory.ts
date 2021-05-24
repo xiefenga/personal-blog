@@ -4,7 +4,7 @@ import { Table, Model, Column, ForeignKey } from 'sequelize-typescript'
 
 
 @Table({ timestamps: true })
-class ArticleCagtegories extends Model {
+class ArticleCagtegory extends Model {
   @ForeignKey(() => Article)
   @Column
   public articleId!: number
@@ -14,5 +14,5 @@ class ArticleCagtegories extends Model {
   public categoryId!: number
 }
 
-export default ArticleCagtegories
+export default ArticleCagtegory
 

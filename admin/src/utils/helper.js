@@ -67,6 +67,6 @@ export const delay = n => new Promise(resolve => setTimeout(resolve, n));
 // 获取当前年份
 export const getYear = () => new Date().getFullYear();
 
-export const isEmpty = value => value == null || value === '';
+export const isEmpty = value => value == null || value === '' || (Array.isArray(value) && !value.length);
 
 export { wordsCalc, debounce, cancelablePromise, treeDateTransform, findCategoryIndex }

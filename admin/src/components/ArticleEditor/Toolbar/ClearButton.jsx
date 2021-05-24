@@ -1,18 +1,13 @@
 import { Button } from 'antd'
 import PropTypes from 'prop-types'
-import { useCallback } from 'react'
-import { useMarkdown } from '@/hooks/store'
+import { useClearArticle } from '@/hooks/store'
 
 
 function ClearButton(props) {
   const { showText } = props;
-  const [, setMarkdown] = useMarkdown();
-  const onClick = useCallback(
-    () => setMarkdown(''),
-    [setMarkdown]
-  )
+  const clear = useClearArticle();
   return (
-    <Button type="dashed" onClick={onClick}> {showText} </Button>
+    <Button type="dashed" onClick={clear}> {showText} </Button>
   )
 }
 

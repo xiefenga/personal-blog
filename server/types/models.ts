@@ -1,9 +1,11 @@
-interface IArticle {
+interface IModel { }
+
+interface IArticle extends IModel {
   title: string;
   content: string;
   views: number;
   words: number;
-  post: string;
+  cover: string;
 }
 
 interface IArticles extends IArticle {
@@ -11,7 +13,7 @@ interface IArticles extends IArticle {
   tags: ITag[]
 }
 
-interface ICategory {
+interface ICategory extends IModel {
   name: string;
   parentId: number | null;
 }
@@ -20,11 +22,11 @@ interface ICategories extends ICategory {
   children: ICategory[];
 }
 
-interface ITag {
+interface ITag extends IModel {
   name: string;
 }
 
-interface IComment {
+interface IComment extends IModel {
   username: string;
   content: string;
   articleId: number;
@@ -32,10 +34,10 @@ interface IComment {
 }
 
 
-interface IAdmin {
+interface IAdmin extends IModel {
   username: string;
   avatar: string
 }
 
 
-export { IArticle, IArticles, ICategory, ICategories, ITag, IComment, IAdmin }
+export { IModel, IArticle, IArticles, ICategory, ICategories, ITag, IComment, IAdmin }

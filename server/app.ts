@@ -4,25 +4,25 @@ import jwt from 'koa-jwt'
 import cors from '@koa/cors'
 import koaStatic from 'koa-static'
 import bodyParser from 'koa-bodyparser'
-import errorMiddleware from './middlewares/error'
+import errorHandle from './middlewares/error'
 import noAccess from './middlewares/noAccess'
 import router from './middlewares/router'
-import { jwtSecret, staticPath, jwtIgnore } from './utils/configs'
+import { JWT_SECRET, JWT_IGNORE_ROUTES, STATIC_PATH } from './utils/constants'
 import './db/init'
 
 const app = new Koa();
 
-app.use(errorMiddleware());
+app.use(errorHandle());
 
 app.use(cors());
 
-app.use(koaStatic(staticPath));
+app.use(koaStatic(STATIC_PATH));
 
 app.use(bodyParser());
 
 app.use(noAccess());
 
-app.use(jwt({ secret: jwtSecret, cookie: 'token' }).unless(jwtIgnore));
+app.use(jwt({ secret: JWT_SECRET, cookie: 'token' }).unless(JWT_IGNORE_ROUTES));
 
 app.use(router.routes());
 

@@ -1,0 +1,18 @@
+.belong-selects {
+  width: 300px;
+}
+
+.belong-selects .title {
+  color: rgba(0, 0, 0, 0.45);
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+.belong-selects .title:first-of-type {
+  margin-top: 0;
+}
+
+.belong-selects .submit {
+  margin: 5px 0;
+  text-align: center;
+}

@@ -1,31 +1,38 @@
-import Admin from '../models/Admin'
-import { IAdmin } from '../types/models'
-import { AdminConfig } from '../types/configs'
-import { plainTransform } from '../utils/transform'
-import { validateModel } from '../validation/handleErrors'
-import { adminPath as path } from '../utils/configs'
 import { writeFile } from 'fs/promises'
+import AdminModel from '../models/Admin'
+import { IAdmin } from '../types/models'
+import { UnknowObject } from '../types/helper'
+import { getAdminConfig } from '../utils/helper'
+import { plainTransform } from '../utils/transform'
+import { ADMIN_CONFIG_PATH } from '../utils/constants'
+import { loginValidate, validateModel } from '../utils/validate'
 
-const login = async (loginInfo: Object): Promise<string[] | IAdmin> => {
-  const admin = plainTransform(Admin, loginInfo);
-  const errors = await validateModel(admin, true);
-  if (errors.length) { return errors; }
-  const { username, password, avatar }: AdminConfig = require(path);
-  if (admin.username === username && admin.password === password) {
-    return { username, avatar };
+
+const login = async (loginInfo: UnknowObject): Promise<IAdmin> => {
+  const admin = plainTransform(AdminModel, loginInfo);
+  await validateModel(admin, true);
+  const config = getAdminConfig();
+  loginValidate(config, admin);
+  const { username, avatar } = config;
+  return { username, avatar };
+}
+
+const updateAdmin = async (userInfo: UnknowObject): Promise<void> => {
+  const temp = plainTransform(AdminModel, userInfo);
+  validateModel(temp, true);
+  const config = getAdminConfig();
+  const update = plainTransform(
+    AdminModel,
+    Object.assign({}, config, userInfo)
+  );
+  try {
+    await writeFile(
+      ADMIN_CONFIG_PATH,
+      JSON.stringify(update, null, 2)
+    );
+  } catch (_) {
+    throw '修改失败，请重试';
   }
-  return ['用户名或密码不正确'];
 }
 
-const modify = async (userInfo: Object): Promise<string[] | boolean> => {
-  const temp = plainTransform(Admin, userInfo);
-  const errors = await validateModel(temp, true);
-  if (errors.length) { return errors; }
-  const config: AdminConfig = require(path);
-  const update = plainTransform(Admin, Object.assign(config, userInfo));
-  const json = JSON.stringify(update, null, 2);
-  await writeFile(path, json);
-  return true;
-}
-
-export { login, modify }
+export { login, updateAdmin }

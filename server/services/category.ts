@@ -1,25 +1,24 @@
+import { UnknowObject } from '../types/helper'
 import CategoryModel from '../models/Category'
 import { plainTransform } from '../utils/transform'
 import CategoryEntity from '../db/entities/Category'
-import { validateModel } from '../validation/handleErrors'
 import { ICategories, ICategory } from '../types/models'
-import ArticleCagtegoriesEntity from '../db/entities/ArticleCategories'
+import ArticleCagtegoriesEntity from '../db/entities/ArticleCategory'
+import { CATEGORY_EXISTED, CATEGORY_NOT_EXIST, ID_INVALID } from '../utils/tips'
+import { categoryParentIdValidate, emptyModelValidate, idValidate, validateModel } from '../utils/validate'
 
-const addCategory = async (categoryObj: Object): Promise<string[] | ICategory> => {
-  const category = plainTransform(CategoryModel, categoryObj);
-  const errors = await validateModel(category);
-  if (errors.length) { return errors; }
-  const { parentId = null } = category;
-  // 需要使用 != null 来判断，parentId 可能传递为 0
-  if (parentId !== null) {
-    const p = await CategoryEntity.findByPk(parentId);
-    if (p === null) { return ['父类目不存在'] }
-    if (p.parentId) { return ['只支持二级类目'] }
-  }
+
+const addCategory = async (value: UnknowObject): Promise<ICategory> => {
+  const category = plainTransform(CategoryModel, value);
+  await validateModel(category);
+  await categoryParentIdValidate(category);
   const [c, created] = await CategoryEntity.findOrCreate({
     where: { ...category }
   });
-  return created ? c : ['该类目已存在'];
+  if (!created) {
+    throw CATEGORY_EXISTED;
+  }
+  return c;
 }
 
 /**
@@ -35,38 +34,47 @@ const getCategories = async (): Promise<[ICategories[], number]> => {
   return [res, count];
 }
 
-const deleteCategory = async (id: number): Promise<string[] | boolean> => {
-  if (Number.isNaN(id)) { return ['id非法'] }
+const deleteCategory = async (id: number): Promise<void> => {
+  idValidate(id, ID_INVALID);
   const [{ count: c1 }, { count: c2 }] = await Promise.all([
     ArticleCagtegoriesEntity.findAndCountAll({ where: { categoryId: id } }),
     CategoryEntity.findAndCountAll({ where: { parentId: id } })
   ]);
-  if (c1 === 0 && c2 === 0) {
-    await CategoryEntity.destroy({ where: { id } });
-    return true;
+  if (c1 !== 0 || c2 !== 0) {
+    throw new Error('该类目非空');
   }
-  return ['category非空'];
+  await CategoryEntity.destroy({ where: { id } });
 }
 
-const updateCategory = async (id: number, categoryObj: Object): Promise<string[] | ICategory> => {
-  if (Number.isNaN(id)) { return ['id非法'] }
-  const category = plainTransform(CategoryModel, categoryObj);
-  const errors = await validateModel(category, true);
-  if (errors.length) { return errors }
-  const ins = await CategoryEntity.findByPk(id);
-  if (ins === null) { return ['该类目不存在'] }
+const updateCategory = async (id: number, value: Object): Promise<ICategory> => {
+  idValidate(id, ID_INVALID);
+  const category = plainTransform(CategoryModel, value);
+  await validateModel(category, true);
+  const ins = emptyModelValidate(
+    await CategoryEntity.findByPk(id),
+    CATEGORY_NOT_EXIST
+  );
+
   const name = category.name ?? ins.name;
-  const parentId = category.parentId === undefined ? ins.parentId : category.parentId;
+  const parentId = category.parentId === undefined
+    ? ins.parentId
+    : category.parentId;
   if (ins.name === name && parentId === ins.parentId) {
     return ins;
   }
+
   if (category.parentId) {
-    const p = await CategoryEntity.findByPk(category.parentId);
-    if (p === null) { return ['父类目不存在'] }
-    if (p.parentId) { return ['只支持二级类目'] }
+    await categoryParentIdValidate(category);
   }
-  const existed = await CategoryEntity.findOne({ where: { name, parentId } });
-  if (existed) { return ['已存在该类目，修改失败']; }
+  const existed = await CategoryEntity.findOne({
+    where: {
+      name,
+      parentId
+    }
+  });
+  if (existed) {
+    throw CATEGORY_EXISTED;
+  }
   ins.name = name;
   ins.parentId = parentId;
   ins.save();
