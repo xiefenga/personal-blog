@@ -1,0 +1,54 @@
+.article-list {
+  box-sizing: border-box;
+  padding-top: 20px;
+  height: 100%;
+  overflow: hidden;
+  background-color: aliceblue;
+  user-select: none;
+  position: relative;
+}
+
+.article-list .ant-spin {
+  position: absolute;
+  left: 50%!important;
+  top: 50%!important;
+  transform: translate(-50%, -50%);
+}
+
+.article-list p {
+  margin: 0;
+}
+
+.article-list .time span:first-child {
+  margin: 0 10px 0 0;
+}
+
+.article-list .categories {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.article-list .categories .category {
+  margin-right: 10px;
+}
+
+.article-list .tags .ant-tag {
+  border: none;
+}
+
+.article-list .ant-list {
+  height: 100%;
+}
+
+.article-list .ant-list-item-meta-avatar img {
+  width: 130px;
+  height: 88px;
+  object-fit: cover;
+}
+
+.article-list .ant-list-pagination {
+  position: absolute;
+  margin: 0;
+  right: 100px;
+  bottom: 50px;
+}

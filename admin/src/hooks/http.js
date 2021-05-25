@@ -3,7 +3,7 @@ import { isEmpty } from '@/utils/helper'
 import { message } from 'antd'
 import { useCallback } from 'react'
 import { useArticle, useClearArticle } from './store'
-import { SUCCESS_STATUS as SUCCESS } from '@/utils/constants'
+import { SUCCESS } from '@/utils/constants'
 import { useParams } from 'react-router'
 
 function usePostArtilce() {

@@ -1,5 +1,5 @@
 import { login } from '@/api/login'
-import { SUCCESS_STATUS as SUCCESS } from '@/utils/constants'
+import { SUCCESS } from '@/utils/constants'
 
 export const SET_ADMIN = 'SET_ADMIN';
 

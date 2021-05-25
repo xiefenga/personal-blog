@@ -11,6 +11,8 @@ export const ADMIN_CONFIG_FILENAME = 'admin.config.json';
 
 export const SITE_CONFIG_FILENAME = 'site.config.json';
 
+export const OSS_CONFIG_FILENAME = 'ali-oss.config.json';
+
 export const SECRET_CONFIG_FILENAME = 'secret.pub';
 
 export const ROOT_PATH = resolve(__dirname, '../');
@@ -24,6 +26,8 @@ export const ADMIN_CONFIG_PATH = resolve(CONFIGS_DIR_PATH, ADMIN_CONFIG_FILENAME
 export const SECRET_CONFIG_PATH = resolve(CONFIGS_DIR_PATH, SECRET_CONFIG_FILENAME);
 
 export const SITE_CONFIG_PATH = resolve(CONFIGS_DIR_PATH, SITE_CONFIG_FILENAME);
+
+export const OSS_CONFIG_PATH = resolve(CONFIGS_DIR_PATH, OSS_CONFIG_FILENAME);
 
 export const STATIC_PATH = resolve(ROOT_PATH, STATIC_DIR_NAME);
 

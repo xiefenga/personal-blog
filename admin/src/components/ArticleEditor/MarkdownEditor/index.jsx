@@ -2,7 +2,7 @@ import 'codemirror/keymap/sublime'
 import 'codemirror/theme/monokai.css'
 import CodeMirror from '@uiw/react-codemirror'
 import throttle from 'lodash.throttle'
-import { wordsCalc } from '@/utils/helper'
+import { wordsCount } from '@/utils/helper'
 import { useMarkdown } from '@/hooks/store'
 import { markdownParser } from '@/utils/markdown'
 import { useRef, useCallback, useMemo } from 'react'
@@ -25,10 +25,9 @@ function MarkdownEditor() {
   );
 
   const words = useMemo(
-    () => wordsCalc(markdown),
+    () => wordsCount(markdown),
     [markdown]
   );
-
 
   // change 事件 通过输入和 value 的改变都会触发
   const onChange = useMemo(
@@ -79,12 +78,22 @@ function MarkdownEditor() {
     []
   );
 
+  const move2Editor = useCallback(
+    () => scrollAreaRef.current = 1,
+    []
+  );
+
+  const move2Preview = useCallback(
+    () => scrollAreaRef.current = 2,
+    []
+  );
+
   return (
     <div className="md-editor">
       <div className="editor-body">
         <div
           className="editor-edit"
-          onMouseOver={() => scrollAreaRef.current = 1}
+          onMouseOver={move2Editor}
         >
           <CodeMirror
             ref={editorRef}
@@ -99,7 +108,7 @@ function MarkdownEditor() {
           ref={previewRef}
           onScroll={handleScroll}
           // 采用 mouseover 事件是由于 over事件在 触碰到子元素是也会触发，防止使用 enter 事件为被触发的情况
-          onMouseOver={() => scrollAreaRef.current = 2}
+          onMouseOver={move2Preview}
         >
           <article id="article-content" dangerouslySetInnerHTML={{ __html: html }} />
         </div>

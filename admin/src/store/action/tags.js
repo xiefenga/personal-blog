@@ -1,4 +1,4 @@
-import { SUCCESS_STATUS as SUCCESS } from '@/utils/constants'
+import { SUCCESS } from '@/utils/constants'
 import { getTags, addTag, updateTag, deleteTag } from '@/api/tag'
 
 export const SET_TAGS = 'SET_TAGS';

@@ -5,7 +5,7 @@ import { ISuccessResponse, IFailResponse } from '../types/helper'
 import { ADMIN_CONFIG_FILENAME, ADMIN_CONFIG_PATH, CONFIGS_DIR_NAME, DB_CONFIG_FILENAME, DB_CONFIG_PATH, FAIL, OSS_CONFIG_FILENAME, OSS_CONFIG_PATH, SUCCESS } from './constants'
 
 
-function objectToArray<T>(object: Object): T[] {
+export const objectToArray = <T>(object: Object): T[] => {
   const ans: T[] = [];
   for (const prop in object) {
     if (Object.prototype.hasOwnProperty.call(object, prop)) {
@@ -16,7 +16,7 @@ function objectToArray<T>(object: Object): T[] {
 }
 
 
-function wordCounts(data: string): number {
+export const wordCounts = (data: string): number => {
   const pattern = /[a-zA-Z0-9_\u0392-\u03c9\u0410-\u04F9]+|[\u4E00-\u9FFF\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af]+/g;
   const m = data.match(pattern);
   let count = 0;
@@ -45,15 +45,13 @@ function getValidationError({ constraints, children }: ValidationError): string[
 }
 
 // 获取 class-validator 验证之后的错误消息
-const getValidationErrors = (errs: ValidationError[]): string[] => errs.map(err => getValidationError(err)).flat();
-
-export { objectToArray, wordCounts, getValidationErrors }
+export const getValidationErrors = (errs: ValidationError[]): string[] => errs.map(err => getValidationError(err)).flat();
 
 
-function createSuccessResponse(): ISuccessResponse;
-function createSuccessResponse(value: any): ISuccessResponse;
-function createSuccessResponse(value: [Object, number]): ISuccessResponse;
-function createSuccessResponse(value: any = null): ISuccessResponse {
+export function createSuccessResponse(): ISuccessResponse;
+export function createSuccessResponse(value: any): ISuccessResponse;
+export function createSuccessResponse(value: [Object, number]): ISuccessResponse;
+export function createSuccessResponse(value: any = null): ISuccessResponse {
   if (
     Array.isArray(value) &&
     value.length === 2 &&
@@ -65,7 +63,7 @@ function createSuccessResponse(value: any = null): ISuccessResponse {
   return { status: SUCCESS, data: value }
 }
 
-const createFailResponse = (errors: string[] | string): IFailResponse => ({
+export const createFailResponse = (errors: string[] | string): IFailResponse => ({
   status: FAIL,
   error: Array.isArray(errors)
     ? errors[0]
@@ -90,7 +88,7 @@ function getAdminConfig(): AdminConfig {
   try {
     return require(ADMIN_CONFIG_PATH) as AdminConfig;
   } catch (_) {
-    throw new Error(
+    throwValidateError(
       '缺少配置文件:' + join(CONFIGS_DIR_NAME, ADMIN_CONFIG_FILENAME)
     );
   }
@@ -100,7 +98,7 @@ function getOSSConfig(): OSSConfig {
   try {
     return require(OSS_CONFIG_PATH) as OSSConfig;
   } catch (_) {
-    throw new Error(
+    throwValidateError(
       '缺少配置文件:' + join(CONFIGS_DIR_NAME, OSS_CONFIG_FILENAME)
     );
   }
@@ -120,8 +118,6 @@ function assertValidation(assert: boolean, message: string) {
 
 
 export {
-  createSuccessResponse,
-  createFailResponse,
   getDBConfig,
   getAdminConfig,
   getOSSConfig,

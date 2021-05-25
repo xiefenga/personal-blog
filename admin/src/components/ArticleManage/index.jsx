@@ -27,7 +27,7 @@ function ArticleManage() {
         <Menu.Item key="edit" icon={<FileAddOutlined />}>
           <Link to="/article/edit">添加文章</Link>
         </Menu.Item>
-        <Menu.Item key="update" icon={<EditOutlined />}>
+        <Menu.Item key="list" icon={<EditOutlined />}>
           <Link to="/article/list">修改文章</Link>
         </Menu.Item>
       </Menu>

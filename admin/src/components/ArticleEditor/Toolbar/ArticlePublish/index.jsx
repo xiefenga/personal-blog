@@ -1,8 +1,8 @@
 import { Button, Popover } from 'antd'
 import { useCallback, useState } from 'react'
 import { usePostArtilce } from '@/hooks/http'
-import TagsChecker from '@/components/TagsChecker'
-import CategoriesChecker from '@/components/CategoriesChecker'
+import TagsSelect from '@/components/TagsSelect'
+import CategoriesSelect from '@/components/CategoriesSelect'
 import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons'
 import './index.css'
 
@@ -37,9 +37,9 @@ function ArticlePublish() {
         content={
           <div className="belong-selects">
             <p className="title">文章类目</p>
-            <CategoriesChecker />
+            <CategoriesSelect />
             <p className="title">文章标签</p>
-            <TagsChecker />
+            <TagsSelect />
             <p className="submit">
               <Button type="primary" size="small" loading={loading} onClick={onClick}>
                 提交

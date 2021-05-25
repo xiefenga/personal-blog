@@ -1,11 +1,10 @@
-import { tag as axios } from './axios'
+import { tag as axios } from './instances'
 
-const getTags = async () => axios.get();
+export const getTags = async () => axios.get('/');
 
-const addTag = async name => axios.post('/', { name });
+export const addTag = async name => axios.post('/', { name });
 
-const updateTag = async (id, name) => axios.put('/' + id, { name });
+export const updateTag = async (id, name) => axios.put('/' + id, { name });
 
-const deleteTag = async id => axios.delete('/' + id);
+export const deleteTag = async id => axios.delete('/' + id);
 
-export { getTags, addTag, updateTag, deleteTag }

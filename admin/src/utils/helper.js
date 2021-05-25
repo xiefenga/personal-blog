@@ -1,6 +1,7 @@
+import { SUCCESS_INTERCEPTOR, ERROR_INTERCEPTOR } from './constants'
 
-// 计算 markdown 中的字数
-const wordsCalc = data => {
+// 计算 markdown 中的 有效 字数
+export const wordsCount = data => {
   const pattern = /[a-zA-Z0-9_\u0392-\u03c9\u0410-\u04F9]+|[\u4E00-\u9FFF\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af]+/g;
   const m = data.match(pattern);
   let count = 0;
@@ -16,7 +17,7 @@ const wordsCalc = data => {
 }
 
 // 防抖
-const debounce = (callback, delay) => {
+export const debounce = (callback, delay) => {
   let timer = null;
   return function (...args) {
     clearTimeout(timer);
@@ -25,7 +26,7 @@ const debounce = (callback, delay) => {
 }
 
 // 将一个 promise 包装成一个可以取消的 promsie
-const cancelablePromise = promise => {
+export const cancelablePromise = promise => {
   let isCanceled = false;
 
   const wrappedPromise = new Promise((resolve, reject) => {
@@ -41,18 +42,20 @@ const cancelablePromise = promise => {
   };
 }
 
-const treeDateTransform = (data, map) => ({
+// 将树形数据结构中的属性名进行改变
+export const treeDateTransform = (data, map) => ({
   ...map(data),
   children: data.children
     ? data.children.map(c => treeDateTransform(c, map))
     : []
 });
 
-const findCategoryIndex = (id, categories) => {
+// 从二维的树型结构中寻找 id 相等的坐标
+export const findIDIndex = (id, categories) => {
   for (let i = 0; i < categories.length; i++) {
     const c = categories[i];
     if (c.id === id) {
-      return [i];
+      return [i, -1];
     } else {
       const j = c.children.findIndex(c => c.id === id);
       if (j !== -1) {
@@ -60,13 +63,22 @@ const findCategoryIndex = (id, categories) => {
       }
     }
   }
+  return [-1, -1];
 }
 
-export const delay = n => new Promise(resolve => setTimeout(resolve, n));
+export const setInterceptors = (...instances) => {
+  instances.forEach(ins => {
+    ins.interceptors.response.use(
+      SUCCESS_INTERCEPTOR,
+      ERROR_INTERCEPTOR
+    )
+  });
+}
+
+export const delay = n => new Promise(resolve => window.setTimeout(resolve, n));
 
 // 获取当前年份
 export const getYear = () => new Date().getFullYear();
 
 export const isEmpty = value => value == null || value === '' || (Array.isArray(value) && !value.length);
 
-export { wordsCalc, debounce, cancelablePromise, treeDateTransform, findCategoryIndex }

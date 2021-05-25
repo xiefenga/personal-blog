@@ -1,11 +1,9 @@
-import { category as axios } from './axios'
+import { category as axios } from './instances'
 
-const getCategories = async () => axios.get('/');
+export const getCategories = async () => axios.get('/');
 
-const addCategory = async value => axios.post('/', value);
+export const addCategory = async value => axios.post('/', value);
 
-const updateCategory = async (id, value) => axios.put('/' + id, value);
+export const updateCategory = async (id, value) => axios.put('/' + id, value);
 
-const deleteCategory = async id => axios.delete('/' + id);
-
-export { getCategories, addCategory, updateCategory, deleteCategory }
+export const deleteCategory = async id => axios.delete('/' + id);

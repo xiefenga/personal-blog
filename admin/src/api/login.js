@@ -1,16 +1,12 @@
-import { login as axios } from './axios'
+import { login as axios } from './instances'
 
-const login = async (loginInfo) => {
-  return axios.post('/login', loginInfo);
-}
+export const login = async info => axios.post('/login', info);
 
-const whoAmI = async () => {
-  return axios.get('/whoami');
-}
 
-const logout = async () => {
-  return axios.get('/logout');
-}
+export const whoAmI = async () => axios.get('/whoami');
 
-export { login, whoAmI, logout }
+
+export const logout = async () => axios.get('/logout');
+
+
 

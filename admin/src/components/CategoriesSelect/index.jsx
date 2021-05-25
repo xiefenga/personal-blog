@@ -1,7 +1,8 @@
 import { TreeSelect } from 'antd'
 import { useCallback, useMemo } from 'react'
+import { treeDateTransform, findIDIndex } from '@/utils/helper'
 import { useArticleCategories, useCategories } from '@/hooks/store'
-import { treeDateTransform, findCategoryIndex } from '@/utils/helper'
+
 
 const style = { width: '100%' };
 
@@ -22,9 +23,9 @@ function CategoriesChecker() {
     (value, _, extra) => {
       const { triggerValue, selected } = extra;
       if (selected) {
-        const [i, j] = findCategoryIndex(triggerValue, categories);
+        const [i, j] = findIDIndex(triggerValue, categories);
         // 选中的是二级类目，需要看看是否已经选中父类目
-        if (j !== undefined) {
+        if (j !== -1) {
           const p = categories[i].id;
           setSelectedCategories(
             [

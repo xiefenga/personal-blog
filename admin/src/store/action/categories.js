@@ -1,5 +1,5 @@
-import { findCategoryIndex } from '@/utils/helper'
-import { SUCCESS_STATUS as SUCCESS } from '@/utils/constants'
+import { findIDIndex } from '@/utils/helper'
+import { SUCCESS } from '@/utils/constants'
 import { getCategories, addCategory, updateCategory, deleteCategory } from '@/api/category'
 
 export const SET_CATEGORIES = 'SET_CATEGORIES';
@@ -39,9 +39,9 @@ export const updateCategoryAction = (id, value) => async (dispatch, getState) =>
   const { status, data } = await updateCategory(id, value);
   if (status === SUCCESS) {
     const { categories } = getState();
-    const [i, j] = findCategoryIndex(id, categories);
+    const [i, j] = findIDIndex(id, categories);
     // 原本的数据是二级类目
-    if (j !== undefined) {
+    if (j !== -1) {
       const c = categories[i].children[j];
       // 未改变父类目
       if (c.parentId === data.parentId) {
@@ -76,8 +76,8 @@ export const deleteCategoryAction = id => async (dispatch, getState) => {
   const { status } = await deleteCategory(id);
   if (status === SUCCESS) {
     const { categories } = getState();
-    const [i, j] = findCategoryIndex(id, categories);
-    if (j !== undefined) {
+    const [i, j] = findIDIndex(id, categories);
+    if (j !== -1) {
       categories[i].children.splice(j, 1);
     } else {
       categories.splice(i, 1);
