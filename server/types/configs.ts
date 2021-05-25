@@ -10,8 +10,13 @@ interface AdminConfig {
   avatar: string;
 }
 
-interface SiteConfig {
-
+interface OSSConfig {
+  "region": string;
+  "accessKeyId": string;
+  "accessKeySecret": string;
+  "bucket": string;
+  "customUrl"?: string;
+  "path"?: string
 }
 
-export { DBConfig, AdminConfig }
+export { DBConfig, AdminConfig, OSSConfig }
