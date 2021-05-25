@@ -2,7 +2,7 @@ import { Op } from 'sequelize'
 import ArticleModel from '../models/Article'
 import ArticleEntity from '../db/entities/Article'
 import { plainTransform } from '../utils/transform'
-import { wordCounts } from '../utils/helper'
+import { throwValidateError, wordCounts } from '../utils/helper'
 import { EXCLUDE_TIMESTAME, SITE_CONFIG_PATH } from '../utils/constants'
 import ArticleCagtegoryEntity from '../db/entities/ArticleCategory'
 import ArticleTagEntity from '../db/entities/ArticleTag'
@@ -133,10 +133,11 @@ const addArticle = async (value: UnknowObject): Promise<IArticles> => {
 
   // 创建 Article 表中的数据
   let data: ArticleEntity;
+
   try {
     data = await ArticleEntity.create(article);
   } catch (_) {
-    throw '添加失败, 请确保文章名唯一';
+    throwValidateError('添加失败, 请确保文章名唯一');
   }
 
   // ArticleCagtegories 和 ArticleTags 表中的数据的创建
@@ -158,6 +159,7 @@ const addArticle = async (value: UnknowObject): Promise<IArticles> => {
       )
     )
   ]);
+
   return await fillArticle(data);
 }
 
@@ -186,7 +188,6 @@ const updateArticle = async (id: number, value: UnknowObject): Promise<IArticles
     const cs = await categoriesValidate(categories);
     //  去除 article.categories 多余的数据（同时存在父子类目的父类目）
     removeInvalidCId(categories, cs);
-
 
     // 所有需要被删除的 article category 关系
     const acs = await ArticleCagtegoryEntity.findAll({

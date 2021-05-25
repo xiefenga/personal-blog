@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken'
 import Router from '@koa/router'
 import { login } from '../services/admin'
+import { validateJWT } from '../utils/validate'
 import { JWT_SECRET } from '../utils/constants'
 import { createSuccessResponse } from '../utils/helper'
-import { validateJWT } from '../utils/validate'
 
 
 const router = new Router();

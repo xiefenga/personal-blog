@@ -2,7 +2,7 @@ import { writeFile } from 'fs/promises'
 import AdminModel from '../models/Admin'
 import { IAdmin } from '../types/models'
 import { UnknowObject } from '../types/helper'
-import { getAdminConfig } from '../utils/helper'
+import { getAdminConfig, throwValidateError } from '../utils/helper'
 import { plainTransform } from '../utils/transform'
 import { ADMIN_CONFIG_PATH } from '../utils/constants'
 import { loginValidate, validateModel } from '../utils/validate'
@@ -31,7 +31,7 @@ const updateAdmin = async (userInfo: UnknowObject): Promise<void> => {
       JSON.stringify(update, null, 2)
     );
   } catch (_) {
-    throw '修改失败，请重试';
+    throwValidateError('修改失败，请重试');
   }
 }
 

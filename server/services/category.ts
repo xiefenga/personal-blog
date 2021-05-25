@@ -6,6 +6,7 @@ import { ICategories, ICategory } from '../types/models'
 import ArticleCagtegoriesEntity from '../db/entities/ArticleCategory'
 import { CATEGORY_EXISTED, CATEGORY_NOT_EXIST, ID_INVALID } from '../utils/tips'
 import { categoryParentIdValidate, emptyModelValidate, idValidate, validateModel } from '../utils/validate'
+import { assertValidation } from '../utils/helper'
 
 
 const addCategory = async (value: UnknowObject): Promise<ICategory> => {
@@ -15,9 +16,10 @@ const addCategory = async (value: UnknowObject): Promise<ICategory> => {
   const [c, created] = await CategoryEntity.findOrCreate({
     where: { ...category }
   });
-  if (!created) {
-    throw CATEGORY_EXISTED;
-  }
+  assertValidation(
+    !created,
+    CATEGORY_EXISTED
+  );
   return c;
 }
 
@@ -40,9 +42,10 @@ const deleteCategory = async (id: number): Promise<void> => {
     ArticleCagtegoriesEntity.findAndCountAll({ where: { categoryId: id } }),
     CategoryEntity.findAndCountAll({ where: { parentId: id } })
   ]);
-  if (c1 !== 0 || c2 !== 0) {
-    throw new Error('该类目非空');
-  }
+  assertValidation(
+    c1 !== 0 || c2 !== 0,
+    '该类目非空'
+  );
   await CategoryEntity.destroy({ where: { id } });
 }
 
@@ -72,9 +75,11 @@ const updateCategory = async (id: number, value: Object): Promise<ICategory> => 
       parentId
     }
   });
-  if (existed) {
-    throw CATEGORY_EXISTED;
-  }
+  assertValidation(
+    !!existed,
+    CATEGORY_EXISTED
+  );
+
   ins.name = name;
   ins.parentId = parentId;
   ins.save();

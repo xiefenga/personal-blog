@@ -4,32 +4,36 @@ import { Op, Model } from 'sequelize'
 import { JWT_SECRET } from './constants'
 import Category from '../models/Category'
 import TagEntity from '../db/entities/Tag'
-import { getValidationErrors } from './helper'
 import { AdminConfig } from '../types/configs'
 import { IAdmin, IModel } from '../types/models'
 import ArticleEntity from '../db/entities/Article'
 import CategoryEntity from '../db/entities/Category'
-import { isInt, isPositive, validate } from 'class-validator'
 import { ARTICLE_EXISTED, IDENTITY_OVERDUE } from './tips'
+import { isInt, isPositive, validate } from 'class-validator'
+import { assertValidation, getValidationErrors, throwValidateError } from './helper'
+
 
 
 function positiveIntValidate(value: number, message: string): void {
-  if (!isPositive(value) || !isInt(value)) {
-    throw message;
-  }
+  assertValidation(
+    !isPositive(value) || !isInt(value),
+    message
+  );
 }
 
 function idValidate(id: number, message: string): void {
-  if (!isInt(id)) {
-    throw message;
-  }
+  assertValidation(
+    !isInt(id),
+    message
+  );
 }
 
 function emptyModelValidate<T extends Model>(model: T | null, message: string): T {
-  if (model === null) {
-    throw message;
-  }
-  return model;
+  assertValidation(
+    model === null,
+    message
+  );
+  return model!;
 }
 
 async function categoriesValidate(categories: number[]): Promise<CategoryEntity[]> {
@@ -40,9 +44,10 @@ async function categoriesValidate(categories: number[]): Promise<CategoryEntity[
       }
     }
   });
-  if (count === 0 || count !== categories.length) {
-    throw 'categories字段有误';
-  }
+  assertValidation(
+    count === 0 || count !== categories.length,
+    'categories字段有误'
+  );
   return rows;
 }
 
@@ -54,9 +59,10 @@ async function tagsValidate(tags: number[]): Promise<TagEntity[]> {
       }
     }
   });
-  if (count === 0 || count !== tags.length) {
-    throw 'tags字段有误';
-  }
+  assertValidation(
+    count === 0 || count !== tags.length,
+    'tags字段有误'
+  );
   return rows;
 }
 
@@ -85,13 +91,11 @@ async function validateModel<T extends IModel>(model: T, skip: boolean = false) 
 }
 
 function loginValidate(config: AdminConfig, modal: Admin) {
-  const { username, password, avatar } = config;
-  if (
-    modal.username !== username ||
-    modal.password !== password
-  ) {
-    throw '账号 / 密码错误';
-  }
+  const { username, password } = config;
+  assertValidation(
+    modal.username !== username || modal.password !== password,
+    '账号 / 密码错误'
+  );
 }
 
 function validateJWT(token?: string) {
@@ -99,10 +103,10 @@ function validateJWT(token?: string) {
     try {
       return jwt.verify(token, JWT_SECRET) as IAdmin;
     } catch (_) {
-      throw IDENTITY_OVERDUE;
+      throwValidateError(IDENTITY_OVERDUE);
     }
   }
-  throw IDENTITY_OVERDUE;
+  throwValidateError(IDENTITY_OVERDUE);
 }
 
 async function validateTitleSafe(id: number, title: string) {
@@ -114,9 +118,7 @@ async function validateTitleSafe(id: number, title: string) {
       }
     }
   });
-  if (existed) {
-    throw ARTICLE_EXISTED;
-  }
+  assertValidation(!!existed, ARTICLE_EXISTED);
 }
 
 async function categoryParentIdValidate(category: Category) {
@@ -124,8 +126,8 @@ async function categoryParentIdValidate(category: Category) {
   // 需要使用 != null 来判断，parentId 可能传递为 0
   if (parentId !== null) {
     const p = await CategoryEntity.findByPk(parentId);
-    if (p === null) { throw '父类目不存在' }
-    if (p.parentId) { throw '只支持二级类目' }
+    assertValidation(p === null, '父类目不存在');
+    assertValidation(p!.parentId !== null, '只支持二级类目');
   }
 }
 

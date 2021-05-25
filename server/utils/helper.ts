@@ -1,9 +1,8 @@
 import { join } from 'path'
-import { ParameterizedContext } from 'koa'
 import { ValidationError } from 'class-validator'
-import { AdminConfig, DBConfig } from '../types/configs'
+import { AdminConfig, DBConfig, OSSConfig } from '../types/configs'
 import { ISuccessResponse, IFailResponse } from '../types/helper'
-import { ADMIN_CONFIG_FILENAME, ADMIN_CONFIG_PATH, CONFIGS_DIR_NAME, DB_CONFIG_FILENAME, DB_CONFIG_PATH, FAIL, SUCCESS } from './constants'
+import { ADMIN_CONFIG_FILENAME, ADMIN_CONFIG_PATH, CONFIGS_DIR_NAME, DB_CONFIG_FILENAME, DB_CONFIG_PATH, FAIL, OSS_CONFIG_FILENAME, OSS_CONFIG_PATH, SUCCESS } from './constants'
 
 
 function objectToArray<T>(object: Object): T[] {
@@ -97,11 +96,25 @@ function getAdminConfig(): AdminConfig {
   }
 }
 
+function getOSSConfig(): OSSConfig {
+  try {
+    return require(OSS_CONFIG_PATH) as OSSConfig;
+  } catch (_) {
+    throw new Error(
+      '缺少配置文件:' + join(CONFIGS_DIR_NAME, OSS_CONFIG_FILENAME)
+    );
+  }
+}
+
 class ValidateError extends Error { };
+
+function throwValidateError(message: string): never {
+  throw new ValidateError(message);
+}
 
 function assertValidation(assert: boolean, message: string) {
   if (assert) {
-    throw new ValidateError(message);
+    throwValidateError(message);
   }
 }
 
@@ -111,5 +124,7 @@ export {
   createFailResponse,
   getDBConfig,
   getAdminConfig,
-  assertValidation
+  getOSSConfig,
+  assertValidation,
+  throwValidateError,
 }
