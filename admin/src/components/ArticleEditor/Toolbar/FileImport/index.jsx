@@ -15,10 +15,8 @@ function FileImport(props) {
   const onChange = useCallback(
     async e => {
       const files = e.target.files;
-      // 解决 chrome 下，选择完文件之后，第二次未选择，也文件触发 change 事件的错误
-      if (!files.length) {
-        return;
-      }
+      // 解决 chrome 下，选择完文件之后，第二次未选择文件 也会触发 change 事件的错误
+      if (!files.length) { return; }
       const file = files[0];
       try {
         const { name: fileName, content } = await importFile(file, extLimits);

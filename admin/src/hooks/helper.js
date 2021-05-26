@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { delay, cancelablePromise } from '@/utils/helper'
 import { CLICK_DOUBLECLICK_INTERVAL as INTERVAL } from '@/utils/constants'
 
-const useCancelablePromises = () => {
+export const useCancelablePromises = () => {
   const pendingPromises = useRef([]);
 
   const appendPendingPromise = promise =>
@@ -20,7 +20,7 @@ const useCancelablePromises = () => {
   };
 };
 
-const useCorrectDoubleClick = (onClick, onDoubleClick) => {
+export const useCorrectDoubleClick = (onClick, onDoubleClick) => {
   const api = useCancelablePromises();
 
   const handleClick = (...args) => {
@@ -50,7 +50,3 @@ const useCorrectDoubleClick = (onClick, onDoubleClick) => {
 };
 
 
-
-
-
-export { useCancelablePromises, useCorrectDoubleClick }

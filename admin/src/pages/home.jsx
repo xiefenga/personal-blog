@@ -1,5 +1,5 @@
 import { Layout } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '@/layout/Header'
 import Welcome from '@/components/Welcome'
 import { useAuth } from '@/hooks/routes'
@@ -12,8 +12,11 @@ import Loading from '@/components/Loading'
 const style = { width: '100%', height: '100%' };
 
 function Home() {
-  const [loading, auth] = useAuth();
-  useEffect(auth, [auth]);
+  const auth = useAuth();
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    auth().then(success => success && setLoading(false));
+  }, [auth]);
 
   return (
     <Layout style={style}>

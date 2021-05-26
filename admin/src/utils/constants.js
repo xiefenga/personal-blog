@@ -18,6 +18,8 @@ export const FAIL = 'fail';
 
 export const ARTICLE_LIST_PAGE_SIZE = 5;
 
+export const EMPTY_FUNC = () => { };
+
 export const SUCCESS_INTERCEPTOR = resp => {
   const { status, error } = resp.data;
   if (status === FAIL) {

@@ -15,8 +15,8 @@ interface OSSConfig {
   "accessKeyId": string;
   "accessKeySecret": string;
   "bucket": string;
+  "path": string
   "customUrl"?: string;
-  "path"?: string
 }
 
 export { DBConfig, AdminConfig, OSSConfig }

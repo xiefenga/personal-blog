@@ -29,7 +29,7 @@ const useClearArticle = () => {
 }
 
 function useMarkdown() {
-  const { content = '' } = useSelector(state => state.article);
+  const { content = '' } = useArticle();
   const dispatch = useDispatch();
   const updateMarkdown = useCallback(
     value => dispatch(setArticleAction({ content: value })),
@@ -39,7 +39,7 @@ function useMarkdown() {
 }
 
 function useTitle() {
-  const { title = '' } = useSelector(state => state.article);
+  const { title = '' } = useArticle();
   const dispatch = useDispatch();
   const updateTitle = useCallback(
     value => dispatch(setArticleAction({ title: value })),
@@ -48,8 +48,18 @@ function useTitle() {
   return [title, updateTitle];
 }
 
+function useCover() {
+  const { cover = '' } = useArticle();
+  const dispatch = useDispatch();
+  const updateCover = useCallback(
+    value => dispatch(setArticleAction({ cover: value })),
+    [dispatch]
+  );
+  return [cover, updateCover];
+}
+
 function useArticleCategories() {
-  const { categories = [] } = useSelector(state => state.article);
+  const { categories = [] } = useArticle();
   const dispatch = useDispatch();
   const updateTitle = useCallback(
     value => dispatch(setArticleAction({ categories: value })),
@@ -59,7 +69,7 @@ function useArticleCategories() {
 }
 
 function useArticleTags() {
-  const { tags = [] } = useSelector(state => state.article);
+  const { tags = [] } = useArticle();
   const dispatch = useDispatch();
   const updateTitle = useCallback(
     value => dispatch(setArticleAction({ tags: value })),
@@ -68,7 +78,7 @@ function useArticleTags() {
   return [tags, updateTitle];
 }
 
-export { useArticle, useClearArticle, useMarkdown, useTitle, useArticleCategories, useArticleTags }
+export { useArticle, useClearArticle, useMarkdown, useTitle, useCover, useArticleCategories, useArticleTags }
 
 function useTags() {
   const tags = useSelector(state => state.tags);

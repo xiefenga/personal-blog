@@ -1,4 +1,6 @@
-import { SUCCESS_INTERCEPTOR, ERROR_INTERCEPTOR } from './constants'
+import { upload2ALiOSS } from './oss'
+import { SUCCESS_INTERCEPTOR, ERROR_INTERCEPTOR, EMPTY_FUNC } from './constants'
+
 
 // 计算 markdown 中的 有效 字数
 export const wordsCount = data => {
@@ -75,10 +77,36 @@ export const setInterceptors = (...instances) => {
   });
 }
 
+const config = {
+  "region": "oss-cn-hangzhou",
+  "accessKeyId": "LTAI4GCzjyniTeYBwjpdsRXo",
+  "accessKeySecret": "uL6LpltM9wNpmJQCRJ4IWQL4Y56ds9",
+  "bucket": "xf-blog-imgs",
+  "customUrl": "http://oss.xiefeng.tech",
+  "path": "blogs-imgs/"
+};
+
+export const uploadAdaptor = async ({ file, onSuccess = EMPTY_FUNC, onError = EMPTY_FUNC, onProgress = EMPTY_FUNC }) => {
+  const resp = await upload2ALiOSS(config, Date.now(), file);
+  // console.log(resp);
+  onSuccess(resp.url);
+}
+
+export const preLoadImg = (src, onSuccess = EMPTY_FUNC, onError = EMPTY_FUNC) => {
+  const img = new Image();
+  img.onload = onSuccess;
+  img.onerror = onError;
+  img.src = src;
+}
+
 export const delay = n => new Promise(resolve => window.setTimeout(resolve, n));
 
 // 获取当前年份
 export const getYear = () => new Date().getFullYear();
 
 export const isEmpty = value => value == null || value === '' || (Array.isArray(value) && !value.length);
+
+export const getUID = () => Date.now().toString();
+
+
 
