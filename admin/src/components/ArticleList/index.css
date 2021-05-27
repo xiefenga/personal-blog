@@ -8,35 +8,15 @@
   position: relative;
 }
 
-.article-list .ant-spin {
-  position: absolute;
-  left: 50%!important;
-  top: 50%!important;
-  transform: translate(-50%, -50%);
-}
-
-.article-list p {
-  margin: 0;
-}
-
-.article-list .time span:first-child {
-  margin: 0 10px 0 0;
-}
-
-.article-list .categories {
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.article-list .categories .category {
-  margin-right: 10px;
-}
-
-.article-list .tags .ant-tag {
-  border: none;
-}
+/* 让 list 组件默认 100% 高度 */
 
 .article-list .ant-list {
+  height: 100%;
+}
+
+/* 修改 spin 区域的高度，让 spin 的图标可以居中显示 */
+
+.article-list .ant-spin-nested-loading {
   height: 100%;
 }
 
@@ -44,6 +24,30 @@
   width: 130px;
   height: 88px;
   object-fit: cover;
+}
+
+.article-list .article-info {
+  overflow: hidden;
+  min-width: 1250px;
+}
+
+.article-list .article-info .categories {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.article-list .article-info .categories .item:not(:last-of-type)::after {
+  content: '、';
+}
+
+.article-list .article-info .times .post-time {
+  margin: 0 10px 0 0;
+}
+
+/* 移除 tag 组件默认 border */
+
+.article-list .article-info .tags .ant-tag {
+  border: none;
 }
 
 .article-list .ant-list-pagination {

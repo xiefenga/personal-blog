@@ -1,38 +1,93 @@
-import { getArticles } from '@/api/article'
-import { List, Button, Tag, Image } from 'antd'
+import { useHistory } from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons'
-import { useEffect, useCallback, useState } from 'react'
-import { ARTICLE_LIST_PAGE_SIZE as size } from '@/utils/constants'
+import { List, Button, Tag, Image, Modal } from 'antd'
+import { useEffect, useCallback, useMemo } from 'react'
+import { ARTICLE_LIST_PAGE_SIZE } from '@/utils/constants'
+import { useGetArticleList, useEditModal } from '@/hooks/http'
 import './index.css'
+
 
 function ArticleList() {
 
-  const [loading, setLoading] = useState(true);
+  const history = useHistory();
 
-  const [articleList, setArticleList] = useState([]);
+  const {
+    loading,
+    articleList,
+    toPage,
+    total,
+    getArticleList
+  } = useGetArticleList();
 
-  const [page, setPage] = useState(1);
+  const {
+    onOk,
+    visible,
+    content,
+    title,
+    hideModal,
+    showModal,
+    confirmLoading
+  } = useEditModal();
 
-  const [total, setTotal] = useState(0);
+  useEffect(getArticleList, [getArticleList]);
 
-  useEffect(() => {
-    getArticles(page, size).then(res => {
-      setArticleList(res.data);
-      setTotal(res.count);
-      setLoading(false);
-    });
-  }, [page]);
+  const ok = useCallback(
+    async () => {
+      const success = await onOk();
+      success && getArticleList();
+    },
+    [onOk, getArticleList]
+  );
+
+  const pagination = useMemo(
+    () => ({
+      onChange: n => toPage(n),
+      pageSize: ARTICLE_LIST_PAGE_SIZE,
+      total: total
+    }),
+    [toPage, total]
+  );
+
+  const loadingConfig = useMemo(
+    () => ({
+      spinning: loading,
+      indicator: <LoadingOutlined />
+    }),
+    [loading]
+  );
 
   const renderItem = useCallback(
     item => (
       <List.Item
         key={item.id}
         actions={[
-          <Button type="link">删除文章</Button>,
-          <Button type="link">修改封面</Button>,
-          <Button type="link">修改标签</Button>,
-          <Button type="link">修改类目</Button>,
-          <Button type="link" >编辑内容</Button>
+          <Button type="link" onClick={
+            () => showModal(4, {
+              id: item.id,
+              title: item.title
+            })
+          }> 删除文章</Button >,
+          <Button type="link" onClick={
+            () => showModal(1, {
+              id: item.id,
+              cover: item.cover
+            })
+          }>修改封面</Button>,
+          <Button type="link" onClick={
+            () => showModal(2, {
+              id: item.id,
+              tags: item.tags.map(t => t.id)
+            })
+          }>修改标签</Button>,
+          <Button type="link" onClick={
+            () => showModal(3, {
+              id: item.id,
+              categories: item.categories.map(([p, c]) => (c ?? p).id)
+            })
+          }>修改类目</Button>,
+          <Button type="link" onClick={
+            () => history.push('/article/edit/' + item.id)
+          }>编辑内容</Button>
         ]}
       >
         <List.Item.Meta
@@ -43,8 +98,8 @@ function ArticleList() {
               <div className="categories">
                 {item.categories.map(([p, c]) => (
                   c
-                    ? <span key={c.id}> {p.name} &gt; {c.name} </span>
-                    : <span key={p.id}> {p.name} </span>
+                    ? <span className="item" key={c.id}> {p.name} &gt; {c.name} </span>
+                    : <span className="item" key={p.id}> {p.name} </span>
                 ))}
               </div>
               <div className="tags">
@@ -57,33 +112,40 @@ function ArticleList() {
                   </Tag>
                 ))}
               </div>
-              <div className="time">
-                <span>发布时间：{new Date(item.createdAt).toLocaleString()}</span>
-                <span>更新时间：{new Date(item.updatedAt).toLocaleString()}</span>
+              <div className="times">
+                <span className="post-time">发布时间：{new Date(item.createdAt).toLocaleString()}</span>
+                <span className="update-time">更新时间：{new Date(item.updatedAt).toLocaleString()}</span>
               </div>
             </div>
           }
         />
-      </List.Item>
+      </List.Item >
     ),
-    []
+    [history, showModal]
   );
 
 
   return (
     <div className="article-list">
       <List
-        loading={{ spinning: loading, indicator: <LoadingOutlined /> }}
-        itemLayout="horizontal"
         size="small"
-        pagination={{
-          onChange: n => setPage(n),
-          pageSize: size,
-          total: total
-        }}
+        itemLayout="horizontal"
+        loading={loadingConfig}
+        pagination={pagination}
         dataSource={articleList}
         renderItem={renderItem}
       />
+      <Modal
+        onOk={ok}
+        title={title}
+        destroyOnClose
+        closable={false}
+        visible={visible}
+        onCancel={hideModal}
+        confirmLoading={confirmLoading}
+      >
+        {content}
+      </Modal>
     </div>
   )
 }

@@ -17,6 +17,7 @@ function UploadCover() {
     },
     [setCover]
   );
+  const onRemove = useCallback(() => setCover(null), [setCover]);
   return (
     <div className="cover-upload">
       <Popover
@@ -30,6 +31,7 @@ function UploadCover() {
               limit={1}
               urls={urls}
               onSuccess={onSuccess}
+              onRemove={onRemove}
             />
           </div>
         }

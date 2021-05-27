@@ -1,6 +1,6 @@
 import { message, Modal } from 'antd'
 import { whoAmI, logout } from '@/api/login'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useAdmin, useLogin, useLogout } from './store'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -31,25 +31,7 @@ function useRedirect(path) {
 }
 
 
-function useAuth() {
-  const history = useHistory();
-  const [admin, updateAdminInfo] = useAdmin();
-  return useCallback(
-    async () => {
-      if (admin === null) {
-        const { status, data } = await whoAmI();
-        if (status === SUCCESS) {
-          updateAdminInfo(data);
-        } else {
-          history.push('/login');
-          return false;
-        }
-      }
-      return true;
-    },
-    [history, admin, updateAdminInfo]
-  );
-}
+
 
 
 function useLoginAndJump(setLoading) {
@@ -93,7 +75,6 @@ export {
   useGoHome,
   usePaths,
   useRedirect,
-  useAuth,
   useLoginAndJump as useLogin,
   useConfirmLogout as useLogout
 }

@@ -17,10 +17,17 @@ function useAdmin() {
 }
 
 // article 相关
+export const useArticle = () => {
+  const article = useSelector(state => state.article);
+  const dispatch = useDispatch();
+  const update = useCallback(
+    article => dispatch(setArticleAction({ ...article })),
+    [dispatch]
+  );
+  return [article, update];
+}
 
-const useArticle = () => useSelector(state => state.article);
-
-const useClearArticle = () => {
+export const useClearArticle = () => {
   const dispatch = useDispatch();
   return useCallback(
     () => dispatch(clearArticleAction()),
@@ -28,8 +35,8 @@ const useClearArticle = () => {
   );
 }
 
-function useMarkdown() {
-  const { content = '' } = useArticle();
+export const useMarkdown = () => {
+  const { content = '' } = useSelector(state => state.article);
   const dispatch = useDispatch();
   const updateMarkdown = useCallback(
     value => dispatch(setArticleAction({ content: value })),
@@ -38,8 +45,8 @@ function useMarkdown() {
   return [content, updateMarkdown];
 }
 
-function useTitle() {
-  const { title = '' } = useArticle();
+export const useTitle = () => {
+  const { title = '' } = useSelector(state => state.article);
   const dispatch = useDispatch();
   const updateTitle = useCallback(
     value => dispatch(setArticleAction({ title: value })),
@@ -48,39 +55,38 @@ function useTitle() {
   return [title, updateTitle];
 }
 
-function useCover() {
-  const { cover = '' } = useArticle();
+export const useCover = () => {
+  const { cover = '' } = useSelector(state => state.article);
   const dispatch = useDispatch();
-  const updateCover = useCallback(
+  const update = useCallback(
     value => dispatch(setArticleAction({ cover: value })),
     [dispatch]
   );
-  return [cover, updateCover];
+  return [cover, update];
 }
 
-function useArticleCategories() {
-  const { categories = [] } = useArticle();
+export const useArticleCategories = () => {
+  const { categories = [] } = useSelector(state => state.article);
   const dispatch = useDispatch();
-  const updateTitle = useCallback(
+  const update = useCallback(
     value => dispatch(setArticleAction({ categories: value })),
     [dispatch]
   );
-  return [categories, updateTitle];
+  return [categories, update];
 }
 
-function useArticleTags() {
-  const { tags = [] } = useArticle();
+export const useArticleTags = () => {
+  const { tags = [] } = useSelector(state => state.article);
   const dispatch = useDispatch();
-  const updateTitle = useCallback(
+  const update = useCallback(
     value => dispatch(setArticleAction({ tags: value })),
     [dispatch]
   );
-  return [tags, updateTitle];
+  return [tags, update];
 }
 
-export { useArticle, useClearArticle, useMarkdown, useTitle, useCover, useArticleCategories, useArticleTags }
 
-function useTags() {
+export const useTags = () => {
   const tags = useSelector(state => state.tags);
   const dispatch = useDispatch();
   const updateTags = useCallback(
@@ -90,7 +96,7 @@ function useTags() {
   return [tags, updateTags];
 }
 
-function useCategories() {
+export const useCategories = () => {
   const categories = useSelector(state => state.categories);
   const dispatch = useDispatch();
   const update = useCallback(
@@ -182,15 +188,12 @@ function useDeleteCategory() {
 
 export {
   useAdmin,
-
-  useTags,
   useLogin,
   useLogout,
   useGetTags,
   useAddTag,
   useUpdateTag,
   useDeleteTag,
-  useCategories,
   useGetCategories,
   useAddCategory,
   useUpdateCategory,

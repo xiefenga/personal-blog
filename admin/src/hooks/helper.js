@@ -1,6 +1,15 @@
-import { useRef } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import { delay, cancelablePromise } from '@/utils/helper'
 import { CLICK_DOUBLECLICK_INTERVAL as INTERVAL } from '@/utils/constants'
+
+
+export const useForceUpdate = () => {
+  const [, setState] = useState({});
+  return useCallback(
+    () => setState({}),
+    []
+  );
+}
 
 export const useCancelablePromises = () => {
   const pendingPromises = useRef([]);

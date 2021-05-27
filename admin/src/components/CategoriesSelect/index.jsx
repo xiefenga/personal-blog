@@ -1,14 +1,18 @@
 import { TreeSelect } from 'antd'
+import PropTypes from 'prop-types'
 import { useCallback, useMemo } from 'react'
+import { useCategories } from '@/hooks/store'
 import { treeDateTransform, findIDIndex } from '@/utils/helper'
-import { useArticleCategories, useCategories } from '@/hooks/store'
 
 
 const style = { width: '100%' };
 
-function CategoriesChecker() {
+function CategoriesSelect(props) {
+  const {
+    selected: selectedCategories,
+    setSelected: setSelectedCategories
+  } = props;
   const [categories] = useCategories();
-  const [selectedCategories, setSelectedCategories] = useArticleCategories();
   const treeData = useMemo(
     () => categories.map(
       c => treeDateTransform(
@@ -49,7 +53,6 @@ function CategoriesChecker() {
   );
 
 
-
   return (
     <div className="categories-checker">
       <TreeSelect
@@ -66,6 +69,11 @@ function CategoriesChecker() {
   )
 }
 
+CategoriesSelect.propTypes = {
+  selected: PropTypes.array.isRequired,
+  setSelected: PropTypes.func.isRequired
+}
 
-export default CategoriesChecker
+
+export default CategoriesSelect
 

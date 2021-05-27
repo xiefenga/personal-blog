@@ -1,12 +1,17 @@
 import { Tag } from 'antd'
-import { useArticleTags, useTags } from '@/hooks/store'
+import PropTypes from 'prop-types'
+import { useTags } from '@/hooks/store'
 import './index.css'
 
 const { CheckableTag } = Tag;
 
-function TagsChecker() {
+
+function TagsSelect(props) {
+  const {
+    selected: checkedTags,
+    setSelected: setCheckedTags
+  } = props;
   const [tags] = useTags();
-  const [checkedTags, setCheckedTags] = useArticleTags();
   return (
     <div className="tags-checker">
       {tags.map(tag => (
@@ -28,5 +33,10 @@ function TagsChecker() {
   )
 }
 
-export default TagsChecker
+TagsSelect.propTypes = {
+  selected: PropTypes.array.isRequired,
+  setSelected: PropTypes.func.isRequired
+}
+
+export default TagsSelect
 

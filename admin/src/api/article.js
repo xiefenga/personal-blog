@@ -8,3 +8,5 @@ export const getArticles = async (page = 1, size = 10) => axios.get('/', { param
 
 export const deleteArticle = async id => axios.delete('/' + id);
 
+export const getArticle = async id => axios.get('/' + id);
+
