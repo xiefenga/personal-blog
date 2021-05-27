@@ -257,6 +257,8 @@ const updateArticle = async (id: number, value: UnknowObject): Promise<IArticles
   }
   if (cover) {
     article.cover = cover;
+  } else if (cover === null) {
+    article.cover = require(SITE_CONFIG_PATH).defaultCover;
   }
   article.save();
 
