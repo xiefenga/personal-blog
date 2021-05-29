@@ -1,13 +1,13 @@
 import { Layout } from 'antd'
-import { useEffect, useState } from 'react'
 import Header from '@/layout/Header'
-import Welcome from '@/components/Welcome'
 import { useAuth } from '@/hooks/http'
-import { Switch, Route } from 'react-router-dom'
+import Loading from '@/components/Loading'
+import Welcome from '@/components/Welcome'
 import TagManage from '@/components/TagManage'
 import ArticleManage from '@/components/ArticleManage'
 import CategoryManage from '@/components/CategoryManage'
-import Loading from '@/components/Loading'
+import { useEffect, useState, useCallback } from 'react'
+import { Switch, Route, useHistory } from 'react-router-dom'
 import { useGetCategories, useGetTags } from '@/hooks/store'
 
 const style = { width: '100%', height: '100%' };
@@ -16,10 +16,13 @@ function Home() {
   const auth = useAuth();
   const getTags = useGetTags();
   const getCategories = useGetCategories();
+  const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [tip, setTip] = useState('登录中');
-  useEffect(() => {
-    auth().then(async success => {
+
+  const init = useCallback(
+    async () => {
+      const success = await auth();
       if (success) {
         setTip('获取类目和标签中');
         await Promise.all([
@@ -27,11 +30,13 @@ function Home() {
           getCategories()
         ]);
         setLoading(false);
+      } else {
+        history.push('/login');
       }
-    });
-  },
-    [auth, getTags, getCategories]
+    },
+    [auth, history, getTags, getCategories]
   );
+  useEffect(init, [init]);
 
   return (
     <Layout style={style}>
