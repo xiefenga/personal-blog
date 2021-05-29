@@ -1,19 +1,15 @@
-import { TweenOneGroup } from 'rc-tween-one'
+import EditBox from '../EditBox'
+import { randomColor } from '@/utils/helper'
+import { useState, useCallback } from 'react'
 import { useCorrectDoubleClick } from '@/hooks/helper'
-import { useEffect, useState, useCallback } from 'react'
 import { Empty, Tag, Input, message, Modal } from 'antd'
 import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
-import { useTags, useGetTags, useAddTag, useUpdateTag, useDeleteTag } from '@/hooks/store'
+import { useTags, useAddTag, useUpdateTag, useDeleteTag } from '@/hooks/store'
 import './index.css'
-import EditBox from '../EditBox';
 
-const enter = { scale: 0.8, opacity: 0, type: 'from', duration: 100, onComplete: e => e.target.style = '' };
-
-const leave = { opacity: 0, width: 0, scale: 0, duration: 200 };
 
 function TagManage() {
   const [tags] = useTags();
-  const getTags = useGetTags();
   const addTag = useAddTag();
   const updateTag = useUpdateTag();
   const deleteTag = useDeleteTag();
@@ -99,28 +95,23 @@ function TagManage() {
   // 1. 增加 loading 
   // 2. 增加 加载时退出,取消请求
 
-  useEffect(() => {
-    if (!tags.length) {
-      getTags();
-    }
-  }, [tags, getTags]);
 
   return (
     <div className="tag-manage">
       <div className="tag-list">
-        <TweenOneGroup enter={enter} leave={leave}>
-          {tags && tags.length
-            ? tags.map(tag => (
-              <Tag key={tag.id}
-                onClick={() => onClick(tag)}
-                onDoubleClick={() => onDouleClick(tag)}
-              >
-                {tag.name}
-              </Tag>
-            ))
-            : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-          }
-        </TweenOneGroup>
+        {tags.length
+          ? tags.map(tag => (
+            <Tag
+              key={tag.id}
+              color={randomColor(tag.id)}
+              onClick={() => onClick(tag)}
+              onDoubleClick={() => onDouleClick(tag)}
+            >
+              {tag.name}
+            </Tag>
+          ))
+          : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        }
       </div>
       <div className="tag-add">
         {addVisible

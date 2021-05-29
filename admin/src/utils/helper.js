@@ -108,5 +108,26 @@ export const isEmpty = value => value == null || value === '' || (Array.isArray(
 
 export const getUID = () => Date.now().toString();
 
+const colors = [
+  '#52a08',
+  '#9cb23e',
+  '#c3c23d',
+  '#6681be',
+  '#742f',
+  '#467119',
+  '#7b8935',
+  '#1beeba',
+  '#fc6582',
+  '#96816e',
+  '#d2e40c',
+  '#104854',
+  '#e77c8f',
+  '#a21dc0',
+  '#df7002',
+  '#7837f3'
+];
+
+export const randomColor = id => colors[id % 16];
+
 
 
