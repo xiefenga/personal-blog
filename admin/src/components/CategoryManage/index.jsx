@@ -1,17 +1,12 @@
 import EditBox from '../EditBox'
 import { Tree, Input, message, Empty } from 'antd'
 import { treeDateTransform } from '@/utils/helper'
-import React, { useEffect, useMemo, useState, useCallback, Fragment, createRef } from 'react'
+import React, { useEffect, useMemo, useState, useCallback, Fragment, } from 'react'
 import { DeleteOutlined, PlusOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { useAddCategory, useCategories, useDeleteCategory, useGetCategories, useUpdateCategory } from '@/hooks/store'
+import { useAddCategory, useCategories, useDeleteCategory, useUpdateCategory } from '@/hooks/store'
 import './index.css'
 
-const shouldExpandAll = createRef();
-
-shouldExpandAll.current = true;
-
 function CategoryManage() {
-  const getCategories = useGetCategories();
   const [categories] = useCategories();
   const addCategory = useAddCategory();
   const updateCategory = useUpdateCategory();
@@ -22,20 +17,13 @@ function CategoryManage() {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [addVisible, setAddVisible] = useState(false);
   const [addValue, setAddValue] = useState('');
-  const { current: expandAll } = shouldExpandAll;
+
+
   useEffect(
-    () => !categories.length && getCategories(),
-    [categories, getCategories]
+    () => setExpandedKeys(categories.map(c => c.id)),
+    [categories]
   );
-  useEffect(
-    () => {
-      if (categories.length && !expandedKeys.length && expandAll) {
-        setExpandedKeys(categories.map(c => c.id));
-        shouldExpandAll.current = false;
-      }
-    },
-    [categories, expandedKeys, expandAll]
-  );
+
   const treeData = useMemo(
     () => categories.map(
       c => treeDateTransform(
@@ -82,6 +70,7 @@ function CategoryManage() {
             size="small"
             autoFocus
             onBlur={() => setFocueKey(null)}
+            onKeyDown={e => e.keyCode === 27 && setFocueKey(null)}
             value={editValue}
             onChange={e => setEditValue(e.target.value)}
             onPressEnter={async () => {

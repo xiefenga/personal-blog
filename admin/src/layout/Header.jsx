@@ -1,10 +1,10 @@
-import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { useAdmin } from '@/hooks/store'
-import { useLogout } from '@/hooks/routes'
-import { UserOutlined } from '@ant-design/icons'
+import { useLogout } from '@/hooks/http'
+import { useMemo, useCallback } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { usePaths, useGoHome } from '@/hooks/routes'
-import { Layout, Row, Col, Avatar, Menu } from 'antd'
+import { Layout, Row, Col, Avatar, Menu, message, Modal } from 'antd'
+import { UserOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import './Header.css'
 
 
@@ -24,7 +24,23 @@ function Header() {
 
   const selectedKeys = usePaths()[0];
 
-  const confirmLogout = useLogout(username);
+  const logout = useLogout();
+
+  const history = useHistory();
+
+  const confirmLogout = useCallback(
+    () => Modal.confirm({
+      title: '确认退出',
+      icon: <QuestionCircleOutlined />,
+      content: `确定退出登录账号 ${username}？`,
+      onOk: async () => {
+        await logout();
+        message.success('退出登录');
+        history.push('/login');
+      }
+    }),
+    [history, username, logout],
+  );
 
   return (
     <Layout.Header id="header">

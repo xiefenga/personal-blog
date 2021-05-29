@@ -1,8 +1,9 @@
-import { useState } from 'react'
 import Footer from '@/layout/Footer'
-import { useLogin } from '@/hooks/routes'
-import { Form, Input, Button, Typography } from 'antd'
+import { useLogin } from '@/hooks/store'
+import { useGoHome } from '@/hooks/routes'
+import { useCallback, useState } from 'react'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { Form, Input, Button, Typography, message } from 'antd'
 import './login.css'
 
 
@@ -18,8 +19,25 @@ const formLayout = {
 const btnLayout = { offset: 4, span: 16 };
 
 function Login() {
+
   const [loading, setLoading] = useState(false);
-  const onFinish = useLogin(setLoading);
+
+  const goHome = useGoHome();
+
+  const login = useLogin();
+
+  const onFinish = useCallback(
+    async values => {
+      setLoading(true);
+      const success = await login(values);
+      setLoading(false);
+      if (success) {
+        message.success('登录成功');
+        goHome(true);
+      }
+    },
+    [login, goHome]
+  );
 
   return (
     <div className="login-box">
