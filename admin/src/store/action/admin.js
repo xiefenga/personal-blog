@@ -11,7 +11,7 @@ export const loginAction = values => async dispatch => {
   if (status === SUCCESS) {
     dispatch(setAdminAction(data));
   }
-  return resp;
+  return status === SUCCESS;
 }
 
 export const setAdminAction = (payload) => ({
