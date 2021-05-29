@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useAdmin } from '@/hooks/store'
 import { useLogout } from '@/hooks/routes'
@@ -6,15 +7,20 @@ import { usePaths, useGoHome } from '@/hooks/routes'
 import { Layout, Row, Col, Avatar, Menu } from 'antd'
 import './Header.css'
 
+
 function Header() {
 
   const [admin] = useAdmin();
 
-  const avatar = admin ? admin.avatar : '';
+  const [avatar, username] = useMemo(
+    () => (admin
+      ? [admin.avatar, admin.username]
+      : ['', '登录中']
+    ),
+    [admin]
+  );
 
-  const username = admin ? admin.username : '登录中';
-
-  const onClick = useGoHome();
+  const goHome = useGoHome();
 
   const selectedKeys = usePaths()[0];
 
@@ -24,7 +30,7 @@ function Header() {
     <Layout.Header id="header">
       <Row>
         <Col span={4}>
-          <h1 onClick={onClick}>个人博客后台</h1>
+          <h1 onClick={goHome}>个人博客后台</h1>
         </Col>
         <Col span={12} >
           <Menu className="header-menu" mode="horizontal" selectedKeys={selectedKeys}>
