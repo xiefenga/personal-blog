@@ -87,8 +87,10 @@ const config = {
 };
 
 export const uploadAdaptor = async ({ file, onSuccess = EMPTY_FUNC, onError = EMPTY_FUNC, onProgress = EMPTY_FUNC }) => {
+  const config = JSON.parse(
+    window.localStorage.getItem('oss-config')
+  );
   const resp = await upload2ALiOSS(config, Date.now(), file);
-  // console.log(resp);
   onSuccess(resp.url);
 }
 

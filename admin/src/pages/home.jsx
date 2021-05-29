@@ -1,6 +1,6 @@
 import { Layout } from 'antd'
 import Header from '@/layout/Header'
-import { useAuth } from '@/hooks/http'
+import { useAuth, useGetOSSCongig } from '@/hooks/http'
 import Loading from '@/components/Loading'
 import Welcome from '@/components/Welcome'
 import TagManage from '@/components/TagManage'
@@ -16,6 +16,7 @@ function Home() {
   const auth = useAuth();
   const getTags = useGetTags();
   const getCategories = useGetCategories();
+  const getOSSCongig = useGetOSSCongig();
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [tip, setTip] = useState('登录中');
@@ -27,14 +28,15 @@ function Home() {
         setTip('获取类目和标签中');
         await Promise.all([
           getTags(),
-          getCategories()
+          getCategories(),
+          getOSSCongig()
         ]);
         setLoading(false);
       } else {
         history.push('/login');
       }
     },
-    [auth, history, getTags, getCategories]
+    [auth, history, getTags, getCategories, getOSSCongig]
   );
   useEffect(init, [init]);
 

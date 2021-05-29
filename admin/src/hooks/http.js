@@ -9,6 +9,7 @@ import { useAdmin, useArticle, useClearArticle, useLogout as useLogoutAdmin } fr
 import { SUCCESS, ARTICLE_LIST_PAGE_SIZE } from '@/utils/constants'
 import { useParams } from 'react-router-dom'
 import { whoAmI, logout } from '@/api/login'
+import { getConfig } from '@/api/oss'
 
 export const useAuth = () => {
   const [admin, updateAdminInfo] = useAdmin();
@@ -25,6 +26,18 @@ export const useAuth = () => {
       return true;
     },
     [admin, updateAdminInfo]
+  );
+}
+
+export const useGetOSSCongig = () => {
+  return useCallback(
+    async () => {
+      const { status, data } = await getConfig();
+      if (status === SUCCESS) {
+        window.localStorage.setItem('oss-config', JSON.stringify(data));
+      }
+    },
+    []
   );
 }
 
@@ -165,7 +178,6 @@ export const useGetArticleList = () => {
       setLoading(true);
       const { status, data, count } = await getArticles(page, ARTICLE_LIST_PAGE_SIZE);
       setLoading(false);
-      console.log('aaa')
       if (status === SUCCESS) {
         setArticleList(data);
         setTotal(count);
