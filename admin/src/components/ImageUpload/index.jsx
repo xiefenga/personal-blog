@@ -1,5 +1,5 @@
-import { Upload } from 'antd'
 import PropTypes from 'prop-types'
+import { Upload, Modal } from 'antd'
 import { uploadAdaptor } from '@/utils/helper'
 import { UploadOutlined } from '@ant-design/icons'
 import { useCallback, useMemo, useState } from 'react'
@@ -28,7 +28,6 @@ function ImageUpload(props) {
 
   const onChange = useCallback(
     ({ file, fileList }) => {
-      console.log(file)
       setFileList(fileList);
       if (file.status === 'done') {
         onSuccess({
@@ -41,6 +40,20 @@ function ImageUpload(props) {
     },
     [onSuccess, onRemove]
   );
+
+  const onPreview = useCallback(
+    file => {
+      const url = file.url || file.thumbUrl;
+      Modal.info({
+        icon: null,
+        title: <p><b>图片预览</b></p>,
+        content: <img src={url} alt="" style={{ width: '100%' }} />,
+        okText: '关闭'
+      });
+    },
+    []
+  );
+
   return (
     <Upload
       accept="image/*"
@@ -49,6 +62,7 @@ function ImageUpload(props) {
       fileList={fileList}
       customRequest={customRequest}
       onChange={onChange}
+      onPreview={onPreview}
     >
       <p className="ant-upload-drag-icon">
         <UploadOutlined />
