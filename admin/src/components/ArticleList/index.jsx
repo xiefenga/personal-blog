@@ -2,8 +2,8 @@ import { useHistory } from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons'
 import { List, Button, Tag, Image, Modal } from 'antd'
 import { useEffect, useCallback, useMemo } from 'react'
-import { ARTICLE_LIST_PAGE_SIZE } from '@/utils/constants'
 import { useGetArticleList, useEditModal } from '@/hooks/http'
+import { ARTICLE_LIST_PAGE_SIZE, IMG_LOAD_ERROR_FALLBACK } from '@/utils/constants'
 import './index.css'
 
 
@@ -91,7 +91,13 @@ function ArticleList() {
         ]}
       >
         <List.Item.Meta
-          avatar={<Image src={item.cover} />}
+          avatar={
+            <Image
+              preview={false}
+              src={item.cover}
+              fallback={IMG_LOAD_ERROR_FALLBACK}
+            />
+          }
           title={item.title}
           description={
             <div className="article-info">
