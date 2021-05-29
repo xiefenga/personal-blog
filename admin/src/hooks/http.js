@@ -5,10 +5,10 @@ import { postArticle, updateArticle, getArticle, deleteArticle, getArticles } fr
 import { isEmpty } from '@/utils/helper'
 import { message } from 'antd'
 import { useCallback, useState, useMemo } from 'react'
-import { useAdmin, useArticle, useClearArticle } from './store'
+import { useAdmin, useArticle, useClearArticle, useLogout as useLogoutAdmin } from './store'
 import { SUCCESS, ARTICLE_LIST_PAGE_SIZE } from '@/utils/constants'
 import { useParams } from 'react-router-dom'
-import { whoAmI } from '@/api/login'
+import { whoAmI, logout } from '@/api/login'
 
 export const useAuth = () => {
   const [admin, updateAdminInfo] = useAdmin();
@@ -28,6 +28,17 @@ export const useAuth = () => {
   );
 }
 
+
+export const useLogout = () => {
+  const logoutAdmin = useLogoutAdmin();
+  return useCallback(
+    async () => {
+      await logout();
+      logoutAdmin();
+    },
+    [logoutAdmin]
+  );
+}
 
 // article 
 export const useGetArticle = () => {

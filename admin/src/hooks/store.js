@@ -6,7 +6,7 @@ import { setTagsAction, getTagsAction, addTagAction, updateTagAction, deleteTagA
 import { setCategoriesAction, getCategoriesAction, addCategoryAction, updateCategoryAction, deleteCategoryAction } from '@/store/action/categories'
 
 
-function useAdmin() {
+export const useAdmin = () => {
   const admin = useSelector(state => state.admin);
   const dispatch = useDispatch();
   const updateAdmin = useCallback(
@@ -106,7 +106,7 @@ export const useCategories = () => {
   return [categories, update];
 }
 
-function useLogin() {
+export const useLogin = () => {
   const dispatch = useDispatch();
   return useCallback(
     async values => dispatch(loginAction(values)),
@@ -114,7 +114,7 @@ function useLogin() {
   );
 }
 
-function useLogout() {
+export const useLogout = () => {
   const dispatch = useDispatch();
   return useCallback(
     () => dispatch(logoutAction()),
@@ -122,7 +122,7 @@ function useLogout() {
   );
 }
 
-function useGetTags() {
+export const useGetTags = () => {
   const dispatch = useDispatch();
   return useCallback(
     async () => dispatch(getTagsAction()),
@@ -130,7 +130,7 @@ function useGetTags() {
   );
 }
 
-function useAddTag() {
+export const useAddTag = () => {
   const dispatch = useDispatch();
   return useCallback(
     async value => dispatch(addTagAction(value)),
@@ -138,7 +138,7 @@ function useAddTag() {
   );
 }
 
-function useUpdateTag() {
+export const useUpdateTag = () => {
   const dispatch = useDispatch();
   return useCallback(
     async (id, value) => dispatch(updateTagAction(id, value)),
@@ -146,7 +146,7 @@ function useUpdateTag() {
   );
 }
 
-function useDeleteTag() {
+export const useDeleteTag = () => {
   const dispatch = useDispatch();
   return useCallback(
     async id => dispatch(deleteTagAction(id)),
@@ -154,7 +154,7 @@ function useDeleteTag() {
   );
 }
 
-function useGetCategories() {
+export const useGetCategories = () => {
   const dispatch = useDispatch();
   return useCallback(
     async () => dispatch(getCategoriesAction()),
@@ -162,7 +162,7 @@ function useGetCategories() {
   );
 }
 
-function useAddCategory() {
+export const useAddCategory = () => {
   const dispatch = useDispatch();
   return useCallback(
     async value => dispatch(addCategoryAction(value)),
@@ -170,7 +170,7 @@ function useAddCategory() {
   );
 }
 
-function useUpdateCategory() {
+export const useUpdateCategory = () => {
   const dispatch = useDispatch();
   return useCallback(
     async (id, value) => dispatch(updateCategoryAction(id, value)),
@@ -178,7 +178,7 @@ function useUpdateCategory() {
   );
 }
 
-function useDeleteCategory() {
+export const useDeleteCategory = () => {
   const dispatch = useDispatch();
   return useCallback(
     async id => dispatch(deleteCategoryAction(id)),
@@ -186,16 +186,3 @@ function useDeleteCategory() {
   );
 }
 
-export {
-  useAdmin,
-  useLogin,
-  useLogout,
-  useGetTags,
-  useAddTag,
-  useUpdateTag,
-  useDeleteTag,
-  useGetCategories,
-  useAddCategory,
-  useUpdateCategory,
-  useDeleteCategory
-}
