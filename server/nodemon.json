@@ -1,0 +1,6 @@
+{
+  "ignore": [
+    "caches/*"
+  ],
+  "ext": "ts"
+}
