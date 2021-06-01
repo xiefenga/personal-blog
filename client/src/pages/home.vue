@@ -1,10 +1,9 @@
 <template>
-  <div>
-    home
-  </div>
+  <Header></Header>
 </template>
 
 <script setup>
+import Header from '@/components/Header.vue'
 </script>
 
 <style>
