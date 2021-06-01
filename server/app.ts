@@ -8,7 +8,7 @@ import errorHandle from './middlewares/error'
 import noAccess from './middlewares/noAccess'
 import router from './middlewares/router'
 import { JWT_SECRET, JWT_IGNORE_ROUTES, STATIC_PATH } from './utils/constants'
-import './db/init'
+import './init'
 
 const app = new Koa();
 

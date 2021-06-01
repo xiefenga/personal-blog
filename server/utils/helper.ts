@@ -1,8 +1,22 @@
 import { join } from 'path'
+import { IQuote } from '../types/request'
 import { ValidationError } from 'class-validator'
 import { AdminConfig, DBConfig, OSSConfig } from '../types/configs'
 import { ISuccessResponse, IFailResponse } from '../types/helper'
-import { ADMIN_CONFIG_FILENAME, ADMIN_CONFIG_PATH, CONFIGS_DIR_NAME, DB_CONFIG_FILENAME, DB_CONFIG_PATH, FAIL, OSS_CONFIG_FILENAME, OSS_CONFIG_PATH, SUCCESS } from './constants'
+import {
+  FAIL,
+  SUCCESS,
+  ADMIN_CONFIG_FILENAME,
+  ADMIN_CONFIG_PATH,
+  CACHE_DIR_NAME,
+  CONFIGS_DIR_NAME,
+  DB_CONFIG_FILENAME,
+  DB_CONFIG_PATH,
+  OSS_CONFIG_FILENAME,
+  OSS_CONFIG_PATH,
+  QUOTE_CACHE_FILENAME,
+  QUOTE_CACHE_PATH,
+} from './constants'
 
 
 export const objectToArray = <T>(object: Object): T[] => {
@@ -71,7 +85,7 @@ export const createFailResponse = (errors: string[] | string): IFailResponse => 
 });
 
 
-function getDBConfig(): DBConfig {
+export function getDBConfig(): DBConfig {
   try {
     return require(DB_CONFIG_PATH) as DBConfig;
   } catch (_) {
@@ -84,7 +98,7 @@ function getDBConfig(): DBConfig {
   }
 }
 
-function getAdminConfig(): AdminConfig {
+export function getAdminConfig(): AdminConfig {
   try {
     return require(ADMIN_CONFIG_PATH) as AdminConfig;
   } catch (_) {
@@ -94,7 +108,7 @@ function getAdminConfig(): AdminConfig {
   }
 }
 
-function getOSSConfig(): OSSConfig {
+export function getOSSConfig(): OSSConfig {
   try {
     return require(OSS_CONFIG_PATH) as OSSConfig;
   } catch (_) {
@@ -104,23 +118,25 @@ function getOSSConfig(): OSSConfig {
   }
 }
 
-class ValidateError extends Error { };
-
-function throwValidateError(message: string): never {
-  throw new ValidateError(message);
-}
-
-function assertValidation(assert: boolean, message: string) {
-  if (assert) {
-    throwValidateError(message);
+export function getQuoteCache(): IQuote {
+  try {
+    return require(QUOTE_CACHE_PATH) as IQuote
+  } catch (error) {
+    throwValidateError(
+      '缺少缓存文件:' + join(CACHE_DIR_NAME, QUOTE_CACHE_FILENAME)
+    );
   }
 }
 
 
-export {
-  getDBConfig,
-  getAdminConfig,
-  getOSSConfig,
-  assertValidation,
-  throwValidateError,
+class ValidateError extends Error { };
+
+export function throwValidateError(message: string): never {
+  throw new ValidateError(message);
+}
+
+export function assertValidation(assert: boolean, message: string) {
+  if (assert) {
+    throwValidateError(message);
+  }
 }

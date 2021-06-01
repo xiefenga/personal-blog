@@ -1,6 +1,7 @@
 import Router from '@koa/router'
 import ossRouter from '../routes/oss'
 import tagRouter from '../routes/tag'
+import dailyRouter from '../routes/daily'
 import adminRouter from '../routes/admin'
 import articleRouter from '../routes/article'
 import categoryRouter from '../routes/category'
@@ -11,6 +12,8 @@ const router = new Router({ prefix: '/api' });
 router.use('/oss', ossRouter.routes());
 
 router.use('/tag', tagRouter.routes());
+
+router.use('/daily', dailyRouter.routes());
 
 router.use('/admin', adminRouter.routes());
 
