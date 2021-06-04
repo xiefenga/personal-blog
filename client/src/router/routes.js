@@ -7,7 +7,7 @@ import Categories from '@/pages/categories.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/:page?',
     name: 'home',
     component: Home
   },

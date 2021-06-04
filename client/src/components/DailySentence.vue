@@ -1,26 +1,28 @@
 <template>
-  <div>
+  <div class="daily-sentence">
     <span class="sentence">{{ show }}</span>
     <span class="cursor">|</span>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, toRefs, onMounted, onBeforeUnmount } from "vue";
+import { getDailySentence } from "@/api/daily";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import {
+  DEFAULT_SENTENCE,
   TYPE_WORD_INTERVAL,
   DELETE_WORD_INTRVAL,
   TYPE_DELETE_INTERVAL,
 } from "@/utils/constants";
 
-const props = defineProps({
-  sentences: {
-    type: Array,
-    required: true,
-  },
-});
+const sentences = ref([DEFAULT_SENTENCE]);
 
-const { sentences } = toRefs(props);
+getDailySentence().then((res) => {
+  const {
+    data: { content, translation },
+  } = res;
+  sentences.value = [translation, content];
+});
 
 const num = computed(() => sentences.value.length);
 
@@ -69,3 +71,9 @@ onMounted(startAnimation);
 
 onBeforeUnmount(cancelAnimation);
 </script>
+
+<style lang="postcss" scoped>
+.daily-sentence {
+  @apply text-xl leading-normal;
+}
+</style>

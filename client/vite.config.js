@@ -9,5 +9,11 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, 'src')
     }
+  },
+  server: {
+    proxy: {
+      // 代理地址不需要加 路径
+      '/api': 'http://localhost:8080',
+    }
   }
 })

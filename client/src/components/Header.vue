@@ -1,27 +1,24 @@
 <template>
   <header>
     <nav-bar :site-name="siteName" />
-    <site-title :title="siteTitle" :subtitle="siteSubtitle" />
-    <div class="scroll-down"></div>
+    <page-title :title="title" />
+    <scroll-down />
   </header>
 </template>
 
 <script>
 import NavBar from "./NavBar.vue";
-import SiteTitle from "./SiteTitle.vue";
+import PageTitle from "./PageTitle.vue";
+import ScrollDown from "./ScrollDown.vue";
 export default {
   components: {
     NavBar,
-    SiteTitle,
+    PageTitle,
+    ScrollDown,
   },
   data: () => ({
     siteName: "哪有多奇怪",
-    siteTitle: "哪有多奇怪",
-    siteSubtitle: [
-      "孩子不是有待铸造的物料，而是有待启发的人。",
-      "Children are not things to be molded, \
-      but are people to be unfolded",
-    ],
+    title: "哪有多奇怪",
   }),
 };
 </script>
@@ -32,5 +29,9 @@ header {
   background-image: url("http://xiefeng.tech/custom_assets/img/index_top.jpg");
   height: 400px;
   @apply relative bg-fixed bg-cover bg-center bg-no-repeat;
+}
+
+header .scroll-down {
+  @apply absolute bottom-0;
 }
 </style>

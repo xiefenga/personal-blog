@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "markdown2text": "^1.1.0",
+    "nprogress": "^0.2.0",
     "vue": "^3.0.5",
     "vue-router": "4"
   },
