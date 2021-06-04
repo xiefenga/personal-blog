@@ -77,7 +77,8 @@ const tags = computed(() => article.tags || []);
 
 <style lang="postcss" scoped>
 .article-card {
-  @apply flex  h-64;
+  @apply flex;
+  height: 280px;
 }
 
 .article-card:nth-of-type(even) {
@@ -138,6 +139,6 @@ const tags = computed(() => article.tags || []);
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
-  margin-top: 5px;
+  @apply text-sm mt-2;
 }
 </style>
