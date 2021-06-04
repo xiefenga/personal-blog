@@ -136,9 +136,8 @@ const tags = computed(() => article.tags || []);
 
 .article-card .article-info .article-preview {
   display: -webkit-box;
-  overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
-  @apply text-sm mt-2;
+  @apply text-sm mt-2 overflow-hidden leading-loose;
 }
 </style>
