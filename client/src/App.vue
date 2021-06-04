@@ -10,7 +10,6 @@ import { CONSOLE_STR } from "@/utils/constants";
 
 <style>
 #app {
-  height: 10000px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
     Lato, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
 }
