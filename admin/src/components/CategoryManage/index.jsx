@@ -1,8 +1,8 @@
 import EditBox from '../EditBox'
-import { Tree, Input, message, Empty } from 'antd'
 import { treeDateTransform } from '@/utils/helper'
+import { Tree, Input, message, Empty, Modal } from 'antd'
 import React, { useEffect, useMemo, useState, useCallback, Fragment, } from 'react'
-import { DeleteOutlined, PlusOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, PlusOutlined, EditOutlined, QuestionCircleOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { useAddCategory, useCategories, useDeleteCategory, useUpdateCategory } from '@/hooks/store'
 import './index.css'
 
@@ -57,11 +57,20 @@ function CategoryManage() {
             <span className="category-tool" onClick={
               async e => {
                 e.stopPropagation();
-                const success = await deleteCategory(key);
-                if (success) {
-                  message.success('删除成功');
-                  setFocueKey(null);
-                }
+                Modal.confirm({
+                  title: '确认删除',
+                  icon: <QuestionCircleOutlined />,
+                  content: `确定删除类目 ${title}？`,
+                  onOk: async () => {
+                    const success = await deleteCategory(key);
+                    if (success) {
+                      message.success('删除成功');
+                      setFocueKey(null);
+                    }
+                  },
+                  maskClosable: true
+                })
+
               }
             }><DeleteOutlined /></span>
           </Fragment>

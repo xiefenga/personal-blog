@@ -53,11 +53,11 @@ function Header() {
             <Menu.Item key="article">
               <Link to="/article">文章管理</Link>
             </Menu.Item>
-            <Menu.Item key="category">
-              <Link to="/category" >类目管理</Link>
+            <Menu.Item key="belong">
+              <Link to="/belong" >归属管理</Link>
             </Menu.Item>
-            <Menu.Item key="tag">
-              <Link to="/tag">标签管理</Link>
+            <Menu.Item key="site">
+              <Link to="/site" >站点管理</Link>
             </Menu.Item>
           </Menu>
         </Col>

@@ -95,9 +95,9 @@ function TagManage() {
   // 1. 增加 loading 
   // 2. 增加 加载时退出,取消请求
 
-
   return (
     <div className="tag-manage">
+      <p className="title">标签列表</p>
       <div className="tag-list">
         {tags.length
           ? tags.map(tag => (

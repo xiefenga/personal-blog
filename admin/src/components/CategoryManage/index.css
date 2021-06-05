@@ -5,8 +5,9 @@
   height: 100%;
 }
 
-.category-manage h1 {
+.category-manage p.title {
   margin-bottom: 20px;
+  font-size: 1.8rem;
 }
 
 .category-manage .category-list {

@@ -314,7 +314,7 @@ export const useEditModal = () => {
     ({ id, title }) => {
       setId(id);
       setTitle(title);
-      setEditType(2);
+      setEditType(4);
     },
     []
   );

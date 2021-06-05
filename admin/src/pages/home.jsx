@@ -1,13 +1,13 @@
 import { Layout } from 'antd'
 import Header from '@/layout/Header'
-import { useAuth, useGetOSSCongig } from '@/hooks/http'
 import Loading from '@/components/Loading'
 import Welcome from '@/components/Welcome'
-import TagManage from '@/components/TagManage'
+import SiteManage from '@/components/SiteManage'
+import BelongManage from '@/components/BelongManage'
 import ArticleManage from '@/components/ArticleManage'
-import CategoryManage from '@/components/CategoryManage'
 import { useEffect, useState, useCallback } from 'react'
 import { Switch, Route, useHistory } from 'react-router-dom'
+import { useAuth, useGetOSSCongig } from '@/hooks/http'
 import { useGetCategories, useGetTags } from '@/hooks/store'
 
 const style = { width: '100%', height: '100%' };
@@ -51,8 +51,8 @@ function Home() {
             <Switch>
               <Route path="/" component={Welcome} exact />
               <Route path="/article" component={ArticleManage} />
-              <Route path="/category" component={CategoryManage} exact />
-              <Route path="/tag" component={TagManage} exact />
+              <Route path="/belong" component={BelongManage} />
+              <Route path="/site" component={SiteManage} />
             </Switch>
           )
         }

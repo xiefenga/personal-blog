@@ -1,0 +1,9 @@
+.belong-manage {
+  display: flex;
+  height:100%;
+}
+
+.belong-manage .category-manage,
+.belong-manage  .tag-manage {
+  width:50%;
+}
