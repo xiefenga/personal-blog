@@ -1,8 +1,8 @@
 <template>
-  <header :style="{ backgroundImage: cover }">
+  <header>
     <nav-bar />
     <page-title />
-    <scroll-down />
+    <scroll-down v-if="showScrollDown" />
   </header>
 </template>
 
@@ -10,8 +10,12 @@
 import NavBar from "./NavBar.vue";
 import PageTitle from "./PageTitle.vue";
 import ScrollDown from "./ScrollDown.vue";
-import { ref } from "vue";
-const cover = ref("");
+import { computed, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
+const showScrollDown = computed(() =>
+  ["home", "article-list"].includes(route.name)
+);
 </script>
 
 <style lang="postcss" scoped>

@@ -11,6 +11,7 @@ const routes = [
   },
   {
     path: '/page/:page',
+    name: 'article-list',
     component: ArticleList
   },
   {
