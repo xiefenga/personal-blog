@@ -4,7 +4,16 @@
       <i class="iconfont">&#xe606;</i>
       <span>标签</span>
     </template>
-    <router-link class="tag-item" v-for="tag in tags" :key="tag.id" to="/">
+    <router-link
+      class="tag-item"
+      v-for="tag in tags"
+      :key="tag.id"
+      :style="{
+        fontSize: randomSize(tag.id),
+        color: randomColor(tag.id),
+      }"
+      :to="`/tags/${encode(tag.name)}`"
+    >
       {{ tag.name }}
     </router-link>
   </card-widget>
@@ -12,23 +21,47 @@
 
 <script setup>
 import CardWidget from "./CardWidget.vue";
-import { ref } from "vue";
+import { tags, fetchTags } from "@/store/tags";
+fetchTags();
+const sizes = [
+  "1rem",
+  "1.25rem",
+  "1.2rem",
+  "1.1rem",
+  "1.05rem",
+  "1.125rem",
+  "1.025rem",
+];
+const randomSize = (id) => sizes[id % 7];
 
-const tags = ref([
-  { id: 1, name: "网络" },
-  { id: 2, name: "http/https" },
-  { id: 3, name: "数据结构" },
-  { id: 4, name: "JavaScript" },
-  { id: 5, name: "React" },
-  { id: 6, name: "Typescript" },
-  { id: 7, name: "Vue" },
-  { id: 8, name: "CSS" },
-  { id: 9, name: "hexo" },
-  { id: 10, name: "mongodb" },
-  { id: 11, name: "webpack" },
-  { id: 12, name: "NodeJs" },
-  { id: 12, name: "计算机基础" },
-]);
+const colors = [
+  "#52a08",
+  "#9cb23e",
+  "#c3c23d",
+  "#6681be",
+  "#742f",
+  "#467119",
+  "#7b8935",
+  "#1beeba",
+  "#fc6582",
+  "#96816e",
+  "#d2e40c",
+  "#104854",
+  "#e77c8f",
+  "#a21dc0",
+  "#df7002",
+  "#7837f3",
+];
+
+const randomColor = (id) => colors[id % 16];
+
+const encode = (url) => {
+  if (url.includes("/")) {
+    return url.replace("/", "%2F");
+  } else {
+    return encodeURI(url);
+  }
+};
 </script>
 
 <style lang="postcss" scoped>

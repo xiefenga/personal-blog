@@ -1,3 +1,5 @@
+import NProgress from "nprogress";
+import MarkdownIt from "markdown-it";
 import { MIN, HOUR, DAY, ONE_DAY_MS, ONE_HOUR_MS, ONE_MINUTE_MS, TIME_EN_ZH_TABLE } from './constants'
 
 export const time2TimeStamp = t => new Date(t).getTime();
@@ -32,3 +34,12 @@ export const relativeTime2ZHStr = (t1, t2) => {
   const dir = diff > 0 ? '后' : '前';
   return `${Math.abs(diff)} ${TIME_EN_ZH_TABLE[unit]}${dir}`;
 }
+
+export const md = new MarkdownIt();
+
+export const mdRender = md.render.bind(md);
+
+export const startLoading = () => NProgress.start();
+
+export const doneLoading = () => NProgress.done();
+

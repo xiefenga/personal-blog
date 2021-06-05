@@ -1,3 +1,3 @@
-import { daily } from './instances'
+import axios from './instances'
 
-export const getDailySentence = async () => daily.get('/quote');
+export const getDailySentence = async () => axios.get('/daily/quote');

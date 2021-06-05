@@ -13,7 +13,6 @@ import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import { CONSOLE_STR } from "@/utils/constants";
 import { fetchSiteInfo } from "@/store/siteInfo";
-
 fetchSiteInfo();
 // onMounted(() => console.log(CONSOLE_STR));
 </script>

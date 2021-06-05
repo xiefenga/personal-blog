@@ -4,7 +4,7 @@
       <img :src="article.cover" />
     </div>
     <div class="article-info">
-      <router-link class="article-title" to="/">
+      <router-link class="article-title" :to="`/${article.title}`">
         {{ article.title }}
       </router-link>
       <div class="article-metas">

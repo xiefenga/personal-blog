@@ -16,9 +16,7 @@ import { getArticleList } from "@/api/article";
 import ArticleCard from "@/components/ArticleCard.vue";
 import Pagination from "@/components/Pagination.vue";
 import { PAGINATION_PAGE_SIZE } from "@/utils/constants";
-
-import "nprogress/nprogress.css";
-import NProgress from "nprogress";
+import { doneLoading } from "@/utils/helper";
 
 const articles = ref([]);
 
@@ -30,17 +28,16 @@ const route = useRoute();
 const page = computed(() => Number(route.params.page) || 1);
 
 watchEffect(async () => {
-  NProgress.start();
   const { data, count: total } = await getArticleList(
     page.value,
     PAGINATION_PAGE_SIZE
   );
-  NProgress.done();
+  doneLoading();
   articles.value = data;
   count.value = total;
 });
 
-const pageChange = (newPage) => router.push("/" + newPage);
+const pageChange = (newPage) => router.push("/page/" + newPage);
 </script>
 
 <style lang="postcss" scoped>

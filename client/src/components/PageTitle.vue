@@ -5,19 +5,21 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import DailySentence from "./DailySentence.vue";
-export default {
-  components: {
-    DailySentence,
-  },
-  props: {
-    title: {
-      props: String,
-      required: true,
-    },
-  },
-};
+import { siteName } from "@/store/siteInfo";
+import { article } from "@/store/article";
+import { computed, watch } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+// const
+// console.log(route.path);
+
+// watch(route, () => console.log(route.matched));
+
+const title = computed(() => siteName.value);
 </script>
 
 <style lang="postcss" scoped>

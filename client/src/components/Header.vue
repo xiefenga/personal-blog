@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav-bar />
-    <page-title :title="siteName" />
+    <page-title />
     <scroll-down />
   </header>
 </template>
@@ -10,7 +10,6 @@
 import NavBar from "./NavBar.vue";
 import PageTitle from "./PageTitle.vue";
 import ScrollDown from "./ScrollDown.vue";
-import { siteName } from "@/store/siteInfo";
 </script>
 
 <style lang="postcss" scoped>

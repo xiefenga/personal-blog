@@ -1,5 +1,6 @@
 import routes from './routes'
 import { createRouter, createWebHistory } from 'vue-router'
+import { startLoading } from '@/utils/helper';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -9,6 +10,13 @@ const router = createRouter({
       return { top: 0 };
     }
     return savedPosition;
+  }
+});
+
+router.beforeEach((to, from) => {
+  // 直接加载，不是跳转 from.matched.length === 0
+  if (from.matched.length) {
+    startLoading();
   }
 });
 

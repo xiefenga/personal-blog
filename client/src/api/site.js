@@ -1,3 +1,3 @@
-import { site } from './instances'
+import axios from './instances'
 
-export const getSiteInfo = async () => site.get('/');
+export const getSiteInfo = async () => axios.get('/site');
