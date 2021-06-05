@@ -158,7 +158,7 @@ export const usePostArtilce = () => {
         message.success('发布成功');
         clear();
       }
-
+      return success;
     },
     [id, addArticle, updateArticle, clear]
   );

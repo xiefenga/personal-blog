@@ -20,7 +20,7 @@ function FileImport(props) {
       const file = files[0];
       try {
         const { name: fileName, content } = await importFile(file, extLimits);
-        setTitle(fileName);
+        setTitle(fileName.split('.')[0]);
         setMarkdown(content);
       } catch (error) {
         message.error(error.message);
