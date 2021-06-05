@@ -1,8 +1,8 @@
 import { join } from 'path'
 import { IQuote } from '../types/request'
 import { ValidationError } from 'class-validator'
-import { AdminConfig, DBConfig, OSSConfig } from '../types/configs'
 import { ISuccessResponse, IFailResponse } from '../types/helper'
+import { AdminConfig, DBConfig, OSSConfig, SiteConfig } from '../types/configs'
 import {
   FAIL,
   SUCCESS,
@@ -16,6 +16,8 @@ import {
   OSS_CONFIG_PATH,
   QUOTE_CACHE_FILENAME,
   QUOTE_CACHE_PATH,
+  SITE_CONFIG_PATH,
+  SITE_CONFIG_FILENAME,
 } from './constants'
 
 
@@ -124,6 +126,16 @@ export function getQuoteCache(): IQuote {
   } catch (error) {
     throwValidateError(
       '缺少缓存文件:' + join(CACHE_DIR_NAME, QUOTE_CACHE_FILENAME)
+    );
+  }
+}
+
+export function getSiteConfig(): SiteConfig {
+  try {
+    return require(SITE_CONFIG_PATH) as SiteConfig
+  } catch (error) {
+    throwValidateError(
+      '缺少配置文件:' + join(CONFIGS_DIR_NAME, SITE_CONFIG_FILENAME)
     );
   }
 }
