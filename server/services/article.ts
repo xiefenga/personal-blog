@@ -95,6 +95,14 @@ const fillArticle = async (article: ArticleEntity): Promise<IArticles> => {
   return { ...article.get(), categories, tags };
 }
 
+export const getArticleByIdOrTitle = async (title: string): Promise<IArticles> => {
+  const id = Number(title);
+  if (Number.isInteger(id)) {
+    return await getArticleById(id);
+  }
+  return await getArticleByTitle(title);
+}
+
 export const getArticleById = async (id: number): Promise<IArticles> => {
   idValidate(id, ID_INVALID);
   const article = emptyModelValidate(
