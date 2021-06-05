@@ -1,36 +1,35 @@
-import Home from '@/pages/home.vue'
-import About from '@/pages/about.vue'
-import Tags from '@/pages/tags.vue'
-import Archives from '@/pages/archives.vue'
-import Categories from '@/pages/categories.vue'
+import ArticleList from '@/components/ArticleList.vue'
+import AboutMe from '@/components/AboutMe.vue'
+import ArchivesList from '@/components/ArchivesList.vue'
+
 
 
 const routes = [
   {
     path: '/:page?',
     name: 'home',
-    component: Home
+    component: ArticleList
   },
   {
     path: '/about',
     name: 'about',
-    component: About
+    component: AboutMe
   },
   {
     path: '/archives',
     name: 'archives',
-    component: Archives
+    component: ArchivesList
   },
-  {
-    path: '/tags',
-    name: 'tags',
-    component: Tags
-  },
-  {
-    path: '/categories',
-    name: 'categories',
-    component: Categories
-  }
+  // {
+  //   path: '/tags',
+  //   name: 'tags',
+  //   component: Tags
+  // },
+  // {
+  //   path: '/categories',
+  //   name: 'categories',
+  //   component: Categories
+  // }
 ];
 
 export default routes

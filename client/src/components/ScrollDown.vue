@@ -8,23 +8,12 @@
 
 <script setup>
 import { onBeforeUnmount } from "vue";
-import { SCROLL_Y_OFFSET, SCROLL_PER_DIS } from "@/utils/constants";
+import { HEADER_HEIGHT, SCROLL_PER_DIS } from "@/utils/constants";
+import { useScrollPageY } from "@/composition/scroll";
 
-let id = null;
+const [scrollDown, cancelScroll] = useScrollPageY(HEADER_HEIGHT);
 
-const scrollDown = () => {
-  const offset = window.pageYOffset;
-  id = requestAnimationFrame(() => {
-    if (offset >= SCROLL_Y_OFFSET) {
-      window.scrollTo(0, SCROLL_Y_OFFSET);
-      return;
-    }
-    window.scrollTo(0, offset + SCROLL_PER_DIS);
-    scrollDown();
-  });
-};
-
-onBeforeUnmount(() => cancelAnimationFrame(id));
+onBeforeUnmount(cancelScroll);
 </script>
 
 <style lang="postcss" scoped>

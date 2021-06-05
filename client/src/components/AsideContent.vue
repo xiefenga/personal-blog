@@ -6,12 +6,10 @@
   </div>
 </template>
 
-
-
 <script setup>
+import TagsCard from "./TagsCard.vue";
 import AuthorCard from "./AuthorCard.vue";
 import RecentCard from "./RecentCard.vue";
-import TagsCard from "./TagsCard.vue";
 </script>
 
 <style lang="postcss" scoped>

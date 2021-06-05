@@ -1,26 +1,16 @@
 <template>
   <header>
-    <nav-bar :site-name="siteName" />
-    <page-title :title="title" />
+    <nav-bar />
+    <page-title :title="siteName" />
     <scroll-down />
   </header>
 </template>
 
-<script>
+<script setup>
 import NavBar from "./NavBar.vue";
 import PageTitle from "./PageTitle.vue";
 import ScrollDown from "./ScrollDown.vue";
-export default {
-  components: {
-    NavBar,
-    PageTitle,
-    ScrollDown,
-  },
-  data: () => ({
-    siteName: "哪有多奇怪",
-    title: "哪有多奇怪",
-  }),
-};
+import { siteName } from "@/store/siteInfo";
 </script>
 
 <style lang="postcss" scoped>

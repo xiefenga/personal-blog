@@ -6,7 +6,7 @@
         src="http://xiefeng.tech/custom_assets/img/avatar.jpg"
       />
     </div>
-    <div class="admin-name">Xie Feng</div>
+    <div class="admin-name">{{ author }}</div>
     <div class="blog-data">
       <div class="blog-data-item">
         <div class="headline">文章</div>
@@ -23,11 +23,11 @@
     </div>
     <div class="social-icons">
       <!-- github -->
-      <a class="social-item" href="https://github.com/xiefenga">
+      <a class="social-item" :href="github" target="_blank">
         <i class="iconfont">&#xe811;</i>
       </a>
       <!-- mail -->
-      <a class="social-item" href="mailto:x1294699027@gmail.com">
+      <a class="social-item" :href="`mailto:${mail}`" target="_blank">
         <i class="iconfont">&#xe7b7;</i>
       </a>
       <!-- blog -->
@@ -40,6 +40,8 @@
 
 <script setup>
 import CardWidget from "./CardWidget.vue";
+import { authorInfo } from "@/store/siteInfo";
+const { github, mail, author } = authorInfo;
 </script>
 
 <style lang="postcss" scoped>

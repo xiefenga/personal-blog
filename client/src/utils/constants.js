@@ -6,7 +6,7 @@ export const TYPE_DELETE_INTERVAL = 100;
 
 export const DEFAULT_SENTENCE = '今日事，今日毕';
 
-export const SCROLL_Y_OFFSET = 400;
+export const HEADER_HEIGHT = 400;
 
 export const SCROLL_PER_DIS = 20;
 

@@ -24,15 +24,8 @@
   </nav>
 </template>
 
-<script>
-export default {
-  props: {
-    siteName: {
-      type: String,
-      required: true,
-    },
-  },
-};
+<script setup>
+import { siteName } from "@/store/siteInfo";
 </script>
 
 
