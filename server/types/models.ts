@@ -1,3 +1,5 @@
+import { SiteConfig } from './configs'
+
 export interface IModel { }
 
 export interface IArticle extends IModel {
@@ -38,7 +40,12 @@ export interface IComment extends IModel {
 
 export interface IAdmin extends IModel {
   username: string;
-  avatar: string
+  avatar: string;
 }
 
+export interface ISiteInfo extends SiteConfig {
+  articles: number;
+  tags: number;
+  categories: number;
+}
 

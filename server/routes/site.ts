@@ -4,8 +4,8 @@ import { createSuccessResponse } from '../utils/helper'
 
 const router = new Router();
 
-router.get('/', ctx => ctx.body = createSuccessResponse(
-  getSiteInfo()
+router.get('/', async ctx => ctx.body = createSuccessResponse(
+  await getSiteInfo()
 ));
 
 export default router

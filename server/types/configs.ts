@@ -26,5 +26,6 @@ export interface SiteConfig {
   avatar: string;
   siteName: string;
   aboutMe: string;
+  beian: string;
   defaultCover: string;
 }
