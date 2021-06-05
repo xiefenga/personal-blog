@@ -1,6 +1,6 @@
 <template>
   <div class="aside-content">
-    <admin-card />
+    <author-card />
     <recent-card />
     <tags-card />
   </div>
@@ -9,7 +9,7 @@
 
 
 <script setup>
-import AdminCard from "./AdminCard.vue";
+import AuthorCard from "./AuthorCard.vue";
 import RecentCard from "./RecentCard.vue";
 import TagsCard from "./TagsCard.vue";
 </script>
