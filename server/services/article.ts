@@ -2,7 +2,7 @@ import { Op } from 'sequelize'
 import ArticleModel from '../models/Article'
 import ArticleEntity from '../db/entities/Article'
 import { plainTransform } from '../utils/transform'
-import { throwValidateError, wordCounts } from '../utils/helper'
+import { requireJSON, throwValidateError, wordCounts } from '../utils/helper'
 import { EXCLUDE_TIMESTAME, SITE_CONFIG_PATH } from '../utils/constants'
 import ArticleCagtegoryEntity from '../db/entities/ArticleCategory'
 import ArticleTagEntity from '../db/entities/ArticleTag'
@@ -12,11 +12,12 @@ import TagEntity from '../db/entities/Tag'
 import { UnknowObject } from '../types/helper'
 import { categoriesValidate, emptyModelValidate, idValidate, positiveIntValidate, removeInvalidCId, tagsValidate, validateModel, validateTitleSafe } from '../utils/validate'
 import { ARTICLE_NOT_EXIST, ID_INVALID, PAGE_INVALID, SIZE_INVALID } from '../utils/tips'
+import { SiteConfig } from '../types/configs'
 
 
 
 // 获取归档
-const getArchives = async (page: number = 1, size: number = 10): Promise<[IArticle[], number]> => {
+export const getArchives = async (page: number = 1, size: number = 10): Promise<[IArticle[], number]> => {
   positiveIntValidate(page, PAGE_INVALID);
   positiveIntValidate(size, SIZE_INVALID);
 
@@ -36,7 +37,7 @@ const getArchives = async (page: number = 1, size: number = 10): Promise<[IArtic
  * @param page 页数
  * @param size 页容量
  */
-const getArticles = async (page: number = 1, size: number = 10): Promise<[IArticles[], number]> => {
+export const getArticles = async (page: number = 1, size: number = 10): Promise<[IArticles[], number]> => {
   positiveIntValidate(page, PAGE_INVALID);
   positiveIntValidate(size, SIZE_INVALID);
   const { rows, count } = await ArticleEntity.findAndCountAll({
@@ -94,10 +95,18 @@ const fillArticle = async (article: ArticleEntity): Promise<IArticles> => {
   return { ...article.get(), categories, tags };
 }
 
-const getArticleById = async (id: number): Promise<IArticles> => {
+export const getArticleById = async (id: number): Promise<IArticles> => {
   idValidate(id, ID_INVALID);
   const article = emptyModelValidate(
     await ArticleEntity.findByPk(id),
+    ARTICLE_NOT_EXIST
+  );
+  return await fillArticle(article);
+}
+
+export const getArticleByTitle = async (title: string): Promise<IArticles> => {
+  const article = emptyModelValidate(
+    await ArticleEntity.findOne({ where: { title } }),
     ARTICLE_NOT_EXIST
   );
   return await fillArticle(article);
@@ -107,14 +116,14 @@ const getArticleById = async (id: number): Promise<IArticles> => {
  * 新增文章，成功返回新添加的信息，失败返回错误消息
  * @param value 添加的文章信息
  */
-const addArticle = async (value: UnknowObject): Promise<IArticles> => {
+export const addArticle = async (value: UnknowObject): Promise<IArticles> => {
   // 类型转换
   const article = plainTransform(ArticleModel, value);
   // 检测数据应当具有的字段和类型
   await validateModel(article);
   // 补全可以缺失的属性 cover
   if (!value.cover) {
-    article.cover = require(SITE_CONFIG_PATH).defaultCover;
+    article.cover = (requireJSON(SITE_CONFIG_PATH) as SiteConfig).defaultCover;
   }
   // 写入正确的字数
   article.words = wordCounts(article.content);
@@ -163,7 +172,7 @@ const addArticle = async (value: UnknowObject): Promise<IArticles> => {
   return await fillArticle(data);
 }
 
-const updateArticle = async (id: number, value: UnknowObject): Promise<IArticles> => {
+export const updateArticle = async (id: number, value: UnknowObject): Promise<IArticles> => {
 
   idValidate(id, ID_INVALID);
 
@@ -266,7 +275,7 @@ const updateArticle = async (id: number, value: UnknowObject): Promise<IArticles
 }
 
 
-const deleteArticle = async (id: number): Promise<void> => {
+export const deleteArticle = async (id: number): Promise<void> => {
   try {
     idValidate(id, ID_INVALID);
   } catch (__) {
@@ -278,7 +287,7 @@ const deleteArticle = async (id: number): Promise<void> => {
 }
 
 
-const getArticlesByCategoryId = async (id: number): Promise<[IArticles[], number]> => {
+export const getArticlesByCategoryId = async (id: number): Promise<[IArticles[], number]> => {
   idValidate(id, ID_INVALID);
   // cs -> categories 
   const cs = await CategoryEntity.findAll({
@@ -304,7 +313,7 @@ const getArticlesByCategoryId = async (id: number): Promise<[IArticles[], number
   return [articles, count];
 }
 
-const getArticlesByTagId = async (id: number): Promise<[IArticles[], number]> => {
+export const getArticlesByTagId = async (id: number): Promise<[IArticles[], number]> => {
   idValidate(id, ID_INVALID);
 
   const { rows: ats, count } = await ArticleTagEntity.findAndCountAll({
@@ -318,15 +327,4 @@ const getArticlesByTagId = async (id: number): Promise<[IArticles[], number]> =>
     )
   );
   return [articles, count];
-}
-
-export {
-  getArchives,
-  getArticles,
-  getArticleById,
-  addArticle,
-  updateArticle,
-  deleteArticle,
-  getArticlesByCategoryId,
-  getArticlesByTagId
 }

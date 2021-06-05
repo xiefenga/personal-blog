@@ -12,6 +12,10 @@ class Tag extends Model implements ITag {
   @Column(DataType.STRING)
   public name!: string;
 
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  public cover!: string;
+
   // 为了实现模型之间的关系，表中不存在对应的字段
   @BelongsToMany(() => Article, () => ArticleTag)
   // 根据 sequelize-typescript 文档，为了访问的类型安全

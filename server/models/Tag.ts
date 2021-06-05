@@ -1,6 +1,7 @@
 import { ITag } from '../types/models'
 import { Expose, Type } from 'class-transformer'
-import { IsNotEmpty, IsString } from 'class-validator'
+import { IsValidURL } from '../utils/decorators'
+import { IsNotEmpty, IsString, ValidateIf } from 'class-validator'
 
 
 class Tag implements ITag {
@@ -10,6 +11,15 @@ class Tag implements ITag {
   @Expose()
   @Type(() => String)
   public name!: string;
+
+
+  @ValidateIf((_, value) => value != null)
+  @IsString({ message: 'cover类型错误' })
+  @IsNotEmpty({ message: 'cover不能为空' })
+  @IsValidURL({ message: 'cover必须为一个合法URL' })
+  @Expose()
+  @Type(() => String)
+  public cover!: string;
 }
 
 export default Tag

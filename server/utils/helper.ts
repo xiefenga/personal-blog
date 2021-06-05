@@ -1,4 +1,5 @@
 import { join } from 'path'
+import { readFileSync } from 'fs'
 import { IQuote } from '../types/request'
 import { ValidationError } from 'class-validator'
 import { ISuccessResponse, IFailResponse } from '../types/helper'
@@ -19,6 +20,7 @@ import {
   SITE_CONFIG_PATH,
   SITE_CONFIG_FILENAME,
 } from './constants'
+
 
 
 export const objectToArray = <T>(object: Object): T[] => {
@@ -86,10 +88,16 @@ export const createFailResponse = (errors: string[] | string): IFailResponse => 
     : errors
 });
 
+export function requireJSON<T>(path: string): T {
+  return JSON.parse(
+    readFileSync(path, 'utf-8')
+  ) as T;
+}
+
 
 export function getDBConfig(): DBConfig {
   try {
-    return require(DB_CONFIG_PATH) as DBConfig;
+    return requireJSON(DB_CONFIG_PATH) as DBConfig;
   } catch (_) {
     console.error(
       '缺少配置文件:',
@@ -102,7 +110,7 @@ export function getDBConfig(): DBConfig {
 
 export function getAdminConfig(): AdminConfig {
   try {
-    return require(ADMIN_CONFIG_PATH) as AdminConfig;
+    return requireJSON(ADMIN_CONFIG_PATH) as AdminConfig;
   } catch (_) {
     throwValidateError(
       '缺少配置文件:' + join(CONFIGS_DIR_NAME, ADMIN_CONFIG_FILENAME)
@@ -112,7 +120,7 @@ export function getAdminConfig(): AdminConfig {
 
 export function getOSSConfig(): OSSConfig {
   try {
-    return require(OSS_CONFIG_PATH) as OSSConfig;
+    return requireJSON(OSS_CONFIG_PATH) as OSSConfig;
   } catch (_) {
     throwValidateError(
       '缺少配置文件:' + join(CONFIGS_DIR_NAME, OSS_CONFIG_FILENAME)
@@ -122,7 +130,7 @@ export function getOSSConfig(): OSSConfig {
 
 export function getQuoteCache(): IQuote {
   try {
-    return require(QUOTE_CACHE_PATH) as IQuote
+    return requireJSON(QUOTE_CACHE_PATH) as IQuote
   } catch (error) {
     throwValidateError(
       '缺少缓存文件:' + join(CACHE_DIR_NAME, QUOTE_CACHE_FILENAME)
@@ -132,7 +140,7 @@ export function getQuoteCache(): IQuote {
 
 export function getSiteConfig(): SiteConfig {
   try {
-    return require(SITE_CONFIG_PATH) as SiteConfig
+    return requireJSON(SITE_CONFIG_PATH) as SiteConfig
   } catch (error) {
     throwValidateError(
       '缺少配置文件:' + join(CONFIGS_DIR_NAME, SITE_CONFIG_FILENAME)
@@ -141,7 +149,7 @@ export function getSiteConfig(): SiteConfig {
 }
 
 
-class ValidateError extends Error { };
+export class ValidateError extends Error { };
 
 export function throwValidateError(message: string): never {
   throw new ValidateError(message);

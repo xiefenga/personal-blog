@@ -10,6 +10,10 @@ class Category extends Model implements ICategory {
   @Column(DataType.STRING)
   public name!: string;
 
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  public cover!: string;
+
   @AllowNull(true)
   @Default(null)
   @Column(DataType.INTEGER.UNSIGNED)

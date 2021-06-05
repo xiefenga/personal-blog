@@ -1,6 +1,6 @@
-interface IModel { }
+export interface IModel { }
 
-interface IArticle extends IModel {
+export interface IArticle extends IModel {
   title: string;
   content: string;
   views: number;
@@ -8,25 +8,27 @@ interface IArticle extends IModel {
   cover: string;
 }
 
-interface IArticles extends IArticle {
+export interface IArticles extends IArticle {
   categories: ICategory[][];
   tags: ITag[]
 }
 
-interface ICategory extends IModel {
+export interface ICategory extends IModel {
   name: string;
+  cover: string;
   parentId: number | null;
 }
 
-interface ICategories extends ICategory {
+export interface ICategories extends ICategory {
   children: ICategory[];
 }
 
-interface ITag extends IModel {
+export interface ITag extends IModel {
   name: string;
+  cover: string;
 }
 
-interface IComment extends IModel {
+export interface IComment extends IModel {
   username: string;
   content: string;
   articleId: number;
@@ -34,10 +36,9 @@ interface IComment extends IModel {
 }
 
 
-interface IAdmin extends IModel {
+export interface IAdmin extends IModel {
   username: string;
   avatar: string
 }
 
 
-export { IModel, IArticle, IArticles, ICategory, ICategories, ITag, IComment, IAdmin }
