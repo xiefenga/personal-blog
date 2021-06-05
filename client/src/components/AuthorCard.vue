@@ -6,19 +6,19 @@
         src="http://xiefeng.tech/custom_assets/img/avatar.jpg"
       />
     </div>
-    <div class="admin-name">{{ author }}</div>
+    <div class="admin-name">{{ name }}</div>
     <div class="blog-data">
       <div class="blog-data-item">
         <div class="headline">文章</div>
-        <div class="item-data">45</div>
+        <div class="item-data">{{ articles }}</div>
       </div>
       <div class="blog-data-item">
         <div class="headline">标签</div>
-        <div class="item-data">14</div>
+        <div class="item-data">{{ tags }}</div>
       </div>
       <div class="blog-data-item">
         <div class="headline">分类</div>
-        <div class="item-data">17</div>
+        <div class="item-data">{{ categories }}</div>
       </div>
     </div>
     <div class="social-icons">
@@ -40,8 +40,9 @@
 
 <script setup>
 import CardWidget from "./CardWidget.vue";
-import { authorInfo } from "@/store/siteInfo";
-const { github, mail, author } = authorInfo;
+import { author, statistics } from "@/store/site";
+const { github, mail, name } = author;
+const { articles, categories, tags } = statistics;
 </script>
 
 <style lang="postcss" scoped>

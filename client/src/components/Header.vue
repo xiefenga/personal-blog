@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header :style="{ backgroundImage: cover }">
     <nav-bar />
     <page-title />
     <scroll-down />
@@ -10,6 +10,8 @@
 import NavBar from "./NavBar.vue";
 import PageTitle from "./PageTitle.vue";
 import ScrollDown from "./ScrollDown.vue";
+import { ref } from "vue";
+const cover = ref("");
 </script>
 
 <style lang="postcss" scoped>

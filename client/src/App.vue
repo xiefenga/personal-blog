@@ -1,20 +1,24 @@
 <template>
   <Header />
   <Main>
-    <router-view />
+    <router-view v-slot="{ Component, route }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </Main>
   <Footer />
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, watch, ref } from "vue";
 import Main from "@/components/Main.vue";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import { CONSOLE_STR } from "@/utils/constants";
-import { fetchSiteInfo } from "@/store/siteInfo";
+import { fetchSiteInfo } from "@/store/site";
+
 fetchSiteInfo();
-// onMounted(() => console.log(CONSOLE_STR));
 </script>
 
 <style>

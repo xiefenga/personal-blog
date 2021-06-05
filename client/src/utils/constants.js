@@ -56,3 +56,6 @@ export const TIME_EN_ZH_TABLE = {
        [DAY]: DAY_ZH
 };
 
+export const ICP_URL = "https://beian.miit.gov.cn/";
+
+export const SITE_START_YEAR = 2021;

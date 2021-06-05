@@ -25,7 +25,8 @@
 </template>
 
 <script setup>
-import { siteName } from "@/store/siteInfo";
+import { siteInfo } from "@/store/site";
+const { name: siteName } = siteInfo;
 </script>
 
 

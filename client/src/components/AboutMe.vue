@@ -5,13 +5,9 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { aboutMe } from "@/store/siteInfo";
-import MdIt from "markdown-it";
+import { author } from "@/store/site";
 import CardWidget from "./CardWidget.vue";
-const md = new MdIt();
-// const about = computed(() => md.render(aboutMe.value));
-// console.log(aboutMe);
+const { about: aboutMe } = author;
 </script>
 
 <style lang="postcss" scoped>

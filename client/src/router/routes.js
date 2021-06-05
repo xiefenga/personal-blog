@@ -3,11 +3,10 @@ import AboutMe from '@/components/AboutMe.vue'
 import ArchivesList from '@/components/ArchivesList.vue'
 import ArticleContent from '@/components/ArticleContent.vue'
 
-
-
 const routes = [
   {
     path: '/',
+    name: 'home',
     component: ArticleList,
   },
   {
@@ -27,14 +26,23 @@ const routes = [
     component: ArchivesList
   },
   {
-    path: '/tags/:id?',
+    path: '/tags',
+    component: {},
+  },
+  {
+    path: '/tags/:name',
     component: {}
   },
-  // {
-  //   path: '/categories',
-  //   name: 'categories',
-  //   component: Categories
-  // }
+  {
+    path: '/categories',
+    name: 'categories',
+    component: {},
+  },
+  {
+    path: '/categories/:p/:c?',
+    component: {},
+  }
+
 ];
 
 export default routes

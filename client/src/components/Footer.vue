@@ -1,28 +1,24 @@
 <template>
   <footer>
-    <div class="copyright">©{{ copyrightYear }} By Xie Feng</div>
+    <div class="copyright">©{{ copyrightYear }} By {{ author }}</div>
     <div class="ipc">
-      <a :href="ICP" target="_blank">苏ICP备 2020051656号</a>
+      <a :href="ICP_URL" target="_blank">{{ beian }}</a>
     </div>
   </footer>
 </template>
 
-<script>
-export default {
-  data: () => ({
-    ICP: "https://beian.miit.gov.cn/",
-    startYear: 2020,
-    curYear: new Date().getFullYear(),
-  }),
-  computed: {
-    copyrightYear() {
-      if (this.startYear === this.curYear) {
-        return this.curYear;
-      }
-      return `${this.startYear} - ${this.curYear}`;
-    },
-  },
-};
+<script setup>
+import { computed } from "vue";
+import { ICP_URL, SITE_START_YEAR } from "@/utils/constants";
+import { siteInfo, author as authorInfo } from "@/store/site";
+
+const { beian } = siteInfo;
+const { name: author } = authorInfo;
+const curYear = new Date().getFullYear();
+
+const copyrightYear = computed(() =>
+  SITE_START_YEAR === curYear ? `${curYear}` : `${startYear} - ${curYear}`
+);
 </script>
 
 <style lang="postcss" scoped>

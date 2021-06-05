@@ -7,19 +7,11 @@
 
 <script setup>
 import DailySentence from "./DailySentence.vue";
-import { siteName } from "@/store/siteInfo";
+import { siteInfo } from "@/store/site";
 import { article } from "@/store/article";
 import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
-
-const route = useRoute();
-
-// const
-// console.log(route.path);
-
-// watch(route, () => console.log(route.matched));
-
-const title = computed(() => siteName.value);
+const title = siteInfo.name;
 </script>
 
 <style lang="postcss" scoped>
