@@ -1,8 +1,10 @@
+import { message } from 'antd'
 import matter from 'gray-matter'
 import { useRef, useCallback } from 'react'
 import { delay, cancelablePromise } from '@/utils/helper'
 import { CLICK_DOUBLECLICK_INTERVAL as INTERVAL } from '@/utils/constants'
 import { useMarkdown, useTitle, useCover, useArticleTags, useArticleCategories, useTags, useCategories } from './store'
+
 
 export const useFileFillStore = () => {
   const [, setMarkdown] = useMarkdown();
@@ -15,53 +17,60 @@ export const useFileFillStore = () => {
   return useCallback(
     file => {
       const { name, content } = file;
-      const {
-        data: { title, cover, categories, tags },
-        content: md
-      } = matter(content);
-      setTitle(title ?? name.split('.')[0]);
-      setMarkdown(md);
-      cover && setCover(cover);
-      // 处理 categories
-      if (Array.isArray(categories) && categories.length > 0) {
-        if (Array.isArray(categories[0]) && categories.length > 0 && categories.length < 3) {
-          setCategories(
-            categories.map(cs => {
-              const p = allCategories.find(c => c.name === cs[0]);
-              if (!p) { return null; }
-              if (cs.length === 2) {
-                const c = p.children.find(c => c.name === cs[1]);
-                if (!c) { return null }
+      try {
+        const {
+          data: { title, cover, categories, tags },
+          content: md
+        } = matter(content);
+        setTitle(title ?? name.split('.')[0]);
+        setMarkdown(md);
+        cover && setCover(cover);
+        // 处理 categories
+        if (Array.isArray(categories) && categories.length > 0) {
+          if (Array.isArray(categories[0]) && categories.length > 0 && categories.length < 3) {
+            setCategories(
+              categories.map(cs => {
+                const p = allCategories.find(c => c.name === cs[0]);
+                if (!p) { return null; }
+                if (cs.length === 2) {
+                  const c = p.children.find(c => c.name === cs[1]);
+                  if (!c) { return null }
+                  return c.id;
+                }
+                return p.id;
+              }).filter(c => c !== null)
+            );
+          } else if (typeof categories[0] === 'string') {
+            setCategories(
+              categories.map(cName => {
+                const c = allCategories.find(c => c.name === cName);
+                if (!c) { return null; }
                 return c.id;
-              }
-              return p.id;
-            }).filter(c => c !== null)
-          );
-        } else if (typeof categories[0] === 'string') {
-          setCategories(
-            categories.map(cName => {
-              const c = allCategories.find(c => c.name === cName);
-              if (!c) { return null; }
-              return c.id;
-            }).filter(c => c !== null)
-          );
+              }).filter(c => c !== null)
+            );
+          }
+        } else if (typeof categories === 'string') {
+          const c = allCategories.find(c => c.name === categories);
+          c && setCategories([c.id]);
         }
-      } else if (typeof categories === 'string') {
-        const c = allCategories.find(c => c.name === categories);
-        c && setCategories([c.id]);
-      }
-      // 处理 tags
-      if (Array.isArray(tags)) {
-        setTags(
-          tags.map(tName => {
-            const t = allTags.find(t => t.name === tName);
-            if (!t) { return null; }
-            return t.id;
-          }).filter(t => t !== null)
-        );
-      } else if (typeof tags === 'string') {
-        const t = allTags.find(t => t.name === tags);
-        t && setTags([t.id]);
+        // 处理 tags
+        if (Array.isArray(tags)) {
+          setTags(
+            tags.map(tName => {
+              const t = allTags.find(t => t.name === tName);
+              if (!t) { return null; }
+              return t.id;
+            }).filter(t => t !== null)
+          );
+        } else if (typeof tags === 'string') {
+          const t = allTags.find(t => t.name === tags);
+          t && setTags([t.id]);
+        }
+      } catch (error) {
+        setMarkdown(content);
+        setTitle(name.split('.')[0]);
+        message.error('YMAL 解析失败');
+        console.log(error.message);
       }
     },
     [setMarkdown, setTitle, setCover, setCategories, allCategories, setTags, allTags]
