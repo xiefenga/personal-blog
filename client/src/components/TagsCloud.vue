@@ -1,5 +1,5 @@
 <template>
-  <card-widget class="tags-card">
+  <statistic-card class="tags-card">
     <template #headline>
       <i class="iconfont">&#xe606;</i>
       <span>标签</span>
@@ -16,11 +16,11 @@
     >
       {{ tag.name }}
     </router-link>
-  </card-widget>
+  </statistic-card>
 </template>
 
 <script setup>
-import CardWidget from "./CardWidget.vue";
+import StatisticCard from "./StatisticCard.vue";
 import { tags, fetchTags } from "@/store/tags";
 fetchTags();
 const sizes = [
@@ -75,6 +75,10 @@ const encode = (url) => {
 }
 
 .tags-card .tag-item {
-  @apply text-xl mx-1 inline-block leading-loose hover:text-blue-400 transition duration-200 ease-in-out;
+  @apply text-xl mx-1 inline-block leading-loose transition duration-200 ease-in-out;
+}
+
+.tags-card .tag-item:hover {
+  color: rgb(96, 165, 250) !important;
 }
 </style>

@@ -1,12 +1,12 @@
 <template>
-  <card-widget class="article-content">
+  <content-card class="article-content">
     <article v-html="content" />
-  </card-widget>
+  </content-card>
 </template>
 
 <script setup>
 import { computed, watchEffect } from "vue";
-import CardWidget from "./CardWidget.vue";
+import ContentCard from "./ContentCard.vue";
 import { useRoute } from "vue-router";
 import { article, fetchArticle } from "@/store/article";
 import { mdRender } from "@/utils/helper";
@@ -20,7 +20,7 @@ watchEffect(async () => {
 
 <style lang="postcss" scoped>
 .article-content {
-  @apply py-8 px-8 leading-loose text-sm;
+  @apply leading-loose text-sm;
 }
 </style>
 

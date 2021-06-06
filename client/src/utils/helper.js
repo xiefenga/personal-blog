@@ -1,6 +1,6 @@
 import NProgress from "nprogress";
 import MarkdownIt from "markdown-it";
-import { MIN, HOUR, DAY, ONE_DAY_MS, ONE_HOUR_MS, ONE_MINUTE_MS, TIME_EN_ZH_TABLE } from './constants'
+import { MIN, HOUR, DAY, ONE_DAY_MS, ONE_HOUR_MS, ONE_MINUTE_MS, TIME_EN_ZH_TABLE, NUMBER_MONTH_ZH_TABLE } from './constants'
 
 export const time2TimeStamp = t => new Date(t).getTime();
 
@@ -34,6 +34,31 @@ export const relativeTime2ZHStr = (t1, t2) => {
   const dir = diff > 0 ? '后' : '前';
   return `${Math.abs(diff)} ${TIME_EN_ZH_TABLE[unit]}${dir}`;
 }
+
+export const articles2Archives = (articles) => {
+  const map = new Map();
+  articles.forEach(article => {
+    const key = getYearAndMonth(article.createdAt);
+    if (!map.has(key)) {
+      map.set(key, [article]);
+    } else {
+      map.set(key, [...map.get(key), article]);
+    }
+  });
+  return map;
+}
+
+export const getYearAndMonth = (time) => {
+  const date = new Date(time);
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  return `${year}-${month}`;
+}
+
+export const yearAndMonthStr2ZH = str => {
+  const [year, month] = str.split('-');
+  return `${year} ${NUMBER_MONTH_ZH_TABLE[month]}`;
+};
 
 export const md = new MarkdownIt();
 

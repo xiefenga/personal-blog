@@ -9,3 +9,7 @@ export const getArticleList = async (page = 1, size) => {
 export const getArticle = async title => {
   return axios.get('/article/' + title);
 }
+
+export const getArchives = async () => {
+  return axios.get('/archives');
+}

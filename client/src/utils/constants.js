@@ -56,6 +56,8 @@ export const TIME_EN_ZH_TABLE = {
        [DAY]: DAY_ZH
 };
 
+export const NUMBER_MONTH_ZH_TABLE = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+
 export const ICP_URL = "https://beian.miit.gov.cn/";
 
 export const SITE_START_YEAR = 2021;
