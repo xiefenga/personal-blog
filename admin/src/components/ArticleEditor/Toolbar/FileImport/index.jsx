@@ -21,6 +21,9 @@ function FileImport(props) {
         fileFillStore(fileInfo);
       } catch (error) {
         message.error(error.message);
+      } finally {
+        // 解决 input 二次导入相同文件名文件不触发 change 事件的问题
+        e.target.value = '';
       }
     },
     [extLimits, fileFillStore]
