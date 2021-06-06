@@ -9,7 +9,7 @@ import './index.css'
 
 
 function TagManage() {
-  const [tags] = useTags();
+  const tags = useTags();
   const addTag = useAddTag();
   const updateTag = useUpdateTag();
   const deleteTag = useDeleteTag();

@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { getSiteInfoAction, setSiteInfoAction } from '@/store/action/site'
 import { setArticleAction, clearArticleAction } from '@/store/action/article'
 import { setAdminAction, loginAction, logoutAction } from '@/store/action/admin'
 import { setTagsAction, getTagsAction, addTagAction, updateTagAction, deleteTagAction } from '@/store/action/tags'
@@ -86,25 +87,9 @@ export const useArticleTags = () => {
 }
 
 
-export const useTags = () => {
-  const tags = useSelector(state => state.tags);
-  const dispatch = useDispatch();
-  const updateTags = useCallback(
-    value => dispatch(setTagsAction(value)),
-    [dispatch]
-  );
-  return [tags, updateTags];
-}
+export const useTags = () => useSelector(state => state.tags);
 
-export const useCategories = () => {
-  const categories = useSelector(state => state.categories);
-  const dispatch = useDispatch();
-  const update = useCallback(
-    value => dispatch(setCategoriesAction(value)),
-    [dispatch]
-  );
-  return [categories, update];
-}
+export const useCategories = () => useSelector(state => state.categories);
 
 export const useLogin = () => {
   const dispatch = useDispatch();
@@ -182,6 +167,19 @@ export const useDeleteCategory = () => {
   const dispatch = useDispatch();
   return useCallback(
     async id => dispatch(deleteCategoryAction(id)),
+    [dispatch]
+  );
+}
+
+export const useSiteInfo = () => {
+  const siteInfo = useSelector(state => state.siteInfo);
+  return siteInfo;
+}
+
+export const useGetSiteInfo = () => {
+  const dispatch = useDispatch();
+  return useCallback(
+    async () => dispatch(getSiteInfoAction()),
     [dispatch]
   );
 }

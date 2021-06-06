@@ -12,8 +12,8 @@ export const useFileFillStore = () => {
   const [, setCover] = useCover();
   const [, setTags] = useArticleTags();
   const [, setCategories] = useArticleCategories();
-  const [allTags] = useTags();
-  const [allCategories] = useCategories();
+  const allTags = useTags();
+  const allCategories = useCategories();
   return useCallback(
     file => {
       const { name, content } = file;

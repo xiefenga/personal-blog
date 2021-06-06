@@ -12,7 +12,7 @@ function CategoriesSelect(props) {
     selected: selectedCategories,
     setSelected: setSelectedCategories
   } = props;
-  const [categories] = useCategories();
+  const categories = useCategories();
   const treeData = useMemo(
     () => categories.map(
       c => treeDateTransform(

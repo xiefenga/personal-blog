@@ -7,7 +7,7 @@ import { useAddCategory, useCategories, useDeleteCategory, useUpdateCategory } f
 import './index.css'
 
 function CategoryManage() {
-  const [categories] = useCategories();
+  const categories = useCategories();
   const addCategory = useAddCategory();
   const updateCategory = useUpdateCategory();
   const deleteCategory = useDeleteCategory();

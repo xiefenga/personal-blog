@@ -11,7 +11,7 @@ function TagsSelect(props) {
     selected: checkedTags,
     setSelected: setCheckedTags
   } = props;
-  const [tags] = useTags();
+  const tags = useTags();
   return (
     <div className="tags-checker">
       {tags.map(tag => (

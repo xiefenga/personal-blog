@@ -23,6 +23,10 @@ export const oss = axios.create({
   baseURL: '/api/oss'
 });
 
-setInterceptors(login, tag, category, article, oss);
+export const site = axios.create({
+  baseURL: '/api/site'
+});
+
+setInterceptors(login, tag, category, article, oss, site);
 
 

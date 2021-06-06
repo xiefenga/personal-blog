@@ -8,7 +8,7 @@ import ArticleManage from '@/components/ArticleManage'
 import { useEffect, useState, useCallback } from 'react'
 import { Switch, Route, useHistory } from 'react-router-dom'
 import { useAuth, useGetOSSCongig } from '@/hooks/http'
-import { useGetCategories, useGetTags } from '@/hooks/store'
+import { useGetCategories, useGetSiteInfo, useGetTags } from '@/hooks/store'
 
 const style = { width: '100%', height: '100%' };
 
@@ -17,6 +17,7 @@ function Home() {
   const getTags = useGetTags();
   const getCategories = useGetCategories();
   const getOSSCongig = useGetOSSCongig();
+  const getSiteInfo = useGetSiteInfo();
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [tip, setTip] = useState('登录中');
@@ -29,14 +30,15 @@ function Home() {
         await Promise.all([
           getTags(),
           getCategories(),
-          getOSSCongig()
+          getOSSCongig(),
+          getSiteInfo()
         ]);
         setLoading(false);
       } else {
         history.push('/login');
       }
     },
-    [auth, history, getTags, getCategories, getOSSCongig]
+    [auth, history, getTags, getCategories, getOSSCongig, getSiteInfo]
   );
   useEffect(init, [init]);
 
