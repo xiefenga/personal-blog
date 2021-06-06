@@ -2,15 +2,13 @@ import { message } from 'antd'
 import PropTypes from 'prop-types'
 import { useCallback } from 'react'
 import { importFile } from '@/utils/file'
-import { useMarkdown, useTitle } from '@/hooks/store'
+import { useFileFillStore } from '@/hooks/helper'
 import { FileMarkdownOutlined } from '@ant-design/icons'
 import './index.css'
 
-
 function FileImport(props) {
   const { showText, extLimits, className } = props;
-  const [, setMarkdown] = useMarkdown();
-  const [, setTitle] = useTitle();
+  const fileFillStore = useFileFillStore();
 
   const onChange = useCallback(
     async e => {
@@ -19,14 +17,13 @@ function FileImport(props) {
       if (!files.length) { return; }
       const file = files[0];
       try {
-        const { name: fileName, content } = await importFile(file, extLimits);
-        setTitle(fileName.split('.')[0]);
-        setMarkdown(content);
+        const fileInfo = await importFile(file, extLimits);
+        fileFillStore(fileInfo);
       } catch (error) {
         message.error(error.message);
       }
     },
-    [extLimits, setMarkdown, setTitle]
+    [extLimits, fileFillStore]
   );
 
   return (

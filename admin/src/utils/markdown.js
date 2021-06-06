@@ -11,7 +11,7 @@ const markdownParser = new MarkdownIt({
     if (lang && highlightjs.getLanguage(lang)) {
       try {
         const formatted = highlightjs
-          .highlight(lang, str, true)
+          .highlight(str, { language: lang, ignoreIllegals: true })
           .value.replace(/\n/g, "<br/>") // 换行用br表示
           .replace(/\s/g, "&nbsp;") // 用nbsp替换空格
           .replace(/span&nbsp;/g, "span "); // span标签修复
