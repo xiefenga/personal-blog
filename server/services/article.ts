@@ -17,13 +17,9 @@ import { SiteConfig } from '../types/configs'
 
 
 // 获取归档
-export const getArchives = async (page: number = 1, size: number = 10): Promise<[IArticle[], number]> => {
-  positiveIntValidate(page, PAGE_INVALID);
-  positiveIntValidate(size, SIZE_INVALID);
+export const getArchives = async (): Promise<[IArticle[], number]> => {
 
   const { rows: articles, count } = await ArticleEntity.findAndCountAll({
-    limit: size,
-    offset: (page - 1) * size,
     order: [
       ['createdAt', 'DESC']
     ]
