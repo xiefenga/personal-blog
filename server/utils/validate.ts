@@ -14,21 +14,21 @@ import { assertValidation, getValidationErrors, throwValidateError } from './hel
 
 
 
-function positiveIntValidate(value: number, message: string): void {
+export function positiveIntValidate(value: number, message: string): void {
   assertValidation(
     !isPositive(value) || !isInt(value),
     message
   );
 }
 
-function idValidate(id: number, message: string): void {
+export function idValidate(id: number, message: string): void {
   assertValidation(
     !isInt(id),
     message
   );
 }
 
-function emptyModelValidate<T extends Model>(model: T | null, message: string): T {
+export function emptyModelValidate<T extends Model>(model: T | null, message: string): T {
   assertValidation(
     model === null,
     message
@@ -36,7 +36,7 @@ function emptyModelValidate<T extends Model>(model: T | null, message: string): 
   return model!;
 }
 
-async function categoriesValidate(categories: number[]): Promise<CategoryEntity[]> {
+export async function categoriesValidate(categories: number[]): Promise<CategoryEntity[]> {
   const { rows, count } = await CategoryEntity.findAndCountAll({
     where: {
       id: {
@@ -51,7 +51,7 @@ async function categoriesValidate(categories: number[]): Promise<CategoryEntity[
   return rows;
 }
 
-async function tagsValidate(tags: number[]): Promise<TagEntity[]> {
+export async function tagsValidate(tags: number[]): Promise<TagEntity[]> {
   const { rows, count } = await TagEntity.findAndCountAll({
     where: {
       id: {
@@ -66,7 +66,7 @@ async function tagsValidate(tags: number[]): Promise<TagEntity[]> {
   return rows;
 }
 
-function removeInvalidCId(categories: number[], cs: CategoryEntity[]) {
+export function removeInvalidCId(categories: number[], cs: CategoryEntity[]) {
   for (const { parentId } of cs) {
     if (parentId !== null) {
       const index = categories.indexOf(parentId);
@@ -77,7 +77,7 @@ function removeInvalidCId(categories: number[], cs: CategoryEntity[]) {
   }
 }
 
-async function validateModel<T extends IModel>(model: T, skip: boolean = false) {
+export async function validateModel<T extends IModel>(model: T, skip: boolean = false) {
   const errors = getValidationErrors(
     await validate(
       model,
@@ -87,7 +87,7 @@ async function validateModel<T extends IModel>(model: T, skip: boolean = false) 
   if (errors.length) { throw errors; }
 }
 
-function loginValidate(config: AdminConfig, modal: Admin) {
+export function loginValidate(config: AdminConfig, modal: Admin) {
   const { username, password } = config;
   assertValidation(
     modal.username !== username || modal.password !== password,
@@ -95,7 +95,7 @@ function loginValidate(config: AdminConfig, modal: Admin) {
   );
 }
 
-function validateJWT(token?: string) {
+export function validateJWT(token?: string) {
   if (token) {
     try {
       return jwt.verify(token, JWT_SECRET) as IAdmin;
@@ -106,7 +106,7 @@ function validateJWT(token?: string) {
   throwValidateError(IDENTITY_OVERDUE);
 }
 
-async function validateTitleSafe(id: number, title: string) {
+export async function validateTitleSafe(id: number, title: string) {
   const existed = await ArticleEntity.findOne({
     where: {
       title,
@@ -118,7 +118,7 @@ async function validateTitleSafe(id: number, title: string) {
   assertValidation(!!existed, ARTICLE_EXISTED);
 }
 
-async function categoryParentIdValidate(category: Category) {
+export async function categoryParentIdValidate(category: Category) {
   const { parentId = null } = category;
   // 需要使用 != null 来判断，parentId 可能传递为 0
   if (parentId !== null) {
@@ -126,18 +126,4 @@ async function categoryParentIdValidate(category: Category) {
     assertValidation(p === null, '父类目不存在');
     assertValidation(p!.parentId !== null, '只支持二级类目');
   }
-}
-
-export {
-  positiveIntValidate,
-  idValidate,
-  emptyModelValidate,
-  categoriesValidate,
-  tagsValidate,
-  removeInvalidCId,
-  validateModel,
-  loginValidate,
-  validateJWT,
-  validateTitleSafe,
-  categoryParentIdValidate
 }

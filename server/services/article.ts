@@ -22,7 +22,8 @@ export const getArchives = async (): Promise<[IArticle[], number]> => {
   const { rows: articles, count } = await ArticleEntity.findAndCountAll({
     order: [
       ['createdAt', 'DESC']
-    ]
+    ],
+    attributes: { exclude: ['content'] }
   });
 
   return [articles, count];

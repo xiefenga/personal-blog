@@ -2,7 +2,7 @@ import { isDataURI, isURL, registerDecorator, ValidationOptions } from 'class-va
 
 type Checker = (val: unknown) => boolean;
 
-function IsArrayOf(typeCheck: Checker, validationOptions?: ValidationOptions) {
+export function IsArrayOf(typeCheck: Checker, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'isArrayOf',
@@ -16,7 +16,7 @@ function IsArrayOf(typeCheck: Checker, validationOptions?: ValidationOptions) {
   }
 }
 
-function IsValidURL(validationOptions?: ValidationOptions) {
+export function IsValidURL(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'isValidURL',
@@ -30,5 +30,3 @@ function IsValidURL(validationOptions?: ValidationOptions) {
   }
 }
 
-
-export { IsValidURL, IsArrayOf }

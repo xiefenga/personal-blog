@@ -1,7 +1,7 @@
 import { join } from 'path'
 import { readFileSync } from 'fs'
-import { writeFile } from 'fs/promises'
 import { IQuote } from '../types/request'
+import { access, writeFile } from 'fs/promises'
 import { ValidationError } from 'class-validator'
 import { ISuccessResponse, IFailResponse } from '../types/helper'
 import { AdminConfig, DBConfig, OSSConfig, SiteConfig } from '../types/configs'
@@ -153,6 +153,15 @@ export const writeJSONFile = async (path: string, value: Object) => {
     path,
     JSON.stringify(value, null, 2)
   );
+}
+
+export const fileExist = async (path: string): Promise<boolean> => {
+  try {
+    await access(path);
+  } catch (__) {
+    return false;
+  }
+  return true;
 }
 
 export class ValidateError extends Error { };
