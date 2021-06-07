@@ -1,7 +1,7 @@
 import { mkdir } from 'fs/promises'
 import { getQuoteCache, writeJSONFile } from '../utils/helper'
 import { CACHE_DIR_PATH, QUOTE_CACHE_PATH } from '../utils/constants'
-import { getDailyQuote as requestDailyQuote } from '../request/dailyquote'
+import { getDailyQuote as requestDailyQuote } from '../request/daily-quote'
 
 export const saveDailyQuote = async (): Promise<void> => {
   const quote = await requestDailyQuote();
