@@ -44,8 +44,5 @@ export interface IAdmin extends IModel {
 }
 
 export interface ISiteInfo extends SiteConfig {
-  articles: number;
-  tags: number;
-  categories: number;
 }
 

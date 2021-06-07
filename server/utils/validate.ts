@@ -84,10 +84,7 @@ async function validateModel<T extends IModel>(model: T, skip: boolean = false) 
       { skipUndefinedProperties: skip }
     )
   );
-  if (errors.length) {
-    throw errors;
-  }
-  return errors;
+  if (errors.length) { throw errors; }
 }
 
 function loginValidate(config: AdminConfig, modal: Admin) {

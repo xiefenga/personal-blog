@@ -4,7 +4,6 @@ import { Expose, Transform, Type } from 'class-transformer'
 import { isEmpty, IsInt, IsNotEmpty, IsString, ValidateIf } from 'class-validator'
 
 
-
 class Category implements ICategory {
   @IsString({ message: 'name类型错误' })
   @IsNotEmpty({ message: 'name不能为空' })

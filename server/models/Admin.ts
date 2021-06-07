@@ -1,7 +1,8 @@
 import { IAdmin } from '../types/models'
 import { Expose, Type } from 'class-transformer'
-import { IsNotEmpty, IsString } from 'class-validator'
 import { IsValidURL } from '../utils/decorators'
+import { IsNotEmpty, IsString } from 'class-validator'
+
 
 class Admin implements IAdmin {
 

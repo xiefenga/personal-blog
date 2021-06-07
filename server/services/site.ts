@@ -1,16 +1,27 @@
-import TagEntity from '../db/entities/Tag'
+import SiteInfo from '../models/SiteInfo'
 import { ISiteInfo } from '../types/models'
-import { getSiteConfig } from '../utils/helper'
-import ArticleEntity from '../db/entities/Article'
-import CategoryEntity from '../db/entities/Category'
+import { UnknowObject } from '../types/helper'
+import { validateModel } from '../utils/validate'
+import { plainTransform } from '../utils/transform'
+import { SITE_CONFIG_PATH } from '../utils/constants'
+import { getSiteConfig, throwValidateError, writeJSONFile } from '../utils/helper'
 
-export const getSiteInfo = async (): Promise<ISiteInfo> => {
+
+export const getSiteInfo = async (): Promise<ISiteInfo> => getSiteConfig();
+
+export const updateSiteInfo = async (value: UnknowObject): Promise<ISiteInfo> => {
+  const tmp = plainTransform(SiteInfo, value);
+  await validateModel(tmp, true);
   const config = getSiteConfig();
-  const [articles, categories, tags] = await Promise.all([
-    ArticleEntity.count(),
-    CategoryEntity.count(),
-    TagEntity.count()
-  ]);
-  return { ...config, articles, categories, tags } as ISiteInfo;
+  const siteInfo = plainTransform(SiteInfo, Object.assign({}, config, value));
+  try {
+    await writeJSONFile(
+      SITE_CONFIG_PATH,
+      siteInfo
+    );
+    return siteInfo;
+  } catch (_) {
+    throwValidateError('修改失败，请重试');
+  }
 }
 

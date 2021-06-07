@@ -2,12 +2,6 @@ import { IArticle } from '../types/models'
 import { Expose, Type, Exclude } from 'class-transformer'
 import { IsValidURL, IsArrayOf } from '../utils/decorators'
 import { IsInt, IsNotEmpty, IsString, Min, isInt, ArrayMinSize, ArrayUnique, ValidateIf } from 'class-validator'
-import { UnknowObject } from '../types/helper'
-import { SITE_CONFIG_PATH } from '../utils/constants'
-import { wordCounts } from '../utils/helper'
-import { plainTransform } from '../utils/transform'
-import { validateModel } from '../utils/validate'
-
 
 
 class Article implements IArticle {

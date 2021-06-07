@@ -1,5 +1,6 @@
 import { join } from 'path'
 import { readFileSync } from 'fs'
+import { writeFile } from 'fs/promises'
 import { IQuote } from '../types/request'
 import { ValidationError } from 'class-validator'
 import { ISuccessResponse, IFailResponse } from '../types/helper'
@@ -20,7 +21,6 @@ import {
   SITE_CONFIG_PATH,
   SITE_CONFIG_FILENAME,
 } from './constants'
-
 
 
 export const objectToArray = <T>(object: Object): T[] => {
@@ -148,6 +148,12 @@ export function getSiteConfig(): SiteConfig {
   }
 }
 
+export const writeJSONFile = async (path: string, value: Object) => {
+  await writeFile(
+    path,
+    JSON.stringify(value, null, 2)
+  );
+}
 
 export class ValidateError extends Error { };
 

@@ -1,11 +1,10 @@
-import { writeFile } from 'fs/promises'
 import AdminModel from '../models/Admin'
 import { IAdmin } from '../types/models'
 import { UnknowObject } from '../types/helper'
 import { plainTransform } from '../utils/transform'
 import { ADMIN_CONFIG_PATH } from '../utils/constants'
 import { loginValidate, validateModel } from '../utils/validate'
-import { getAdminConfig, throwValidateError } from '../utils/helper'
+import { getAdminConfig, throwValidateError, writeJSONFile } from '../utils/helper'
 
 export const login = async (loginInfo: UnknowObject): Promise<IAdmin> => {
   const admin = plainTransform(AdminModel, loginInfo);
@@ -18,16 +17,16 @@ export const login = async (loginInfo: UnknowObject): Promise<IAdmin> => {
 
 export const updateAdmin = async (userInfo: UnknowObject): Promise<void> => {
   const temp = plainTransform(AdminModel, userInfo);
-  validateModel(temp, true);
+  await validateModel(temp, true);
   const config = getAdminConfig();
   const update = plainTransform(
     AdminModel,
     Object.assign({}, config, userInfo)
   );
   try {
-    await writeFile(
+    await writeJSONFile(
       ADMIN_CONFIG_PATH,
-      JSON.stringify(update, null, 2)
+      update
     );
   } catch (_) {
     throwValidateError('修改失败，请重试');
