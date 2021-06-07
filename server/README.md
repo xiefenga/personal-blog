@@ -196,12 +196,11 @@ id 可以是文章 id 也可以是文章标题
 
 响应消息：
 
-|  字段  |  类型  | 是否必须 |                备注                |
-| :----: | :----: | :------: | :--------------------------------: |
-| status | string |    是    | 响应状态，值为 `success` 或 `fail` |
-| error  | string |    否    |      错误消息，有错误时才会有      |
-|  data  | ITag[] |    否    |           所有的标签数据           |
-| count  | number |    否    |              标签数量              |
+|  字段  |  类型  |      备注      |
+| :----: | :----: | :------------: |
+| status | string |   `success`    |
+|  data  | ITag[] | 所有的标签数据 |
+| count  | number |    标签数量    |
 
 ### 添加标签
 
@@ -256,3 +255,82 @@ id 可以是文章 id 也可以是文章标题
 | error  | string |    否    |      错误消息，有错误时才会有      |
 |  data  |  null  |    否    |                                    |
 
+### 获取文章
+
+- URL：`/tag/:id`
+- method：`GET`
+
+响应消息：
+
+|  字段  |    类型     | 是否必须 |                备注                |
+| :----: | :---------: | :------: | :--------------------------------: |
+| status |   string    |    是    | 响应状态，值为 `success` 或 `fail` |
+| error  |   string    |    否    |      错误消息，有错误时才会有      |
+|  data  | IArticles[] |    否    |                                    |
+| count  |   number    |    否    |                                    |
+
+## 站点信息
+
+### 获取站点信息
+
+- URL：`/site`
+- method：`GET`
+
+响应消息：
+
+|  字段  |   类型    | 是否必须 |     备注     |
+| :----: | :-------: | :------: | :----------: |
+| status |  string   |    是    |  `success`   |
+|  data  | ISiteInfo |    是    | 站点配置信息 |
+
+### 修改站点信息
+
+- URL：`/site`
+- method：`POST`
+
+参数列表：
+
+|     字段     |  类型  | 是否必须 |    备注    |
+| :----------: | :----: | :------: | :--------: |
+|    author    | string |    否    |  站点作者  |
+|    github    | string |    否    | github地址 |
+|     mail     | string |    否    |  邮箱地址  |
+|    avatar    | string |    否    |    头像    |
+|   siteName   | string |    否    |  站点名称  |
+|   aboutMe    | string |    否    |   关于我   |
+|    beian     | string |    否    |   备案号   |
+| defaultCover | string |    否    |  默认封面  |
+
+响应消息：
+
+|  字段  |  类型  | 是否必须 |                备注                |
+| :----: | :----: | :------: | :--------------------------------: |
+| status | string |    是    | 响应状态，值为 `success` 或 `fail` |
+| error  | string |    否    |      错误消息，有错误时才会有      |
+|  data  |  null  |    否    |                                    |
+
+## OSS配置
+
+### 获取OSS配置
+
+- URL：`/oss`
+- method：`GET`
+
+响应消息：
+
+|  字段  |  类型  | 是否必须 |     备注     |
+| :----: | :----: | :------: | :----------: |
+| status | string |    是    |  `success`   |
+|  data  |  IOSS  |    是    | 站点配置信息 |
+
+## 每日一句
+
+- URL：`/daily/quote`
+- method：`GET`
+
+响应消息：
+
+|  字段  |  类型  | 是否必须 |     备注     |
+| :----: | :----: | :------: | :----------: |
+| status | string |    是    |  `success`   |
+|  data  | IQuote |    是    | 站点配置信息 |
