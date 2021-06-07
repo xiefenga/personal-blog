@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSiteInfoAction, setSiteInfoAction } from '@/store/action/site'
+import { getSiteInfoAction, updateSiteInfoAction } from '@/store/action/site'
 import { setArticleAction, clearArticleAction } from '@/store/action/article'
 import { setAdminAction, loginAction, logoutAction } from '@/store/action/admin'
-import { setTagsAction, getTagsAction, addTagAction, updateTagAction, deleteTagAction } from '@/store/action/tags'
-import { setCategoriesAction, getCategoriesAction, addCategoryAction, updateCategoryAction, deleteCategoryAction } from '@/store/action/categories'
+import { getTagsAction, addTagAction, updateTagAction, deleteTagAction } from '@/store/action/tags'
+import { getCategoriesAction, addCategoryAction, updateCategoryAction, deleteCategoryAction } from '@/store/action/categories'
 
 
 export const useAdmin = () => {
@@ -184,3 +184,10 @@ export const useGetSiteInfo = () => {
   );
 }
 
+export const useUpdateSiteInfo = () => {
+  const dispatch = useDispatch();
+  return useCallback(
+    async value => dispatch(updateSiteInfoAction(value)),
+    [dispatch]
+  );
+}

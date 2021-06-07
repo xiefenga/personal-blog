@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
-import { Form, Input, Typography, Drawer, Button } from 'antd'
-import { useSiteInfo } from '@/hooks/store';
-import { MAIL_VALIDATION_REGEXP, URL_VALIDATION_REGEXP } from '@/utils/constants';
+import { useCallback, useState } from 'react'
+import { useSiteInfo, useUpdateSiteInfo } from '@/hooks/store'
+import { Form, Input, Typography, Drawer, Button, message } from 'antd'
+import { MAIL_VALIDATION_REGEXP, URL_VALIDATION_REGEXP } from '@/utils/constants'
 
 const { Title } = Typography;
 
@@ -21,11 +22,26 @@ function SiteInfoDailog(props) {
   const { visible, onClose } = props;
   const { author, mail, github, siteName, beian, defaultCover, aboutMe } = useSiteInfo();
 
+  const updateSiteInfo = useUpdateSiteInfo();
+
+  const [loading, setLoading] = useState(false);
+
+  const onFinish = useCallback(
+    async value => {
+      setLoading(true);
+      const success = await updateSiteInfo(value);
+      if (success) {
+        message.success('修改成功');
+        setLoading(false);
+        onClose();
+      }
+    },
+    [updateSiteInfo, onClose]
+  );
+
   return (
     <Drawer width={700} title={title} visible={visible} onClose={onClose}>
-      <Form labelCol={labelCol} wrapperCol={wrapperCol} onFinish={
-        value => console.log(value)
-      } >
+      <Form labelCol={labelCol} wrapperCol={wrapperCol} onFinish={onFinish} >
         <Form.Item
           label="作者"
           name="author"
@@ -83,7 +99,7 @@ function SiteInfoDailog(props) {
           <TextArea rows={6} />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 10 }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={loading}>
             提交
         </Button>
         </Form.Item>
