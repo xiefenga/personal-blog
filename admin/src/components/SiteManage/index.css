@@ -3,11 +3,6 @@
   padding: 30px 100px;
 }
 
-.site-manage .site-info  {
-  height: 300px;
-
-}
-
 .site-manage .site-info .ant-descriptions-title {
   font-size: 28px;
 }
@@ -19,12 +14,26 @@
 
 .site-manage .site-info .ant-descriptions-item-content {
   font-size: 18px;
+  max-width: 500px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.site-manage .site-info .about-me {
+  white-space: normal;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  overflow:hidden;
+  -webkit-line-clamp: 7;
+  overflow: hidden;
 }
 
 .site-manage .site-info .ant-descriptions-item-content img {
   object-fit: cover;
+}
+
+.site-manage .edit-site {
+  margin-top: 20px;
+  text-align: center;
 }
