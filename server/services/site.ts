@@ -7,7 +7,7 @@ import { SITE_CONFIG_PATH } from '../utils/constants'
 import { getSiteConfig, throwValidateError, writeJSONFile } from '../utils/helper'
 
 
-export const getSiteInfo = async (): Promise<ISiteInfo> => getSiteConfig();
+export const getSiteInfo = (): ISiteInfo => getSiteConfig();
 
 export const updateSiteInfo = async (value: UnknowObject): Promise<ISiteInfo> => {
   const tmp = plainTransform(SiteInfo, value);

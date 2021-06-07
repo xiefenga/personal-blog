@@ -4,9 +4,7 @@ import { createSuccessResponse } from '../utils/helper'
 
 const router = new Router();
 
-router.get('/', async ctx => ctx.body = createSuccessResponse(
-  await getSiteInfo()
-));
+router.get('/', ctx => ctx.body = createSuccessResponse(getSiteInfo()));
 
 router.post('/', async ctx => {
   const siteInfo = await updateSiteInfo(ctx.request.body);
