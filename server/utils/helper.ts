@@ -148,6 +148,8 @@ export function getSiteConfig(): SiteConfig {
   }
 }
 
+export const requireDefaultCover = () => getSiteConfig().defaultCover;
+
 export const writeJSONFile = async (path: string, value: Object) => {
   await writeFile(
     path,

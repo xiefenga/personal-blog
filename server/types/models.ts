@@ -1,4 +1,4 @@
-import { SiteConfig } from './configs'
+import { OSSConfig, SiteConfig } from './configs'
 
 export interface IModel { }
 
@@ -43,6 +43,7 @@ export interface IAdmin extends IModel {
   avatar: string;
 }
 
-export interface ISiteInfo extends SiteConfig {
-}
+export interface ISiteInfo extends SiteConfig { }
+
+export interface IOSS extends OSSConfig { }
 

@@ -2,13 +2,11 @@ import jwt from 'jsonwebtoken'
 import Admin from '../models/Admin'
 import { Op, Model } from 'sequelize'
 import { JWT_SECRET } from './constants'
-import Category from '../models/Category'
 import TagEntity from '../db/entities/Tag'
+import { IDENTITY_OVERDUE } from './tips'
 import { AdminConfig } from '../types/configs'
 import { IAdmin, IModel } from '../types/models'
-import ArticleEntity from '../db/entities/Article'
 import CategoryEntity from '../db/entities/Category'
-import { ARTICLE_EXISTED, IDENTITY_OVERDUE } from './tips'
 import { isInt, isPositive, validate } from 'class-validator'
 import { assertValidation, getValidationErrors, throwValidateError } from './helper'
 
@@ -106,24 +104,12 @@ export function validateJWT(token?: string) {
   throwValidateError(IDENTITY_OVERDUE);
 }
 
-export async function validateTitleSafe(id: number, title: string) {
-  const existed = await ArticleEntity.findOne({
-    where: {
-      title,
-      id: {
-        [Op.ne]: id
-      }
-    }
-  });
-  assertValidation(!!existed, ARTICLE_EXISTED);
-}
-
-export async function categoryParentIdValidate(category: Category) {
-  const { parentId = null } = category;
+export async function categoryParentIdValidate(parentId: number | null) {
   // 需要使用 != null 来判断，parentId 可能传递为 0
   if (parentId !== null) {
     const p = await CategoryEntity.findByPk(parentId);
     assertValidation(p === null, '父类目不存在');
+    // p !== null 
     assertValidation(p!.parentId !== null, '只支持二级类目');
   }
 }
