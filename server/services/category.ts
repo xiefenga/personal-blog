@@ -43,10 +43,11 @@ export const getCategories = async (): Promise<[ICategories[], number]> => {
 
   const topLevels = data.filter(c => c.parentId === null);
 
+  // tc topLevel category
   const categories = topLevels.map(
-    c => ({
-      ...c.get(),
-      children: data.filter(c => c.parentId === c.id)
+    tc => ({
+      ...tc.get(),
+      children: data.filter(c => c.parentId === tc.id)
     }) as ICategories
   );
 
