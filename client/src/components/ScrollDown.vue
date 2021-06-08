@@ -9,7 +9,7 @@
 <script setup>
 import { onBeforeUnmount } from "vue";
 import { HEADER_HEIGHT, SCROLL_PER_DIS } from "@/utils/constants";
-import { useScrollPageY } from "@/composition/useScroll";
+import { useScrollPageY } from "@/compositions/useScroll";
 
 const [scrollDown, cancelScroll] = useScrollPageY(HEADER_HEIGHT);
 

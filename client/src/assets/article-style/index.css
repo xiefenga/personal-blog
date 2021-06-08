@@ -1,0 +1,112 @@
+
+@import './basic.css';
+@import './code.css';
+
+#article-content {
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  color:#595959
+}
+
+#article-content p {
+  margin: 1em 4px;
+}
+
+/* 一级标题 */
+#article-content h1 {
+  margin: 1.2em 0 1em;
+  padding: 0;
+  font-weight: bold;
+  color:#35b378;
+}
+
+/* 二级标题 */
+#article-content h2 {
+  bmin-height: 32px;
+  line-height: 32px;
+  border-bottom: solid 1px #000000;
+  color: #35b378;
+  display: inline-block;
+  border-bottom-width: 0px;
+  border-bottom-style: solid;
+  border-color: #35b378;
+  padding-top: 5px;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  font-size: 23px;
+  margin: 1em 0 0rem 0;
+  padding: 0.5em 0;
+  text-align: leftt;
+  font-weight: bold;
+}
+
+/* 三级标题 */
+#article-content h3 {
+  margin: 1.2em 0 1em;
+  padding: 0;
+  font-weight: bold;
+  color: #35b378;
+}
+
+
+/* 列表内容，不要设置li
+ */
+#article-content li section {
+  margin: 10px 0;
+}
+
+/* 引用
+ * 左边缘颜色 border-left-color: black;
+ * 背景色 background: gray;
+ */
+#article-content .multiquote-1 {
+  margin: 10px 5px;
+  border-left: 3px solid #35b378;
+  border-right: 0px solid #35b378;
+  color: #616161;
+  quotes: none;
+  background: #FBF9FD
+}
+
+
+/* 链接 
+ * border-bottom: 1px solid #009688;
+ */
+#article-content a {
+  color: #35b378;
+  border-bottom: 1px solid #35b378;
+}
+
+/* 加粗 */
+#article-content strong {
+  color:#35b378;
+}
+
+/* 分隔线
+ * 粗细、样式和颜色
+ * border-top: 1px solid #3e3e3e;
+ */
+#article-content hr {
+  border: 1px solid #35b378;
+  margin: 1.5em auto;
+}
+
+/* 图片描述文字 */
+#article-content figcaption {
+}
+
+/* 行内代码 */
+#article-content p code, #article-content li code {
+  color: #35b378;
+}
+
+/* 脚注文字 */
+#article-content .footnote-word {
+  color: #35b378;
+}
+
+/* 脚注上标 */
+#article-content .footnote-ref {
+  color: #35b378;
+}
+

@@ -6,23 +6,15 @@
 </template>
 
 <script setup>
-import { getDailySentence } from "@/api/daily";
+import { quote } from "@/store/quote";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import {
-  DEFAULT_SENTENCE,
   TYPE_WORD_INTERVAL,
   DELETE_WORD_INTRVAL,
   TYPE_DELETE_INTERVAL,
 } from "@/utils/constants";
 
-const sentences = ref([DEFAULT_SENTENCE]);
-
-getDailySentence().then((res) => {
-  const {
-    data: { content, translation },
-  } = res;
-  sentences.value = [translation, content];
-});
+const sentences = computed(() => quote);
 
 const num = computed(() => sentences.value.length);
 

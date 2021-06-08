@@ -9,35 +9,69 @@
   </div>
 </template>
 
-<script setup>
-import { useRouter, useRoute } from "vue-router";
-import { computed, ref, watchEffect } from "vue";
+<script>
+import { computed, ref } from "vue";
+import Pagination from "./Pagination.vue";
 import { getArticleList } from "@/api/article";
-import ArticleCard from "@/components/ArticleCard.vue";
-import Pagination from "@/components/Pagination.vue";
+import { useRouter, useRoute } from "vue-router";
+import ArticleCard from "./cards/ArticleCard.vue";
 import { PAGINATION_PAGE_SIZE } from "@/utils/constants";
-import { doneLoading } from "@/utils/helper";
+import { startLoading, doneLoading } from "@/utils/helper";
 
-const articles = ref([]);
+export default {
+  components: {
+    Pagination,
+    ArticleCard,
+  },
+  setup() {
+    const count = ref(0);
+    const articles = ref([]);
 
-const count = ref(0);
+    const route = useRoute();
+    const router = useRouter();
 
-const router = useRouter();
-const route = useRoute();
+    const page = computed(() => Number(route.params.page ?? 1));
 
-const page = computed(() => Number(route.params.page) || 1);
+    const pageChange = (page) =>
+      router.push(page === 1 ? "/" : `/page/${page}`);
 
-watchEffect(async () => {
-  const { data, count: total } = await getArticleList(
-    page.value,
-    PAGINATION_PAGE_SIZE
-  );
-  doneLoading();
-  articles.value = data;
-  count.value = total;
-});
-
-const pageChange = (newPage) => router.push("/page/" + newPage);
+    return {
+      count,
+      page,
+      articles,
+      pageChange,
+    };
+  },
+  beforeRouteEnter(to, from, next) {
+    const { page = 1 } = to.params;
+    // 不是直接跳转
+    if (from.matched.length) {
+      startLoading();
+    }
+    getArticleList(page, PAGINATION_PAGE_SIZE).then(({ data, count }) => {
+      doneLoading();
+      if (data.length === 0) {
+        next("/404");
+      }
+      next((vm) => {
+        vm.articles = data;
+        vm.count = count;
+      });
+    });
+  },
+  async beforeRouteUpdate(to) {
+    const { page = 1 } = to.params;
+    // 不是直接跳转
+    startLoading();
+    const { data, count } = await getArticleList(page, PAGINATION_PAGE_SIZE);
+    doneLoading();
+    if (data.length === 0) {
+      return { path: "/404", replace: true };
+    }
+    this.articles = data;
+    this.count = count;
+  },
+};
 </script>
 
 <style lang="postcss" scoped>

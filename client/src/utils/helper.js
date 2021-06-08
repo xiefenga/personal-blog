@@ -1,5 +1,6 @@
 import NProgress from "nprogress";
 import MarkdownIt from "markdown-it";
+import highlightjs from 'highlight.js';
 import { MIN, HOUR, DAY, ONE_DAY_MS, ONE_HOUR_MS, ONE_MINUTE_MS, TIME_EN_ZH_TABLE, NUMBER_MONTH_ZH_TABLE } from './constants'
 
 export const time2TimeStamp = t => new Date(t).getTime();
@@ -60,11 +61,32 @@ export const yearAndMonthStr2ZH = str => {
   return `${year} ${NUMBER_MONTH_ZH_TABLE[month]}`;
 };
 
-export const md = new MarkdownIt();
-
-export const mdRender = md.render.bind(md);
+export const mdParser = new MarkdownIt({
+  html: true,
+  highlight: (str, lang) => {
+    if (lang === undefined || lang === "") {
+      lang = "bash";
+    }
+    // 加上custom则表示自定义样式，而非微信专属，避免被remove pre
+    if (lang && highlightjs.getLanguage(lang)) {
+      try {
+        const formatted = highlightjs
+          .highlight(str, { language: lang, ignoreIllegals: true })
+          .value.replace(/\n/g, "<br/>") // 换行用br表示
+          .replace(/\s/g, "&nbsp;") // 用nbsp替换空格
+          .replace(/span&nbsp;/g, "span "); // span标签修复
+        return '<pre class="custom"><code class="hljs">' + formatted + "</code></pre>";
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    return '<pre class="custom"><code class="hljs">' + markdownParser.utils.escapeHtml(str) + "</code></pre>";
+  },
+});
 
 export const startLoading = () => NProgress.start();
 
 export const doneLoading = () => NProgress.done();
 
+// EC escape character 转义符 /
+export const encodeEC = url => encodeURI(url.replaceAll('/', '%2F'));

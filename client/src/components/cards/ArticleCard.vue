@@ -1,8 +1,8 @@
 <template>
   <card-widget class="article-card">
-    <div class="article-cover">
+    <router-link class="article-cover" :to="`/${article.title}`">
       <img :src="article.cover" />
-    </div>
+    </router-link>
     <div class="article-info">
       <router-link class="article-title" :to="`/${article.title}`">
         {{ article.title }}
@@ -47,37 +47,48 @@
   </card-widget>
 </template>
 
-<script setup>
+<script>
+import { computed } from "vue";
 import toText from "markdown2text";
-import CardWidget from "./CardWidget.vue";
-import { computed, defineProps } from "vue";
+import CardWidget from "../CardWidget.vue";
 import { relativeTime2ZHStr } from "@/utils/helper";
 
-const props = defineProps({
-  article: {
-    type: Object,
-    required: true,
+export default {
+  components: {
+    CardWidget,
   },
-});
+  props: {
+    article: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { article } = props;
 
-const { article } = props;
+    const preview = computed(() => toText(article.content || "").slice(0, 500));
 
-const preview = computed(() => toText(article.content || "").slice(0, 500));
+    const hasPosted = computed(() => relativeTime2ZHStr(article.createdAt));
 
-const hasPosted = computed(() => relativeTime2ZHStr(article.createdAt));
+    const hasUpdated = computed(() => relativeTime2ZHStr(article.updatedAt));
 
-const hasUpdated = computed(() => relativeTime2ZHStr(article.updatedAt));
+    const categories = computed(() => article.categories || []);
 
-const categories = computed(() => article.categories || []);
-
-const tags = computed(() => article.tags || []);
+    const tags = computed(() => article.tags || []);
+    return {
+      preview,
+      hasPosted,
+      hasUpdated,
+      categories,
+      tags,
+    };
+  },
+};
 </script>
-
-
 
 <style lang="postcss" scoped>
 .article-card {
-  @apply flex;
+  @apply flex p-0;
   height: 280px;
 }
 

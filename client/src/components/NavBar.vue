@@ -26,14 +26,14 @@
 
 <script setup>
 import { siteInfo } from "@/store/site";
-const { name: siteName } = siteInfo;
+const { siteName } = siteInfo;
 </script>
 
 
 <style lang="postcss" scoped>
 nav {
   height: 60px;
-  @apply flex items-center px-12 text-lg;
+  @apply flex items-center px-12 text-lg absolute w-full inset-0;
 }
 
 nav .site-name {

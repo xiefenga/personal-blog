@@ -1,17 +1,28 @@
 <template>
   <div class="aside-content">
     <author-card />
-    <!-- <recent-card /> -->
+    <recent-card />
+    <categories-card />
     <tags-card />
     <archives-card />
   </div>
 </template>
 
-<script setup>
-import TagsCard from "./TagsCloud.vue";
-import AuthorCard from "./AuthorCard.vue";
-import RecentCard from "./RecentCard.vue";
-import ArchivesCard from "./ArchivesStatics.vue";
+<script>
+import TagsCard from "./cards/TagsCard.vue";
+import AuthorCard from "./cards/AuthorCard.vue";
+import RecentCard from "./cards/RecentCard.vue";
+import ArchivesCard from "./cards/ArchivesCard.vue";
+import CategoriesCard from "./cards/CategoriesCard.vue";
+export default {
+  components: {
+    TagsCard,
+    AuthorCard,
+    RecentCard,
+    ArchivesCard,
+    CategoriesCard,
+  },
+};
 </script>
 
 <style lang="postcss" scoped>

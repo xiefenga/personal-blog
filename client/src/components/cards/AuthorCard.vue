@@ -1,12 +1,9 @@
 <template>
   <card-widget class="admin-card">
     <div class="admin-avatar">
-      <img
-        class="avatar"
-        src="http://xiefeng.tech/custom_assets/img/avatar.jpg"
-      />
+      <img class="avatar" :src="avatar" />
     </div>
-    <div class="admin-name">{{ name }}</div>
+    <div class="admin-name">{{ author }}</div>
     <div class="blog-data">
       <div class="blog-data-item">
         <div class="headline">文章</div>
@@ -38,11 +35,33 @@
   </card-widget>
 </template>
 
-<script setup>
-import CardWidget from "./CardWidget.vue";
-import { author, statistics } from "@/store/site";
-const { github, mail, name } = author;
-const { articles, categories, tags } = statistics;
+<script>
+import { computed } from "vue";
+import { siteInfo } from "@/store/site";
+import CardWidget from "../CardWidget.vue";
+import { tags as allTags } from "@/store/tags";
+import { count as articles } from "@/store/article";
+import { categories as allCategories } from "@/store/categories";
+
+export default {
+  components: {
+    CardWidget,
+  },
+  setup() {
+    const { github, mail, author, avatar } = siteInfo;
+    const tags = computed(() => allTags.length);
+    const categories = computed(() => allCategories.length);
+    return {
+      github,
+      mail,
+      author,
+      avatar,
+      tags,
+      categories,
+      articles,
+    };
+  },
+};
 </script>
 
 <style lang="postcss" scoped>

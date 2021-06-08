@@ -1,17 +1,31 @@
 <template>
   <div class="page-info">
     <h1 class="page-title">{{ title }}</h1>
-    <daily-sentence />
+    <daily-sentence v-if="isHome" />
+    <article-meta v-else-if="isArticle" />
   </div>
 </template>
 
 <script setup>
-import DailySentence from "./DailySentence.vue";
 import { siteInfo } from "@/store/site";
-import { article } from "@/store/article";
 import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
-const title = siteInfo.name;
+import ArticleMeta from "./ArticleMeta.vue";
+import DailySentence from "./DailySentence.vue";
+import { article } from "@/store/article";
+const route = useRoute();
+const isHome = computed(() => route.meta.home);
+const isArticle = computed(() => route.meta.article);
+const title = computed(() => {
+  if (isHome.value) {
+    return siteInfo.siteName.value;
+  } else if (isArticle.value) {
+    return article.title.value;
+  } else if (route.name === "about-me") {
+    return "关于我";
+  }
+  return siteInfo.siteName.value;
+});
 </script>
 
 <style lang="postcss" scoped>

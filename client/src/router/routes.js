@@ -1,7 +1,7 @@
 import home from '@/page/home.vue'
 import notFount from '@/page/404.vue'
 import ArticleList from '@/components/ArticleList.vue'
-import AboutMe from '@/components/AboutMe.vue'
+import AboutMe from '@/page/about.vue'
 import ArchivesList from '@/components/ArchivesList.vue'
 import ArticleContent from '@/components/ArticleContent.vue'
 
@@ -13,16 +13,19 @@ const routes = [
     children: [
       {
         path: '/',
+        meta: { home: true },
         component: ArticleList
       },
       {
         path: '/page/:page',
         name: 'article-list',
+        meta: { home: true },
         component: ArticleList
       },
       {
         path: '/:article',
-        component: ArticleContent
+        meta: { article: true },
+        component: ArticleContent,
       },
       {
         path: '/archives',
@@ -47,6 +50,7 @@ const routes = [
       },
       {
         path: '/about',
+        name: 'about-me',
         component: AboutMe
       }
     ]

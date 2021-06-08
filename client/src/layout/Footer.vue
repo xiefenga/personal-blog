@@ -9,11 +9,10 @@
 
 <script setup>
 import { computed } from "vue";
+import { siteInfo } from "@/store/site";
 import { ICP_URL, SITE_START_YEAR } from "@/utils/constants";
-import { siteInfo, author as authorInfo } from "@/store/site";
 
-const { beian } = siteInfo;
-const { name: author } = authorInfo;
+const { beian, author } = siteInfo;
 const curYear = new Date().getFullYear();
 
 const copyrightYear = computed(() =>

@@ -13,8 +13,13 @@
   </card-widget>
 </template>
 
-<script setup>
+<script >
 import CardWidget from "@/components/CardWidget.vue";
+export default {
+  components: {
+    CardWidget,
+  },
+};
 </script>
 
 <style lang="postcss" scoped>
