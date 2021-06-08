@@ -29,12 +29,24 @@ query 列表：
 |  data  | IArticles[] |    否    |      响应的数据，有错误时没有      |
 | count  |     int     |    否    |     总的文章数量，有错误时没有     |
 
-### 获取文章（按标题/id)
+
+### 获取所有文章
+
+- URL：`/article/all`
+- method：`GET`
+
+响应消息：
+
+|  字段  |    类型    | 是否必须 |            备注            |
+| :----: | :--------: | :------: | :------------------------: |
+| status |   string   |    是    |         `success`          |
+|  data  | IArticle[] |    是    |          响应数据          |
+| count  |    int     |    是    | 总的文章数量，有错误时没有 |
+
+### 获取文章详情
 
 - URL：`/article/:id`
 - method：`GET`
-
-id 可以是文章 id 也可以是文章标题
 
 响应消息：
 
