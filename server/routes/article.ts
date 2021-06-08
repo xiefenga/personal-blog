@@ -1,7 +1,7 @@
 import Router from '@koa/router'
 import { query2Number } from '../utils/transform'
 import { createSuccessResponse } from '../utils/helper'
-import { addArticle, deleteArticle, getArticleByIdOrTitle, getArticles, updateArticle } from '../services/article'
+import { addArticle, deleteArticle, getAllArticles, getArticleById, getArticles, updateArticle } from '../services/article'
 
 const router = new Router();
 
@@ -15,9 +15,15 @@ router.get('/', async ctx => {
   ctx.body = createSuccessResponse(articleList);
 });
 
+router.get('/all', async ctx => {
+  const articleList = await getAllArticles();
+  ctx.body = createSuccessResponse(articleList);
+});
+
+
 router.get('/:id', async ctx => {
   const { id } = ctx.params;
-  const article = await getArticleByIdOrTitle(id);
+  const article = await getArticleById(Number(id));
   ctx.body = createSuccessResponse(article);
 });
 

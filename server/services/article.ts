@@ -15,7 +15,7 @@ import { categoriesValidate, emptyModelValidate, idValidate, positiveIntValidate
 
 
 // 获取归档
-export const getArchives = async (): Promise<[IArticle[], number]> => {
+export const getAllArticles = async (): Promise<[IArticle[], number]> => {
 
   const { rows: articles, count } = await ArticleEntity.findAndCountAll({
     order: [
@@ -101,20 +101,15 @@ const fillArticle = async (article: ArticleEntity): Promise<IArticles> => {
   return { ...article.get(), categories, tags };
 }
 
-export const getArticleByIdOrTitle = async (title: string | number): Promise<IArticles> => {
+export const getArticleById = async (id: number): Promise<IArticles> => {
 
-  const id = Number(title);
+  idValidate(id, ID_INVALID);
 
   const article = emptyModelValidate(
-    Number.isInteger(id)
-      ? await ArticleEntity.findByPk(id)
-      : await ArticleEntity.findOne({
-        where: {
-          title
-        }
-      }),
+    await ArticleEntity.findByPk(id),
     ARTICLE_NOT_EXIST
-  )
+  );
+
   return await fillArticle(article);
 }
 
@@ -333,7 +328,7 @@ export const getArticlesByCategoryId = async (id: number): Promise<[IArticles[],
 
   const articles = await Promise.all(
     acs.map(
-      ac => getArticleByIdOrTitle(ac.articleId)
+      ac => getArticleById(ac.articleId)
     )
   );
 
@@ -361,7 +356,7 @@ export const getArticlesByTagId = async (id: number): Promise<[IArticles[], numb
 
   const articles = await Promise.all(
     ats.map(
-      at => getArticleByIdOrTitle(at.articleId)
+      at => getArticleById(at.articleId)
     )
   );
 
