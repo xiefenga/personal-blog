@@ -50,7 +50,9 @@ export default {
   setup() {
     const { github, mail, author, avatar } = siteInfo;
     const tags = computed(() => allTags.length);
-    const categories = computed(() => allCategories.length);
+    const categories = computed(() =>
+      allCategories.reduce((acc, cur) => acc + cur.children.length + 1, 0)
+    );
     return {
       github,
       mail,
