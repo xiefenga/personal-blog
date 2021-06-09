@@ -87,6 +87,7 @@ const routes = [
   },
   {
     path: '/:pathMatch(.*)*',
+    alias: '/404',
     name: 'not-fonud',
     component: notFount
   }
