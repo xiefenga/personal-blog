@@ -35,6 +35,11 @@ const routes = [
         component: ArchivesList
       },
       {
+        path: '/archives/page/:page',
+        meta: { title: '归档' },
+        component: ArchivesList
+      },
+      {
         path: '/tags',
         meta: { title: '标签' },
         component: Tags,

@@ -21,42 +21,59 @@
   </div>
 </template>
 
-<script setup>
+<script>
+import { computed, toRefs, watchEffect } from "vue";
 import { PAGINATION_PAGE_SIZE } from "@/utils/constants";
-import { computed, defineProps, toRefs, defineEmit } from "vue";
-
-const props = defineProps({
-  // 当前页码
-  current: {
-    type: Number,
-    default: 0,
+export default {
+  props: {
+    // 当前页码
+    current: {
+      type: Number,
+      default: 0,
+    },
+    // 页码显示数量的限制
+    limit: {
+      type: Number,
+    },
+    // 每页的数量
+    size: {
+      type: Number,
+      default: PAGINATION_PAGE_SIZE,
+    },
+    // 总的数量
+    total: {
+      type: Number,
+      default: 0,
+    },
   },
-  // 页码显示数量的限制
-  limit: {
-    type: Number,
+  setup(props, ctx) {
+    const { total, size, current } = toRefs(props);
+
+    const { emit } = ctx;
+
+    const count = computed(() => Math.ceil(total.value / size.value));
+
+    const onClick = (page) => {
+      if (page > 0 && page !== current.value) {
+        emit("page-change", page);
+      }
+    };
+
+    watchEffect(() => {
+      if (
+        current.value > count.value &&
+        current.value !== 0 &&
+        count.value !== 0
+      ) {
+        emit("page-error", current.value);
+      }
+    });
+
+    return {
+      count,
+      onClick,
+    };
   },
-  // 每页的数量
-  size: {
-    type: Number,
-    default: PAGINATION_PAGE_SIZE,
-  },
-  // 总的数量
-  total: {
-    type: Number,
-    default: 0,
-  },
-});
-
-const { total, size, current } = toRefs(props);
-
-const count = computed(() => Math.ceil(total.value / size.value));
-
-const emit = defineEmit(["page-change"]);
-
-const onClick = (page) => {
-  if (page > 0 && page !== current.value) {
-    emit("page-change", page);
-  }
 };
 </script>
 

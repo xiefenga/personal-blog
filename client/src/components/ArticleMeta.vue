@@ -62,10 +62,12 @@ export default {
 
     const cost = computed(() => Math.ceil(words.value / 260));
     return {
+      cost,
+      views,
       hasPosted,
       hasUpdated,
       showWords,
-      cost,
+      categories,
     };
   },
 };
