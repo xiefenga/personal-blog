@@ -1,0 +1,433 @@
+#article-content {
+  font-size: 16px;
+  color: black;
+  padding: 0 10px;
+  line-height: 1.6;
+  word-spacing: 0px;
+  letter-spacing: 0px;
+  word-break: break-word;
+  word-wrap: break-word;
+  text-align: left;
+  font-family: Optima-Regular, Optima, PingFangSC-light, PingFangTC-light, 'PingFang SC', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  /* margin-top: -10px; 解决开头空隙过大问题*/
+}
+
+/*段落*/
+#article-content p {
+  font-size: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin: 0;
+  line-height: 26px;
+  color: black;
+}
+
+/*标题*/
+#article-content h1,
+#article-content h2,
+#article-content h3,
+#article-content h4,
+#article-content h5,
+#article-content h6 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+  padding: 0px;
+  font-weight: bold;
+  color: black;
+}
+#article-content h1 {
+  font-size: 24px;
+}
+#article-content h2 {
+  font-size: 22px;
+}
+#article-content h3 {
+  font-size: 20px;
+}
+#article-content h4 {
+  font-size: 18px;
+}
+#article-content h5 {
+  font-size: 16px;
+}
+#article-content h6 {
+  font-size: 16px;
+}
+
+#article-content h1 .prefix,
+#article-content h2 .prefix,
+#article-content h3 .prefix,
+#article-content h4 .prefix,
+#article-content h5 .prefix,
+#article-content h6 .prefix {
+  display: none;
+}
+
+#article-content h1 .suffix
+#article-content h2 .suffix,
+#article-content h3 .suffix,
+#article-content h4 .suffix,
+#article-content h5 .suffix,
+#article-content h6 .suffix {
+  display: none;
+}
+
+/*列表*/
+#article-content ul,
+#article-content ol {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding-left: 25px;
+  color: black;
+}
+#article-content ul {
+  list-style-type: disc;
+}
+#article-content ul ul {
+  list-style-type: square;
+}
+
+#article-content ol {
+  list-style-type: decimal;
+}
+
+#article-content li section {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  line-height: 26px;
+  text-align: left;
+  color: rgb(1,1,1); /* 只要是纯黑色微信编辑器就会把color这个属性吞掉。。。*/
+  font-weight: 500;
+}
+
+/*引用*/
+#article-content blockquote {
+  border: none;
+}
+
+#article-content .multiquote-1 {
+  display: block;
+  font-size: 0.9em;
+  overflow: auto;
+  overflow-scrolling: touch;
+  border-left: 3px solid rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.05);
+  color: #6a737d;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 10px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+#article-content .multiquote-1 p {
+  margin: 0px;
+  color: black;
+  line-height: 26px;
+}
+
+#article-content .multiquote-2 {
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  padding: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+#article-content .multiquote-3 {
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  padding: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+#article-content .multiquote-3 p {
+  text-align: center;
+}
+
+#article-content .multiquote-3 h3 {
+  text-align: center;
+}
+
+#article-content .table-of-contents a {
+  border: none;
+  color: black;
+  font-weight: normal;
+}
+
+/*链接*/
+#article-content a {
+  text-decoration: none;
+  color: #1e6bb8;
+  word-wrap: break-word;
+  font-weight: bold;
+  border-bottom: 1px solid #1e6bb8;
+}
+
+/*加粗*/
+#article-content strong {
+  font-weight: bold;
+  color: black;
+}
+
+/*斜体*/
+#article-content em {
+  font-style: italic;
+  color: black;
+}
+
+/*加粗斜体*/
+#article-content em strong {
+  font-weight: bold;
+  color: black;
+}
+
+/*删除线*/
+#article-content del {
+  font-style: italic;
+  color: black;
+}
+
+/*分隔线*/
+#article-content hr {
+  height: 1px;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-top: 1px solid black;
+}
+
+/*代码块*/
+#article-content pre {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#article-content pre code {
+  display: -webkit-box;
+  font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
+  border-radius: 0px;
+  font-size: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+#article-content pre code span {
+  line-height: 26px;
+}
+
+/*行内代码*/
+#article-content p code,
+#article-content li code {
+  font-size: 14px;
+  word-wrap: break-word;
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin: 0 2px;
+  color: #1e6bb8;
+  background-color: rgba(27,31,35,.05);
+  font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
+  word-break: break-all;
+}
+
+/*图片*/
+#article-content img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/*图片*/
+#article-content figure {
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/*图片描述文字*/
+#article-content figcaption {
+  margin-top: 5px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+
+
+/*表格容器 */
+#article-content .table-container{
+  overflow-x: auto;
+}
+
+/*表格*/
+#article-content table {
+  display: table;
+  text-align: left;
+}
+#article-content tbody {
+  border: 0;
+}
+
+#article-content table tr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  background-color: white;
+}
+
+#article-content table tr:nth-child(2n) {
+  background-color: #F8F8F8;
+}
+
+#article-content table tr th,
+#article-content table tr td {
+  font-size: 16px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  text-align: left;
+}
+
+#article-content table tr th {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+
+/* 表格最小列宽4个汉字 */
+#article-content table tr th:nth-of-type(n),
+#article-content table tr td:nth-of-type(n){
+  min-width:85px;
+}
+
+#article-content .footnote-word {
+  color: #1e6bb8;
+  font-weight: bold;
+}
+
+#article-content .footnote-ref {
+  color: #1e6bb8;
+  font-weight: bold;
+}
+
+#article-content .footnote-item {
+  display: flex;
+}
+
+#article-content .footnote-num {
+  display: inline;
+  width: 10%; /*神奇，50px就不可以*/
+  background: none;
+  font-size: 80%;
+  opacity: 0.6;
+  line-height: 26px;
+  font-family: ptima-Regular, Optima, PingFangSC-light, PingFangTC-light, 'PingFang SC', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+#article-content .footnote-item p {
+  display: inline;
+  font-size: 14px;
+  width: 90%;
+  padding: 0px;
+  margin: 0;
+  line-height: 26px;
+  color: black;
+  word-break:break-all;
+  width: calc(100%-50)
+}
+
+#article-content sub, sup {
+  line-height: 0;
+}
+
+#article-content .footnotes-sep:before {
+  content: "参考资料";
+  display: block;
+}
+
+/* 解决公式问题 */
+#article-content .block-equation {
+  display:block;
+  text-align: center;
+  overflow: auto;
+  display: block;
+  -webkit-overflow-scrolling: touch;
+}
+
+#article-content .block-equation svg {
+  max-width: 300% !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+#article-content .inline-equation {
+}
+
+#article-content .inline-equation svg {
+}
+
+#article-content .imageflow-layer1 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  white-space: normal;
+  border: 0px none;
+  padding: 0px;
+  overflow: hidden;
+}
+
+#article-content .imageflow-layer2 {
+  white-space: nowrap;
+  width: 100%;
+  overflow-x: scroll;
+}
+
+#article-content .imageflow-layer3 {
+  display: inline-block;
+  word-wrap: break-word;
+  white-space: normal;
+  vertical-align: middle;
+  width: 100%;
+}
+
+#article-content .imageflow-img {
+  display: inline-block;
+}
+
+#article-content .imageflow-caption {
+  text-align: center;
+  margin-top: 0px;
+  padding-top: 0px;
+  color: #888;
+}
+
+#article-content .nice-suffix-juejin-container {
+  margin-top: 20px !important;
+}
+
+#article-content figure a {
+  border: none;
+}
+
+#article-content figure a img {
+  margin: 0px;
+}
+
+#article-content figure {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 图片链接嵌套 */
+#article-content figure a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 图片链接嵌套，图片解释 */
+#article-content figure a + figcaption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: -35px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  line-height: 35px;
+  z-index: 20;
+}
