@@ -12,22 +12,32 @@
   <Footer />
 </template>
 
-<script setup>
-import { onMounted, watch, ref } from "vue";
+<script>
+import { onMounted } from "vue";
 import Main from "@/layout/Main.vue";
 import Header from "@/layout/Header.vue";
 import Footer from "@/layout/Footer.vue";
-import { CONSOLE_STR } from "@/utils/constants";
+import { fetchTags } from "@/store/tags";
+import { fetchQuote } from "@/store/quote";
 import { fetchSiteInfo } from "@/store/site";
 import { fetchArticles } from "@/store/article";
+import { CONSOLE_STR } from "@/utils/constants";
 import { fetchCategories } from "@/store/categories";
-import { fetchQuote } from "@/store/quote";
-import { fetchTags } from "@/store/tags";
 
-fetchSiteInfo();
-fetchArticles();
-fetchCategories();
-fetchQuote();
-fetchTags();
+export default {
+  components: {
+    Main,
+    Header,
+    Footer,
+  },
+  setup() {
+    fetchSiteInfo();
+    fetchArticles();
+    fetchCategories();
+    fetchQuote();
+    fetchTags();
+    onMounted(() => console.log(CONSOLE_STR));
+  },
+};
 </script>
 
