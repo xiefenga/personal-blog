@@ -1,7 +1,9 @@
 import home from '@/page/home.vue'
 import notFount from '@/page/404.vue'
+import Tags from '@/page/tags.vue'
 import ArticleList from '@/components/ArticleList.vue'
 import AboutMe from '@/page/about.vue'
+import categories from '@/page/categories.vue'
 import ArchivesList from '@/components/ArchivesList.vue'
 import ArticleContent from '@/components/ArticleContent.vue'
 
@@ -29,11 +31,13 @@ const routes = [
       },
       {
         path: '/archives',
+        meta: { title: '归档' },
         component: ArchivesList
       },
       {
         path: '/tags',
-        component: {},
+        meta: { title: '标签' },
+        component: Tags,
       },
       {
         path: '/tags/:name',
@@ -42,7 +46,8 @@ const routes = [
       {
         path: '/categories',
         name: 'categories',
-        component: {},
+        meta: { title: '分类' },
+        component: categories,
       },
       {
         path: '/categories/:p/:c?',
@@ -51,6 +56,7 @@ const routes = [
       {
         path: '/about',
         name: 'about-me',
+        meta: { title: '关于我' },
         component: AboutMe
       }
     ]

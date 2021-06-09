@@ -6,26 +6,38 @@
   </div>
 </template>
 
-<script setup>
-import { siteInfo } from "@/store/site";
-import { computed, watch } from "vue";
+<script>
+import { computed } from "vue";
 import { useRoute } from "vue-router";
+import { siteInfo } from "@/store/site";
+import { article } from "@/store/article";
 import ArticleMeta from "./ArticleMeta.vue";
 import DailySentence from "./DailySentence.vue";
-import { article } from "@/store/article";
-const route = useRoute();
-const isHome = computed(() => route.meta.home);
-const isArticle = computed(() => route.meta.article);
-const title = computed(() => {
-  if (isHome.value) {
-    return siteInfo.siteName.value;
-  } else if (isArticle.value) {
-    return article.title.value;
-  } else if (route.name === "about-me") {
-    return "关于我";
-  }
-  return siteInfo.siteName.value;
-});
+
+export default {
+  components: {
+    ArticleMeta,
+    DailySentence,
+  },
+  setup() {
+    const route = useRoute();
+    const isHome = computed(() => route.meta.home);
+    const isArticle = computed(() => route.meta.article);
+    const title = computed(() => {
+      if (route.meta.title) {
+        return route.meta.title;
+      } else if (isArticle.value) {
+        return article.title.value;
+      }
+      return siteInfo.siteName.value;
+    });
+    return {
+      title,
+      isHome,
+      isArticle,
+    };
+  },
+};
 </script>
 
 <style lang="postcss" scoped>

@@ -61,3 +61,33 @@ export const NUMBER_MONTH_ZH_TABLE = ['一月', '二月', '三月', '四月', '�
 export const ICP_URL = "https://beian.miit.gov.cn/";
 
 export const SITE_START_YEAR = 2021;
+
+export const TAG_CLOUG_COLORS = [
+       "#52a08",
+       "#9cb23e",
+       "#c3c23d",
+       "#6681be",
+       "#742f",
+       "#467119",
+       "#7b8935",
+       "#1beeba",
+       "#fc6582",
+       "#96816e",
+       "#d2e40c",
+       "#104854",
+       "#e77c8f",
+       "#a21dc0",
+       "#df7002",
+       "#7837f3",
+];
+
+export const TAG_CLOUG_FONT_SIZE = [
+       "1em",
+       "1.25em",
+       '0.9em',
+       '0.8em',
+       "1.1em",
+       "1.05em",
+       "1.125em",
+       "1.025em",
+];

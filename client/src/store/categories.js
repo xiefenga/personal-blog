@@ -7,5 +7,6 @@ export const categories = readonly(state);
 
 export const fetchCategories = async () => {
   const { data } = await getCategories();
+  state.splice(0);
   state.push(...data);
 }

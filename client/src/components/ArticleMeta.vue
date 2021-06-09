@@ -45,20 +45,30 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { computed } from "vue";
-import { relativeTime2ZHStr } from "@/utils/helper";
 import { article } from "@/store/article";
+import { relativeTime2ZHStr } from "@/utils/helper";
 
-const { createdAt, updatedAt, categories, words, views } = article;
+export default {
+  setup() {
+    const { createdAt, updatedAt, categories, words, views } = article;
 
-const hasPosted = computed(() => relativeTime2ZHStr(createdAt.value));
+    const hasPosted = computed(() => relativeTime2ZHStr(createdAt.value));
 
-const hasUpdated = computed(() => relativeTime2ZHStr(updatedAt.value));
+    const hasUpdated = computed(() => relativeTime2ZHStr(updatedAt.value));
 
-const showWords = computed(() => (words.value / 1000).toFixed(1));
+    const showWords = computed(() => (words.value / 1000).toFixed(1));
 
-const cost = computed(() => Math.ceil(words.value / 260));
+    const cost = computed(() => Math.ceil(words.value / 260));
+    return {
+      hasPosted,
+      hasUpdated,
+      showWords,
+      cost,
+    };
+  },
+};
 </script>
 
 <style lang="postcss" scoped>

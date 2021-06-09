@@ -7,5 +7,6 @@ export const tags = readonly(state);
 
 export const fetchTags = async () => {
   const { data } = await getTags();
+  state.splice(0);
   state.push(...data);
 }

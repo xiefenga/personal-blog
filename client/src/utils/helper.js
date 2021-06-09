@@ -1,7 +1,7 @@
 import NProgress from "nprogress";
 import MarkdownIt from "markdown-it";
 import highlightjs from 'highlight.js';
-import { MIN, HOUR, DAY, ONE_DAY_MS, ONE_HOUR_MS, ONE_MINUTE_MS, TIME_EN_ZH_TABLE, NUMBER_MONTH_ZH_TABLE } from './constants'
+import { MIN, HOUR, DAY, ONE_DAY_MS, ONE_HOUR_MS, ONE_MINUTE_MS, TIME_EN_ZH_TABLE, NUMBER_MONTH_ZH_TABLE, TAG_CLOUG_COLORS, TAG_CLOUG_FONT_SIZE } from './constants'
 
 export const time2TimeStamp = t => new Date(t).getTime();
 
@@ -90,3 +90,11 @@ export const doneLoading = () => NProgress.done();
 
 // EC escape character 转义符 /
 export const encodeEC = url => encodeURI(url.replaceAll('/', '%2F'));
+
+const colorLen = TAG_CLOUG_COLORS.length;
+
+const sizeLen = TAG_CLOUG_FONT_SIZE.length;
+
+export const randomTextColor = (id) => TAG_CLOUG_COLORS[id % colorLen];
+
+export const randomFontSize = id => TAG_CLOUG_FONT_SIZE[id % sizeLen];
