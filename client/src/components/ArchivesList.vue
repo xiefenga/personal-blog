@@ -13,27 +13,18 @@
 import { computed } from "vue";
 import TimeLine from "./TimeLine.vue";
 import { allArticles } from "@/store/article";
-import { useRoute, useRouter } from "vue-router";
+import { usePagination } from "@/compositions/usePagination";
 
 export default {
   components: {
     TimeLine,
   },
   setup() {
-    const route = useRoute();
-    const router = useRouter();
     const count = computed(() => allArticles.length);
-    const page = computed(() => Number(route.params.page ?? 1));
-    const pageChange = (page) => {
-      router.push(page === 1 ? "/archives" : "/archives/page/" + page);
-    };
-    const pageError = () => router.replace("/404");
     return {
-      page,
       count,
       allArticles,
-      pageChange,
-      pageError,
+      ...usePagination("/archives"),
     };
   },
 };

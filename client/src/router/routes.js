@@ -6,6 +6,8 @@ import AboutMe from '@/page/about.vue'
 import categories from '@/page/categories.vue'
 import ArchivesList from '@/components/ArchivesList.vue'
 import ArticleContent from '@/components/ArticleContent.vue'
+import TagArticles from '@/components/TagArticles.vue'
+import CategoryArticles from '@/components/CategoryArticles.vue'
 
 const routes = [
   {
@@ -45,8 +47,14 @@ const routes = [
         component: Tags,
       },
       {
-        path: '/tags/:name',
-        component: {}
+        path: '/tags/:tag',
+        meta: { tag: true },
+        component: TagArticles
+      },
+      {
+        path: '/tags/:tag/page/:page',
+        meta: { tag: true },
+        component: TagArticles
       },
       {
         path: '/categories',
@@ -55,8 +63,19 @@ const routes = [
         component: categories,
       },
       {
-        path: '/categories/:p/:c?',
-        component: {},
+        path: '/categories/:top/:category?',
+        meta: { category: true },
+        component: CategoryArticles,
+      },
+      {
+        path: '/categories/:top/page/:page',
+        meta: { category: true },
+        component: CategoryArticles,
+      },
+      {
+        path: '/categories/:top/:category/page/:page',
+        meta: { category: true },
+        component: CategoryArticles,
       },
       {
         path: '/about',
@@ -67,7 +86,8 @@ const routes = [
     ]
   },
   {
-    path: '/404',
+    path: '/:pathMatch(.*)*',
+    name: 'not-fonud',
     component: notFount
   }
 ];

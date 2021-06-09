@@ -5,7 +5,7 @@
       <span>分类</span>
     </template>
     <tree-list :data="categories" v-slot="{ item }">
-      <div class="category-item">
+      <div class="category-item" @click="handleClick(item)">
         <span class="date">{{ item.name }}</span>
         <!-- <span class="count">{{ item.count }}</span> -->
       </div>
@@ -25,6 +25,16 @@ export default {
   data: () => ({
     categories,
   }),
+  methods: {
+    handleClick(category) {
+      if (category.parentId) {
+        const top = this.categories.find((t) => t.id === category.parentId);
+        this.$router.push(`/categories/${top.name}/${category.name}`);
+      } else {
+        this.$router.push(`/categories/${category.name}`);
+      }
+    },
+  },
 };
 </script>
 

@@ -26,6 +26,7 @@
           {{ yearAndMonthStr2ZH(item) }}
         </template>
       </div>
+      <div class="no-data" v-if="!list.length">无文章</div>
     </div>
     <Pagination
       v-if="pagination"
@@ -180,6 +181,10 @@ export default {
   @apply transform translate-x-3;
 }
 
+.article-timeline .article-list-item:hover::before {
+  border-color: #ff7242;
+}
+
 .article-timeline .article-list-item::before {
   content: "";
   width: 6px;
@@ -188,7 +193,7 @@ export default {
   top: 34px;
   left: -37px;
   background-color: #fff;
-  @apply absolute rounded-full box-content;
+  @apply absolute rounded-full box-content transition-all duration-200 ease-in-out;
 }
 
 .article-timeline .article-list-item.year {
@@ -196,7 +201,12 @@ export default {
   @apply text-xl;
 }
 
+.article-timeline .article-list-item.year:hover::before {
+  border-color: #49b1f5;
+}
+
 .article-timeline .article-list-item.year::before {
   top: 14px;
+  border-color: #ff7242;
 }
 </style>

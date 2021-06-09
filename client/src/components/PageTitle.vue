@@ -24,10 +24,16 @@ export default {
     const isHome = computed(() => route.meta.home);
     const isArticle = computed(() => route.meta.article);
     const title = computed(() => {
-      if (route.meta.title) {
-        return route.meta.title;
+      const { title, tag, category } = route.meta;
+      if (title) {
+        return title;
       } else if (isArticle.value) {
         return article.title.value;
+      } else if (tag) {
+        return route.params.tag;
+      } else if (category) {
+        const { top, category } = route.params;
+        return category || top;
       }
       return siteInfo.siteName.value;
     });
