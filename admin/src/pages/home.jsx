@@ -40,7 +40,9 @@ function Home() {
     },
     [auth, history, getTags, getCategories, getOSSCongig, getSiteInfo]
   );
-  useEffect(init, [init]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => init(), []);
 
   return (
     <Layout style={style}>
