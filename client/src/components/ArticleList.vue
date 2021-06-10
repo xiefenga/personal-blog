@@ -50,7 +50,8 @@ export default {
     }
     getArticleList(page, PAGINATION_PAGE_SIZE).then(({ data, count }) => {
       doneLoading();
-      if (data.length === 0) {
+      // 当页码不正确时，重定向 404
+      if (page > Math.ceil(count / PAGINATION_PAGE_SIZE)) {
         next("/404");
       }
       next((vm) => {
