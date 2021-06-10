@@ -32,17 +32,6 @@ export const addTag = async (value: UnknowObject): Promise<ITag> => {
     TAG_EXISTED
   );
 
-  const [t, created] = await TagEntity.findOrCreate({
-    where: {
-      ...tag
-    }
-  });
-
-  assertValidation(
-    !created,
-    TAG_EXISTED
-  );
-
   return await TagEntity.create({ ...tag });
 }
 
