@@ -16,6 +16,7 @@ node_modules/
 
 # build directory
 dist
+build
 
 #configs directory
 configs/
