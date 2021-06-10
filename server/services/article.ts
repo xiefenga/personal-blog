@@ -332,7 +332,18 @@ export const getArticlesByCategoryId = async (id: number): Promise<[IArticles[],
     )
   );
 
-  return [articles, count];
+  const existed: string[] = [];
+
+  const res = articles.filter(article => {
+    if (existed.includes(article.title)) {
+      return false;
+    } else {
+      existed.push(article.title);
+      return true;
+    }
+  })
+
+  return [res, count];
 
 }
 
