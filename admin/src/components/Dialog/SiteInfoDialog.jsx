@@ -30,9 +30,9 @@ function SiteInfoDailog(props) {
     async value => {
       setLoading(true);
       const success = await updateSiteInfo(value);
+      setLoading(false);
       if (success) {
         message.success('修改成功');
-        setLoading(false);
         onClose();
       }
     },
@@ -40,7 +40,7 @@ function SiteInfoDailog(props) {
   );
 
   return (
-    <Drawer width={700} title={title} visible={visible} onClose={onClose}>
+    <Drawer destroyOnClose width={700} title={title} visible={visible} onClose={onClose}>
       <Form labelCol={labelCol} wrapperCol={wrapperCol} onFinish={onFinish} >
         <Form.Item
           label="作者"
@@ -101,7 +101,7 @@ function SiteInfoDailog(props) {
         <Form.Item wrapperCol={{ offset: 10 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
             提交
-        </Button>
+          </Button>
         </Form.Item>
       </Form>
     </Drawer>
