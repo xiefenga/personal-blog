@@ -14,24 +14,31 @@ const Welcome = () => (
             <Link to="/article">文章管理</Link>
             <ul>
               <li>
-                <Link to="/article/add">添加文章</Link>
+                <Link to="/article/edit">写文章</Link>
               </li>
               <li>
-                <Link to="/article/update">修改文章</Link>
+                <Link to="/article/list">文章列表</Link>
               </li>
             </ul>
           </li>
           <li>
-            <Link to="/category">类目管理</Link>
+            <Link to="/belong">文章归属</Link>
+            <ul>
+              <li>
+                <Link to="/belong">类目</Link>
+              </li>
+              <li>
+                <Link to="/belong">标签</Link>
+              </li>
+            </ul>
           </li>
           <li>
-            <Link to="/tag">标签管理</Link>
+            <Link to="/site">站点管理</Link>
           </li>
         </ul>
       </Paragraph>
+      <Title level={5} > 欢迎页暂时不知道写啥，就放些链接吧</Title>
     </Typography>
-
-
   </div>
 )
 
