@@ -1,8 +1,16 @@
 import PropTypes from 'prop-types'
-import { Upload, Modal } from 'antd'
 import { uploadAdaptor } from '@/utils/helper'
+import { usePreviewImg } from '@/hooks/helper'
 import { UploadOutlined } from '@ant-design/icons'
-import { useCallback, useMemo, useState } from 'react'
+import { Upload, Button, Form, Input, Row, Col } from 'antd'
+import { useCallback, useMemo, useState, Fragment } from 'react'
+
+const style = { padding: 0 };
+
+const rules = [
+  { required: true, message: 'URL不能为空' },
+  { type: 'url', message: 'URL格式不正确' }
+]
 
 
 function ImageUpload(props) {
@@ -13,6 +21,10 @@ function ImageUpload(props) {
   );
 
   const [fileList, setFileList] = useState(initFileList);
+
+  const [addFileURL, setAddFileURL] = useState(false);
+
+  const previewImg = usePreviewImg();
 
   const customRequest = useCallback(
     async info => {
@@ -42,33 +54,59 @@ function ImageUpload(props) {
   );
 
   const onPreview = useCallback(
-    file => {
-      const url = file.url || file.thumbUrl;
-      Modal.info({
-        icon: null,
-        title: <p><b>图片预览</b></p>,
-        content: <img src={url} alt="" style={{ width: '100%' }} />,
-        okText: '关闭'
-      });
-    },
-    []
+    file => previewImg(file.url || file.thumbUrl),
+    [previewImg]
   );
 
   return (
-    <Upload
-      accept="image/*"
-      maxCount={limit}
-      listType="picture-card"
-      fileList={fileList}
-      customRequest={customRequest}
-      onChange={onChange}
-      onPreview={onPreview}
-    >
-      <p className="ant-upload-drag-icon">
-        <UploadOutlined />
-      </p>
-      <p className="ant-upload-text">{showText}</p>
-    </Upload>
+    <div className="img-upload">
+      {addFileURL
+        ? (
+          <Fragment>
+            <Form onFinish={({ url }) => {
+              setAddFileURL(false);
+              const list = fileList.length === limit
+                ? fileList.slice(1)
+                : fileList;
+              setFileList([...list, { status: 'done', url }]);
+            }}>
+              <Form.Item name="url" label="URL" rules={rules}>
+                <Input placeholder="请输入图片URL或base64编码" allowClear />
+              </Form.Item>
+              <Form.Item>
+                <Row>
+                  <Col>
+                    <Button type="link" onClick={() => setAddFileURL(false)}> 取消添加</Button>
+                  </Col>
+                  <Col offset={15}>
+                    <Button type="link" htmlType="submit"> 确认添加</Button>
+                  </Col>
+                </Row>
+              </Form.Item>
+            </Form>
+          </Fragment>
+
+        ) : (
+          <Fragment>
+            <Upload
+              accept="image/*"
+              maxCount={limit}
+              listType="picture-card"
+              fileList={fileList}
+              customRequest={customRequest}
+              onChange={onChange}
+              onPreview={onPreview}
+            >
+              <p className="ant-upload-drag-icon">
+                <UploadOutlined />
+              </p>
+              <p className="ant-upload-text">{showText}</p>
+            </Upload>
+            <Button type="link" style={style} onClick={() => setAddFileURL(true)}>添加已上传图片</Button>
+          </Fragment>
+        )
+      }
+    </div>
   )
 }
 
