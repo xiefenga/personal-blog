@@ -1,10 +1,24 @@
-import { message } from 'antd'
 import matter from 'gray-matter'
+import { message, Modal } from 'antd'
 import { useRef, useCallback } from 'react'
 import { delay, cancelablePromise } from '@/utils/helper'
 import { CLICK_DOUBLECLICK_INTERVAL as INTERVAL } from '@/utils/constants'
 import { useMarkdown, useTitle, useCover, useArticleTags, useArticleCategories, useTags, useCategories } from './store'
 
+
+export const usePreviewImg = (initURL) => {
+  return useCallback(
+    url => {
+      Modal.info({
+        icon: null,
+        title: <p><b>图片预览</b></p>,
+        content: <img src={url ?? initURL} alt="" style={{ width: '100%' }} />,
+        okText: '关闭'
+      });
+    },
+    []
+  );
+}
 
 export const useFileFillStore = () => {
   const [, setMarkdown] = useMarkdown();
