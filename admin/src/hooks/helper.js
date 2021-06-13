@@ -13,10 +13,12 @@ export const usePreviewImg = (initURL) => {
         icon: null,
         title: <p><b>图片预览</b></p>,
         content: <img src={url ?? initURL} alt="" style={{ width: '100%' }} />,
-        okText: '关闭'
+        okText: '关闭',
+        keyboard: true,
+        maskClosable: true
       });
     },
-    []
+    [initURL]
   );
 }
 
