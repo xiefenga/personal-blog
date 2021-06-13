@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { siteInfo } from "@/store/site";
 import { article } from "@/store/article";
@@ -36,6 +36,9 @@ export default {
         return category || top;
       }
       return siteInfo.siteName.value;
+    });
+    watchEffect(() => {
+      document.title = title.value;
     });
     return {
       title,
