@@ -78,7 +78,7 @@ function ImageUpload(props) {
                   <Col>
                     <Button type="link" onClick={() => setAddFileURL(false)}> 取消添加</Button>
                   </Col>
-                  <Col offset={15}>
+                  <Col offset={9}>
                     <Button type="link" htmlType="submit"> 确认添加</Button>
                   </Col>
                 </Row>
