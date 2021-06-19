@@ -1,7 +1,7 @@
 import Toolbar from './Toolbar'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { useGetArticle } from '@/hooks/http'
+import { useGetArticle } from '@/hooks/store'
 import MarkdownEditor from './MarkdownEditor'
 import './index.css'
 

@@ -1,6 +1,5 @@
-import { useAdmin } from '@/hooks/store'
-import { useLogout } from '@/hooks/http'
 import { useMemo, useCallback } from 'react'
+import { useAdmin, useLogout } from '@/hooks/store'
 import { Link, useHistory } from 'react-router-dom'
 import { usePaths, useGoHome } from '@/hooks/routes'
 import { Layout, Row, Col, Avatar, Menu, message, Modal } from 'antd'
@@ -10,7 +9,7 @@ import './Header.css'
 
 function Header() {
 
-  const [admin] = useAdmin();
+  const admin = useAdmin();
 
   const [avatar, username] = useMemo(
     () => (admin

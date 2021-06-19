@@ -4,15 +4,14 @@ import Login from './pages/login'
 import NotFound from './pages/404'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
-import { Provider } from 'react-redux'
+import { Provider as StoreProvider } from './store'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import store from './store'
 import './App.css'
 
 function App() {
 	return (
 		<ConfigProvider locale={zhCN}>
-			<Provider store={store}>
+			<StoreProvider>
 				<Router basename="admin">
 					<Switch>
 						<Route path="/login" component={Login} exact />
@@ -20,7 +19,7 @@ function App() {
 						<Route path="/" component={Home} />
 					</Switch>
 				</Router>
-			</Provider>
+			</StoreProvider>
 		</ConfigProvider>
 	);
 }

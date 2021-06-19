@@ -1,33 +1,15 @@
-import TagsSelect from '@/components/TagsSelect'
-import CategoriesSelect from '@/components/CategoriesSelect'
-import ImageUpload from '@/components/ImageUpload'
-import { postArticle, updateArticle, getArticle, deleteArticle, getArticles } from '@/api/article'
-import { isEmpty } from '@/utils/helper'
 import { message } from 'antd'
-import { useCallback, useState, useMemo } from 'react'
-import { useAdmin, useArticle, useClearArticle, useLogout as useLogoutAdmin } from './store'
-import { SUCCESS, ARTICLE_LIST_PAGE_SIZE } from '@/utils/constants'
-import { useParams } from 'react-router-dom'
-import { whoAmI, logout } from '@/api/login'
 import { getConfig } from '@/api/oss'
+import { isEmpty } from '@/utils/helper'
+import { useParams } from 'react-router-dom'
+import TagsSelect from '@/components/TagsSelect'
+import ImageUpload from '@/components/ImageUpload'
+import { useArticle, useClearArticle } from './store'
+import { useCallback, useState, useMemo } from 'react'
+import CategoriesSelect from '@/components/CategoriesSelect'
+import { SUCCESS, ARTICLE_LIST_PAGE_SIZE } from '@/utils/constants'
+import { postArticle, updateArticle, deleteArticle, getArticles } from '@/api/article'
 
-export const useAuth = () => {
-  const [admin, updateAdminInfo] = useAdmin();
-  return useCallback(
-    async () => {
-      if (admin === null) {
-        const { status, data } = await whoAmI();
-        if (status === SUCCESS) {
-          updateAdminInfo(data);
-        } else {
-          return false;
-        }
-      }
-      return true;
-    },
-    [admin, updateAdminInfo]
-  );
-}
 
 export const useGetOSSCongig = () => {
   return useCallback(
@@ -41,36 +23,6 @@ export const useGetOSSCongig = () => {
   );
 }
 
-
-export const useLogout = () => {
-  const logoutAdmin = useLogoutAdmin();
-  return useCallback(
-    async () => {
-      await logout();
-      logoutAdmin();
-    },
-    [logoutAdmin]
-  );
-}
-
-// article 
-export const useGetArticle = () => {
-  const [, setArticle] = useArticle();
-  return useCallback(
-    async id => {
-      const { status,
-        data: { cover, content, title, categories, tags }
-      } = await getArticle(id);
-      if (status === SUCCESS) {
-        const article = { cover, content, title };
-        article.categories = categories.map(([p, c]) => (c ?? p).id);
-        article.tags = tags.map(t => t.id);
-        setArticle(article);
-      }
-    },
-    [setArticle]
-  );
-}
 
 export const useDeleteArticle = () => {
   return useCallback(
@@ -87,7 +39,7 @@ export const useDeleteArticle = () => {
 }
 
 export const useAddArticle = () => {
-  const [article] = useArticle();
+  const article = useArticle();
   return useCallback(
     async () => {
       const {
@@ -116,7 +68,7 @@ export const useAddArticle = () => {
 }
 
 export const useUpdateArticle = () => {
-  const [article] = useArticle();
+  const article = useArticle();
   return useCallback(
     async id => {
       const {

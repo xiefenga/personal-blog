@@ -2,13 +2,13 @@ import { Layout } from 'antd'
 import Header from '@/layout/Header'
 import Loading from '@/components/Loading'
 import Welcome from '@/components/Welcome'
+import { useGetOSSCongig } from '@/hooks/http'
 import SiteManage from '@/components/SiteManage'
 import BelongManage from '@/components/BelongManage'
 import ArticleManage from '@/components/ArticleManage'
 import { useEffect, useState, useCallback } from 'react'
 import { Switch, Route, useHistory } from 'react-router-dom'
-import { useAuth, useGetOSSCongig } from '@/hooks/http'
-import { useGetCategories, useGetSiteInfo, useGetTags } from '@/hooks/store'
+import { useGetCategories, useGetSiteInfo, useGetTags, useAuth } from '@/hooks/store'
 
 const style = { width: '100%', height: '100%' };
 

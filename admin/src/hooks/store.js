@@ -1,193 +1,170 @@
-import { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getSiteInfoAction, updateSiteInfoAction } from '@/store/action/site'
-import { setArticleAction, clearArticleAction } from '@/store/action/article'
-import { setAdminAction, loginAction, logoutAction } from '@/store/action/admin'
-import { getTagsAction, addTagAction, updateTagAction, deleteTagAction } from '@/store/action/tags'
-import { getCategoriesAction, addCategoryAction, updateCategoryAction, deleteCategoryAction } from '@/store/action/categories'
+import { useMemo } from 'react'
+import { useStore } from '@/store'
+import { STATE_NAME as TAGS_STATE_NAME } from '@/store/tags'
+import { STATE_NAME as ADMIN_STATE_NAME } from '@/store/admin'
+import { STATE_NAME as SITE_INFO_STATE_NAME } from '@/store/site'
+import { STATE_NAME as ARTICLE_STATE_NAME } from '@/store/article'
+import { STATE_NAME as CATEGORIES_STATE_NAME } from '@/store/categories'
 
+
+export const useStoreState = (STATE_NAME) => {
+  const store = useStore();
+  return useMemo(() => store[STATE_NAME], [store, STATE_NAME]);
+}
+
+// admin
+
+const useStoreAdmin = () => useStoreState(ADMIN_STATE_NAME);
 
 export const useAdmin = () => {
-  const admin = useSelector(state => state.admin);
-  const dispatch = useDispatch();
-  const updateAdmin = useCallback(
-    info => dispatch(setAdminAction(info)),
-    [dispatch]
-  );
-  return [admin, updateAdmin];
+  const { admin } = useStoreAdmin();
+  return admin;
 }
-
-// article 相关
-export const useArticle = () => {
-  const article = useSelector(state => state.article);
-  const dispatch = useDispatch();
-  const update = useCallback(
-    article => dispatch(setArticleAction({ ...article })),
-    [dispatch]
-  );
-  return [article, update];
-}
-
-export const useClearArticle = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    () => dispatch(clearArticleAction()),
-    [dispatch]
-  );
-}
-
-export const useMarkdown = () => {
-  const { content = '' } = useSelector(state => state.article);
-  const dispatch = useDispatch();
-  const updateMarkdown = useCallback(
-    value => dispatch(setArticleAction({ content: value })),
-    [dispatch]
-  );
-  return [content, updateMarkdown];
-}
-
-export const useTitle = () => {
-  const { title = '' } = useSelector(state => state.article);
-  const dispatch = useDispatch();
-  const updateTitle = useCallback(
-    value => dispatch(setArticleAction({ title: value })),
-    [dispatch]
-  );
-  return [title, updateTitle];
-}
-
-export const useCover = () => {
-  const { cover = '' } = useSelector(state => state.article);
-  const dispatch = useDispatch();
-  const update = useCallback(
-    value => dispatch(setArticleAction({ cover: value })),
-    [dispatch]
-  );
-  return [cover, update];
-}
-
-export const useArticleCategories = () => {
-  const { categories = [] } = useSelector(state => state.article);
-  const dispatch = useDispatch();
-  const update = useCallback(
-    value => dispatch(setArticleAction({ categories: value })),
-    [dispatch]
-  );
-  return [categories, update];
-}
-
-export const useArticleTags = () => {
-  const { tags = [] } = useSelector(state => state.article);
-  const dispatch = useDispatch();
-  const update = useCallback(
-    value => dispatch(setArticleAction({ tags: value })),
-    [dispatch]
-  );
-  return [tags, update];
-}
-
-
-export const useTags = () => useSelector(state => state.tags);
-
-export const useCategories = () => useSelector(state => state.categories);
 
 export const useLogin = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async values => dispatch(loginAction(values)),
-    [dispatch]
-  );
+  const { login } = useStoreAdmin();
+  return login;
 }
 
 export const useLogout = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    () => dispatch(logoutAction()),
-    [dispatch]
-  );
+  const { logout } = useStoreAdmin();
+  return logout;
+}
+
+export const useAuth = () => {
+  const { auth } = useStoreAdmin();
+  return auth;
+}
+
+// article 相关
+
+const useStoreArticle = () => useStoreState(ARTICLE_STATE_NAME);
+
+export const useArticle = () => {
+  const { article } = useStoreArticle();
+  return article;
+}
+
+export const useGetArticle = () => {
+  const { getArticle } = useStoreArticle();
+  return getArticle;
+}
+
+export const useClearArticle = () => {
+  const { clearArticle } = useStoreArticle();
+  return clearArticle;
+}
+
+export const useMarkdown = () => {
+  const {
+    article: { content = "" },
+    setContent
+  } = useStoreArticle();
+  return [content, setContent];
+}
+
+export const useTitle = () => {
+  const {
+    article: { title = "" },
+    setTitle
+  } = useStoreArticle();
+  return [title, setTitle];
+}
+
+export const useCover = () => {
+  const {
+    article: { cover = "" },
+    setCover
+  } = useStoreArticle();
+  return [cover, setCover];
+}
+
+export const useArticleCategories = () => {
+  const {
+    article: { categories = [] },
+    setCategories
+  } = useStoreArticle();
+  return [categories, setCategories];
+}
+
+export const useArticleTags = () => {
+  const {
+    article: { tags = [] },
+    setTags
+  } = useStoreArticle();
+  return [tags, setTags];
+}
+
+const useStoreTags = () => useStoreState(TAGS_STATE_NAME);
+
+export const useTags = () => {
+  const { tags } = useStoreTags();
+  return tags;
 }
 
 export const useGetTags = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async () => dispatch(getTagsAction()),
-    [dispatch]
-  );
+  const { getTags } = useStoreTags();
+  return getTags;
 }
 
 export const useAddTag = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async value => dispatch(addTagAction(value)),
-    [dispatch]
-  );
+  const { addTag } = useStoreTags();
+  return addTag;
 }
 
 export const useUpdateTag = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async (id, value) => dispatch(updateTagAction(id, value)),
-    [dispatch]
-  );
+  const { updateTag } = useStoreTags();
+  return updateTag;
 }
 
 export const useDeleteTag = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async id => dispatch(deleteTagAction(id)),
-    [dispatch]
-  );
+  const { deleteTag } = useStoreTags();
+  return deleteTag;
 }
 
+const useStoreCategories = () => useStoreState(CATEGORIES_STATE_NAME);
+
+export const useCategories = () => {
+  const { categories } = useStoreCategories();
+  return categories;
+}
+
+
 export const useGetCategories = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async () => dispatch(getCategoriesAction()),
-    [dispatch]
-  );
+  const { getCategories } = useStoreCategories();
+  return getCategories;
 }
 
 export const useAddCategory = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async value => dispatch(addCategoryAction(value)),
-    [dispatch]
-  );
+  const { addCategory } = useStoreCategories();
+  return addCategory;
 }
 
 export const useUpdateCategory = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async (id, value) => dispatch(updateCategoryAction(id, value)),
-    [dispatch]
-  );
+  const { updateCategory } = useStoreCategories();
+  return updateCategory;
 }
 
 export const useDeleteCategory = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async id => dispatch(deleteCategoryAction(id)),
-    [dispatch]
-  );
+  const { deleteCategory } = useStoreCategories();
+  return deleteCategory;
 }
 
+
+const useStoreSiteInfo = () => useStoreState(SITE_INFO_STATE_NAME);
+
+
 export const useSiteInfo = () => {
-  const siteInfo = useSelector(state => state.siteInfo);
+  const { siteInfo } = useStoreSiteInfo();
   return siteInfo;
 }
 
 export const useGetSiteInfo = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async () => dispatch(getSiteInfoAction()),
-    [dispatch]
-  );
+  const { getSiteInfo } = useStoreSiteInfo();
+  return getSiteInfo;
 }
 
 export const useUpdateSiteInfo = () => {
-  const dispatch = useDispatch();
-  return useCallback(
-    async value => dispatch(updateSiteInfoAction(value)),
-    [dispatch]
-  );
+  const { updateSiteInfo } = useStoreSiteInfo();
+  return updateSiteInfo;
 }

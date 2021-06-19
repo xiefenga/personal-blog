@@ -77,14 +77,6 @@ export const setInterceptors = (...instances) => {
   });
 }
 
-const config = {
-  "region": "oss-cn-hangzhou",
-  "accessKeyId": "LTAI4GCzjyniTeYBwjpdsRXo",
-  "accessKeySecret": "uL6LpltM9wNpmJQCRJ4IWQL4Y56ds9",
-  "bucket": "xf-blog-imgs",
-  "customUrl": "http://oss.xiefeng.tech",
-  "path": "blogs-imgs/"
-};
 
 export const uploadAdaptor = async ({ file, onSuccess = EMPTY_FUNC, onError = EMPTY_FUNC, onProgress = EMPTY_FUNC }) => {
   const config = JSON.parse(
