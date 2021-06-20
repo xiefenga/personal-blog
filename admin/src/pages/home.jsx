@@ -2,11 +2,11 @@ import { Layout } from 'antd'
 import Header from '@/layout/Header'
 import Loading from '@/components/Loading'
 import Welcome from '@/components/Welcome'
-import { useGetOSSCongig } from '@/hooks/http'
 import SiteManage from '@/components/SiteManage'
 import BelongManage from '@/components/BelongManage'
 import ArticleManage from '@/components/ArticleManage'
 import { useEffect, useState, useCallback } from 'react'
+import { useAuthStoreNotEmpty, useGetOSSCongig } from '@/hooks/http'
 import { Switch, Route, useHistory, Redirect } from 'react-router-dom'
 import { useGetCategories, useGetSiteInfo, useGetTags, useAuth } from '@/hooks/store'
 
@@ -21,9 +21,12 @@ function Home() {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [tip, setTip] = useState('登录中');
+  const notEmpty = useAuthStoreNotEmpty();
+
 
   const init = useCallback(
     async () => {
+      if (notEmpty()) { return; }
       const success = await auth();
       if (success) {
         setTip('获取类目和标签中');
@@ -38,7 +41,7 @@ function Home() {
         history.push('/login');
       }
     },
-    [auth, history, getTags, getCategories, getOSSCongig, getSiteInfo]
+    [auth, history, getTags, getCategories, getOSSCongig, getSiteInfo, notEmpty]
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

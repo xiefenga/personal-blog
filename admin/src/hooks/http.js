@@ -4,12 +4,22 @@ import { isEmpty } from '@/utils/helper'
 import { useParams } from 'react-router-dom'
 import TagsSelect from '@/components/TagsSelect'
 import ImageUpload from '@/components/ImageUpload'
-import { useArticle, useClearArticle } from './store'
 import { useCallback, useState, useMemo } from 'react'
 import CategoriesSelect from '@/components/CategoriesSelect'
 import { SUCCESS, ARTICLE_LIST_PAGE_SIZE } from '@/utils/constants'
 import { postArticle, updateArticle, deleteArticle, getArticles } from '@/api/article'
+import { useAdmin, useArticle, useCategories, useClearArticle, useTags } from './store'
 
+
+export const useAuthStoreNotEmpty = () => {
+  const admin = useAdmin();
+  const tags = useTags();
+  const categories = useCategories();
+  return useCallback(
+    () => admin !== null && !!tags.length && !!categories.length,
+    [admin, tags, categories]
+  );
+}
 
 export const useGetOSSCongig = () => {
   return useCallback(
