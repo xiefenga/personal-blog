@@ -94,6 +94,18 @@ export const useFileFillStore = () => {
   );
 }
 
+export const useSessionStorage = (key) => {
+  const set = useCallback(
+    value => window.sessionStorage.setItem(key, value),
+    [key]
+  );
+  const get = useCallback(
+    () => window.sessionStorage.getItem(key),
+    [key]
+  );
+  return { set, get };
+}
+
 export const useCancelablePromises = () => {
   const pendingPromises = useRef([]);
 
