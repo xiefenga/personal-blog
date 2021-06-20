@@ -15,7 +15,8 @@ export const usePreviewImg = (initURL) => {
         content: <img src={url ?? initURL} alt="" style={{ width: '100%' }} />,
         okText: '关闭',
         keyboard: true,
-        maskClosable: true
+        maskClosable: true,
+        zIndex: 9999
       });
     },
     [initURL]

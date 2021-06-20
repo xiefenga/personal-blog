@@ -58,34 +58,42 @@ function ImageUpload(props) {
     [previewImg]
   );
 
+  const onFinish = useCallback(
+    ({ url }) => {
+      setAddFileURL(false);
+      const list = fileList.length === limit
+        ? fileList.slice(1)
+        : fileList;
+      setFileList([...list, { status: 'done', url }]);
+    },
+    [fileList, limit]
+  );
+
+  const showAdd = useCallback(() => setAddFileURL(true), []);
+
+  const cancelAdd = useCallback(() => setAddFileURL(false), []);
+
   return (
     <div className="img-upload">
       {addFileURL
         ? (
           <Fragment>
-            <Form onFinish={({ url }) => {
-              setAddFileURL(false);
-              const list = fileList.length === limit
-                ? fileList.slice(1)
-                : fileList;
-              setFileList([...list, { status: 'done', url }]);
-            }}>
+            <Form onFinish={onFinish} layout="vertical">
               <Form.Item name="url" label="URL" rules={rules}>
                 <Input placeholder="请输入图片URL或base64编码" allowClear />
               </Form.Item>
               <Form.Item>
-                <Row>
+                <Row justify="space-between">
                   <Col>
-                    <Button type="link" onClick={() => setAddFileURL(false)}> 取消添加</Button>
+                    <Button type="link" onClick={cancelAdd}> 取消添加</Button>
                   </Col>
-                  <Col offset={9}>
+                  <Col>
                     <Button type="link" htmlType="submit"> 确认添加</Button>
                   </Col>
                 </Row>
               </Form.Item>
             </Form>
           </Fragment>
-
         ) : (
           <Fragment>
             <Upload
@@ -102,7 +110,7 @@ function ImageUpload(props) {
               </p>
               <p className="ant-upload-text">{showText}</p>
             </Upload>
-            <Button type="link" style={style} onClick={() => setAddFileURL(true)}>添加已上传图片</Button>
+            <Button type="link" style={style} onClick={showAdd}>添加已上传图片</Button>
           </Fragment>
         )
       }
