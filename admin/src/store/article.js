@@ -31,9 +31,10 @@ export const useArticle = () => {
   const get = useCallback(
     async id => {
       const { status,
-        data: { cover, content, title, categories, tags }
+        data = {}
       } = await getArticle(id);
       if (status === SUCCESS) {
+        const { cover, content, title, categories, tags } = data;
         const article = { cover, content, title };
         article.categories = categories.map(([p, c]) => (c ?? p).id);
         article.tags = tags.map(t => t.id);
