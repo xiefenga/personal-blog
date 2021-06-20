@@ -1,4 +1,4 @@
-.article-editor {
+.article-editor, .article-editor .editor-container, .editor-container .ant-spin-container {
   height: 100%;
   width: 100%;
 }
