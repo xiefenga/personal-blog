@@ -1,17 +1,17 @@
 import { Spin } from 'antd'
 import Toolbar from './Toolbar'
-import { useParams } from 'react-router-dom'
 import { useGetArticle } from '@/hooks/store'
 import MarkdownEditor from './MarkdownEditor'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useEffect, useCallback, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import './index.css'
-
 
 
 function ArticleEditor() {
   const { id } = useParams();
   const getArticle = useGetArticle();
+  const history = useHistory();
 
   const [loading, setLoading] = useState(false);
 
@@ -19,11 +19,14 @@ function ArticleEditor() {
     async () => {
       if (id) {
         setLoading(true);
-        await getArticle(id);
+        const success = await getArticle(id);
         setLoading(false);
+        if (!success) {
+          history.replace('/404');
+        }
       }
     },
-    [id, getArticle]
+    [id, getArticle, history]
   )
 
   useEffect(init, [init]);

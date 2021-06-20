@@ -3,8 +3,8 @@ import { useEffect } from 'react'
 import { isEmpty } from '@/utils/helper'
 import ArticleList from '../ArticleList'
 import ArticleEditor from '../ArticleEditor'
-import { Switch, Route, Link } from 'react-router-dom'
 import { usePaths, useRedirect } from '@/hooks/routes'
+import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import { FileAddOutlined, EditOutlined } from '@ant-design/icons'
 import './index.css'
 
@@ -33,7 +33,8 @@ function ArticleManage() {
       </Menu>
       <Switch>
         <Route path="/article/edit/:id?" component={ArticleEditor} exact />
-        <Route path="/article/list" component={ArticleList} />
+        <Route path="/article/list" component={ArticleList} exact />
+        <Redirect to="/404" />
       </Switch>
     </div>
   )

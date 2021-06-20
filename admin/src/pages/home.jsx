@@ -7,7 +7,7 @@ import SiteManage from '@/components/SiteManage'
 import BelongManage from '@/components/BelongManage'
 import ArticleManage from '@/components/ArticleManage'
 import { useEffect, useState, useCallback } from 'react'
-import { Switch, Route, useHistory } from 'react-router-dom'
+import { Switch, Route, useHistory, Redirect } from 'react-router-dom'
 import { useGetCategories, useGetSiteInfo, useGetTags, useAuth } from '@/hooks/store'
 
 const style = { width: '100%', height: '100%' };
@@ -55,8 +55,9 @@ function Home() {
             <Switch>
               <Route path="/" component={Welcome} exact />
               <Route path="/article" component={ArticleManage} />
-              <Route path="/belong" component={BelongManage} />
-              <Route path="/site" component={SiteManage} />
+              <Route path="/belong" component={BelongManage} exact />
+              <Route path="/site" component={SiteManage} exact />
+              <Redirect to="/404" />
             </Switch>
           )
         }
