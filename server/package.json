@@ -4,8 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec ts-node app.ts",
-    "build": "tsc"
+    "dev": "nodemon --exec ts-node app.ts",
+    "start": "node dist/app.js",
+    "build": "ts-node scripts/build.ts"
   },
   "devDependencies": {
     "@types/ali-oss": "^6.0.7",
