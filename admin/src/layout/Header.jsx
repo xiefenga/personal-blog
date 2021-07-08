@@ -1,9 +1,9 @@
-import { useMemo, useCallback } from 'react'
 import { useAdmin, useLogout } from '@/hooks/store'
 import { Link, useHistory } from 'react-router-dom'
 import { usePaths, useGoHome } from '@/hooks/routes'
-import { Layout, Row, Col, Avatar, Menu, message, Modal } from 'antd'
+import { useMemo, useCallback, useState } from 'react'
 import { UserOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { Layout, Row, Col, Avatar, Menu, message, Popconfirm } from 'antd'
 import './Header.css'
 
 
@@ -19,6 +19,10 @@ function Header() {
     [admin]
   );
 
+  const [loading, setLoading] = useState(false);
+
+  const [visible, setVisible] = useState(false);
+
   const goHome = useGoHome();
 
   const selectedKeys = usePaths()[0];
@@ -28,18 +32,22 @@ function Header() {
   const history = useHistory();
 
   const confirmLogout = useCallback(
-    () => Modal.confirm({
-      title: '确认退出',
-      icon: <QuestionCircleOutlined />,
-      content: `确定退出登录账号 ${username}？`,
-      onOk: async () => {
-        await logout();
-        message.success('退出登录');
-        history.push('/login');
-      }
-    }),
-    [history, username, logout],
+    async () => {
+      setLoading(true);
+      await logout();
+      setVisible(false);
+      setLoading(false);
+      message.success('退出登录');
+      history.push('/login');
+    },
+    [history, logout],
   );
+
+  const buttonProp = useMemo(() => ({ loading }), [loading]);
+
+  const hide = useCallback(() => setVisible(false), []);
+
+  const onVisibleChange = useCallback(v => v && setVisible(v), [])
 
   return (
     <Layout.Header id="header">
@@ -61,10 +69,20 @@ function Header() {
           </Menu>
         </Col>
         <Col span={3} offset={5} >
-          <div className="admin" onClick={confirmLogout}>
-            <Avatar size="middle" icon={<UserOutlined />} src={avatar} />
-            <span className="username">{username}</span>
-          </div>
+          <Popconfirm
+            title="退出登录？"
+            visible={visible}
+            icon={<QuestionCircleOutlined />}
+            okButtonProps={buttonProp}
+            onConfirm={confirmLogout}
+            onCancel={hide}
+            onVisibleChange={onVisibleChange}
+          >
+            <div className="admin">
+              <Avatar size="middle" icon={<UserOutlined />} src={avatar} />
+              <span className="username">{username}</span>
+            </div>
+          </Popconfirm>
         </Col>
       </Row>
     </Layout.Header>
