@@ -26,20 +26,22 @@ function Home() {
 
   const init = useCallback(
     async () => {
-      if (notEmpty()) { return; }
-      const success = await auth();
-      if (success) {
-        setTip('获取类目和标签中');
-        await Promise.all([
-          getTags(),
-          getCategories(),
-          getOSSCongig(),
-          getSiteInfo()
-        ]);
-        setLoading(false);
-      } else {
-        history.push('/login');
+      // 直接进入主页面进行登录状态验证
+      if (!notEmpty()) {
+        const success = await auth();
+        if (!success) {
+          history.push('/login');
+          return;
+        }
       }
+      setTip('获取类目和标签中');
+      await Promise.all([
+        getTags(),
+        getCategories(),
+        getOSSCongig(),
+        getSiteInfo()
+      ]);
+      setLoading(false);
     },
     [auth, history, getTags, getCategories, getOSSCongig, getSiteInfo, notEmpty]
   );
