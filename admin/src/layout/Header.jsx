@@ -6,7 +6,6 @@ import { UserOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { Layout, Row, Col, Avatar, Menu, message, Popconfirm } from 'antd'
 import './Header.css'
 
-
 function Header() {
 
   const admin = useAdmin();
@@ -31,8 +30,11 @@ function Header() {
 
   const history = useHistory();
 
+  // 先触发 visibleChange 事件，再触发 confirm 事件
   const confirmLogout = useCallback(
     async () => {
+      // visibleChange 会让 visible 为 false 需要重新设置为 true
+      setVisible(true);
       setLoading(true);
       await logout();
       setVisible(false);
@@ -45,9 +47,8 @@ function Header() {
 
   const buttonProp = useMemo(() => ({ loading }), [loading]);
 
-  const hide = useCallback(() => setVisible(false), []);
-
-  const onVisibleChange = useCallback(v => v && setVisible(v), [])
+  // 正在 loading 时不允许隐藏
+  const onVisibleChange = useCallback(v => !loading && setVisible(v), [loading])
 
   return (
     <Layout.Header id="header">
@@ -75,7 +76,6 @@ function Header() {
             icon={<QuestionCircleOutlined />}
             okButtonProps={buttonProp}
             onConfirm={confirmLogout}
-            onCancel={hide}
             onVisibleChange={onVisibleChange}
           >
             <div className="admin">
