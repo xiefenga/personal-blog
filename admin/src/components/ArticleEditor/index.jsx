@@ -1,17 +1,21 @@
 import { Spin } from 'antd'
 import Toolbar from './Toolbar'
-import { useGetArticle } from '@/hooks/store'
 import MarkdownEditor from './MarkdownEditor'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useEffect, useCallback, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import { useGetArticle, useClearArticle } from '@/hooks/store'
 import './index.css'
 
 
 function ArticleEditor() {
   const { id } = useParams();
-  const getArticle = useGetArticle();
+
   const history = useHistory();
+
+  const clear = useClearArticle();
+
+  const getArticle = useGetArticle();
 
   const [loading, setLoading] = useState(false);
 
@@ -27,9 +31,13 @@ function ArticleEditor() {
       }
     },
     [id, getArticle, history]
-  )
+  );
+
+  const clean = useCallback(() => id ? clear : null, [id, clear]);
 
   useEffect(init, [init]);
+
+  useEffect(clean, [clean]);
 
   return (
     <div className="article-editor">
