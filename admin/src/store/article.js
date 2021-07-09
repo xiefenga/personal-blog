@@ -26,7 +26,7 @@ export const useArticle = () => {
     []
   );
 
-  const clear = useCallback(() => setArticle({}), []);
+  const clear = useCallback(() => setArticle(articleRef.current = {}), []);
 
   const get = useCallback(
     async id => {
@@ -38,8 +38,7 @@ export const useArticle = () => {
         const article = { cover, content, title };
         article.categories = categories.map(([p, c]) => (c ?? p).id);
         article.tags = tags.map(t => t.id);
-        articleRef.current = article;
-        setArticle(article);
+        setArticle(articleRef.current = article);
       }
       return status === SUCCESS;
     },
