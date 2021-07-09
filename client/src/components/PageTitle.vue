@@ -20,6 +20,8 @@ const route = useRoute();
 const isHome = computed(() => route.meta.home);
 const isArticle = computed(() => route.meta.article);
 
+const siteName = computed(() => store.state.siteInfo.siteName);
+
 const title = computed(() => {
   const { title, tag, category } = route.meta;
   if (title) {
@@ -32,10 +34,10 @@ const title = computed(() => {
     const { top, category } = route.params;
     return category || top;
   }
-  return store.state.siteInfo.siteName;
+  return siteName.value;
 });
 
-watchEffect(() => document.title = title.value);
+watchEffect(() => document.title = isHome.value ? title.value : `${title.value} | ${siteName.value}`);
 </script>
 
 <style lang="postcss" scoped>
