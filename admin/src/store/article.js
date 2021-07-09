@@ -1,6 +1,6 @@
 import { getArticle } from '@/api/article'
 import { SUCCESS } from '@/utils/constants'
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef } from 'react'
 
 // interface Article {
 //   title: string;
@@ -38,6 +38,7 @@ export const useArticle = () => {
         const article = { cover, content, title };
         article.categories = categories.map(([p, c]) => (c ?? p).id);
         article.tags = tags.map(t => t.id);
+        articleRef.current = article;
         setArticle(article);
       }
       return status === SUCCESS;
