@@ -65,8 +65,12 @@ function ImageUpload(props) {
         ? fileList.slice(1)
         : fileList;
       setFileList([...list, { status: 'done', url }]);
+      onSuccess({
+        resp: url,
+        respList: [...list.map(file => (file.response || file.url || file.thumbUrl)), url]
+      });
     },
-    [fileList, limit]
+    [fileList, limit, onSuccess]
   );
 
   const showAdd = useCallback(() => setAddFileURL(true), []);
