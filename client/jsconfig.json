@@ -2,7 +2,13 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "baseUrl": "./",
     "paths": {
       "@/*": [
@@ -10,6 +16,10 @@
       ]
     }
   },
+  "include": [
+    "src/**/*.js",
+    "src/**/*.vue"
+  ],
   "exclude": [
     "node_modules"
   ]

@@ -11,10 +11,11 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 import CardWidget from "@/components/CardWidget.vue";
 import AsideContent from "@/components/AsideContent.vue";
-import { useRoute } from "vue-router";
-import { computed } from "vue";
+
 const route = useRoute();
 const isHome = computed(() => route.meta.home);
 </script>

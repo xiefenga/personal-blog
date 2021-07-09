@@ -13,14 +13,14 @@
       <span class="meta-separator">|</span>
       <span class="meta-item">
         <i class="iconfont">&#xe6bb;</i>
-        <template v-for="(cs, index) in categories" :key="cs[0].id">
+        <template v-for="(cs, index) in article.categories" :key="cs[0].id">
           <span class="category">{{ cs[0].name }}</span>
           <template v-if="cs[1]">
             <i class="iconfont category-level">&#xe72b;</i>
             <i class="iconfont">&#xe6bb;</i>
             <span class="category">{{ cs[1].name }}</span>
           </template>
-          <template v-if="index !== categories.length - 1">
+          <template v-if="index !== article.categories.length - 1">
             <span class="item-separator">•</span>
           </template>
         </template>
@@ -39,38 +39,29 @@
       <span class="meta-separator">|</span>
       <span class="meta-item">
         <i class="iconfont">&#xe60c;</i>
-        <span>阅读量：{{ views }}</span>
+        <span>阅读量：{{ article.views }}</span>
       </span>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed } from "vue";
-import { article } from "@/store/article";
+import { useStore } from "vuex";
 import { relativeTime2ZHStr } from "@/utils/helper";
 
-export default {
-  setup() {
-    const { createdAt, updatedAt, categories, words, views } = article;
+const store = useStore();
 
-    const hasPosted = computed(() => relativeTime2ZHStr(createdAt.value));
+const article = computed(() => store.state.article);
 
-    const hasUpdated = computed(() => relativeTime2ZHStr(updatedAt.value));
+const hasPosted = computed(() => relativeTime2ZHStr(article.value.createdAt));
 
-    const showWords = computed(() => (words.value / 1000).toFixed(1));
+const hasUpdated = computed(() => relativeTime2ZHStr(article.value.updatedAt));
 
-    const cost = computed(() => Math.ceil(words.value / 260));
-    return {
-      cost,
-      views,
-      hasPosted,
-      hasUpdated,
-      showWords,
-      categories,
-    };
-  },
-};
+const showWords = computed(() => (article.value.words / 1000).toFixed(1));
+
+const cost = computed(() => Math.ceil(article.value.words / 260));
+
 </script>
 
 <style lang="postcss" scoped>

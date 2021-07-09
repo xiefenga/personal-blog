@@ -1,18 +1,21 @@
 <template>
   <footer>
-    <div class="copyright">©{{ copyrightYear }} By {{ author }}</div>
+    <div class="copyright">©{{ copyrightYear }} By {{ siteInfo.author }}</div>
     <div class="ipc">
-      <a :href="ICP_URL" target="_blank">{{ beian }}</a>
+      <a :href="ICP_URL" target="_blank">{{ siteInfo.beian }}</a>
     </div>
   </footer>
 </template>
 
 <script setup>
 import { computed } from "vue";
-import { siteInfo } from "@/store/site";
+import { useStore } from "vuex";
 import { ICP_URL, SITE_START_YEAR } from "@/utils/constants";
 
-const { beian, author } = siteInfo;
+const store = useStore();
+
+const siteInfo = computed(() => store.state.siteInfo);
+
 const curYear = new Date().getFullYear();
 
 const copyrightYear = computed(() =>

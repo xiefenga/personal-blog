@@ -13,32 +13,24 @@
   </card-widget>
 </template>
 
-
-<script>
+<script setup>
 import { computed } from "vue";
+import { useStore } from "vuex";
 import TreeList from "../TreeList.vue";
 import CardWidget from "../CardWidget.vue";
-import { archives } from "@/store/article";
-import { yearAndMonthStr2ZH } from "@/utils/helper";
+import { FETCH_ARTICLES_MAP } from "@/store/actions";
+import { yearAndMonthStr2ZH, articles2Archives } from "@/utils/helper";
 
-export default {
-  components: {
-    TreeList,
-    CardWidget,
-  },
-  setup() {
-    const archivsStatistics = computed(() =>
-      archives.value.map(([date, articles]) => ({
-        date: yearAndMonthStr2ZH(date),
-        count: articles.length,
-        id: articles[0].id,
-      }))
-    );
-    return {
-      archivsStatistics,
-    };
-  },
-};
+const store = useStore();
+
+store.dispatch(FETCH_ARTICLES_MAP);
+
+const archivsStatistics = computed(() => [...articles2Archives(store.getters.allArticles)].map(([date, articles]) => ({
+  date: yearAndMonthStr2ZH(date),
+  count: articles.length,
+  id: articles[0].id,
+})));
+
 </script>
 
 <style lang="postcss" scoped>

@@ -9,24 +9,21 @@
   />
 </template>
 
-<script>
+<script setup>
 import { computed } from "vue";
+import { useStore } from "vuex";
 import TimeLine from "./TimeLine.vue";
-import { allArticles } from "@/store/article";
 import { usePagination } from "@/compositions/usePagination";
 
-export default {
-  components: {
-    TimeLine,
-  },
-  setup() {
-    const count = computed(() => allArticles.length);
-    return {
-      count,
-      allArticles,
-      ...usePagination("/archives"),
-    };
-  },
-};
+const store = useStore();
+
+const articlesMap = computed(() => store.state.articlesMap);
+
+const allArticles = computed(() => store.getters.allArticles);
+
+const count = computed(() => articlesMap.value.size.toString());
+
+const { page, pageChange, pageError } = usePagination('/archives');
+
 </script>
 

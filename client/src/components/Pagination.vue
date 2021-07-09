@@ -10,9 +10,7 @@
         :key="page"
         :class="{ current: page === current }"
         @click="onClick(page)"
-      >
-        {{ page }}
-      </span>
+      >{{ page }}</span>
       <!-- <span class="space" >…</span> -->
       <span class="next" v-if="current < count" @click="onClick(current + 1)">
         <i class="iconfont">&#xe72b;</i>
@@ -21,60 +19,53 @@
   </div>
 </template>
 
-<script>
-import { computed, toRefs, watchEffect } from "vue";
+<script setup>
 import { PAGINATION_PAGE_SIZE } from "@/utils/constants";
-export default {
-  props: {
-    // 当前页码
-    current: {
-      type: Number,
-      default: 0,
-    },
-    // 页码显示数量的限制
-    limit: {
-      type: Number,
-    },
-    // 每页的数量
-    size: {
-      type: Number,
-      default: PAGINATION_PAGE_SIZE,
-    },
-    // 总的数量
-    total: {
-      type: Number,
-      default: 0,
-    },
+import { computed, toRefs, watchEffect, defineProps, defineEmit } from "vue";
+
+const props = defineProps({
+  // 当前页码
+  current: {
+    type: Number,
+    default: 0,
   },
-  setup(props, ctx) {
-    const { total, size, current } = toRefs(props);
-
-    const { emit } = ctx;
-
-    const count = computed(() => Math.ceil(total.value / size.value));
-
-    const onClick = (page) => {
-      if (page > 0 && page !== current.value) {
-        emit("page-change", page);
-      }
-    };
-
-    watchEffect(() => {
-      if (
-        current.value > count.value &&
-        current.value !== 0 &&
-        count.value !== 0
-      ) {
-        emit("page-error", current.value);
-      }
-    });
-
-    return {
-      count,
-      onClick,
-    };
+  // 页码显示数量的限制
+  limit: {
+    type: Number,
   },
+  // 每页的数量
+  size: {
+    type: Number,
+    default: PAGINATION_PAGE_SIZE,
+  },
+  // 总的数量
+  total: {
+    type: Number,
+    default: 0,
+  }
+});
+
+const { total, size, current } = toRefs(props);
+
+const emit = defineEmit(['page-change', 'page-erro']);
+
+const count = computed(() => Math.ceil(total.value / size.value));
+
+const onClick = (page) => {
+  if (page > 0 && page !== current.value) {
+    emit("page-change", page);
+  }
 };
+
+watchEffect(() => {
+  if (
+    current.value > count.value &&
+    current.value !== 0 &&
+    count.value !== 0
+  ) {
+    emit("page-error", current.value);
+  }
+});
 </script>
 
 <style lang="postcss" scoped>

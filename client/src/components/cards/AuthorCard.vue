@@ -1,9 +1,9 @@
 <template>
   <card-widget class="admin-card">
     <div class="admin-avatar">
-      <img class="avatar" :src="avatar" />
+      <img class="avatar" :src="siteInfo.avatar" />
     </div>
-    <div class="admin-name">{{ author }}</div>
+    <div class="admin-name">{{ siteInfo.author }}</div>
     <div class="blog-data">
       <div class="blog-data-item">
         <div class="headline">文章</div>
@@ -20,11 +20,11 @@
     </div>
     <div class="social-icons">
       <!-- github -->
-      <a class="social-item" :href="github" target="_blank">
+      <a class="social-item" :href="siteInfo.github" target="_blank">
         <i class="iconfont">&#xe811;</i>
       </a>
       <!-- mail -->
-      <a class="social-item" :href="`mailto:${mail}`" target="_blank">
+      <a class="social-item" :href="`mailto:${siteInfo.mail}`" target="_blank">
         <i class="iconfont">&#xe7b7;</i>
       </a>
       <!-- blog -->
@@ -35,35 +35,25 @@
   </card-widget>
 </template>
 
-<script>
+<script setup>
 import { computed } from "vue";
-import { siteInfo } from "@/store/site";
+import { useStore } from "vuex";
 import CardWidget from "../CardWidget.vue";
-import { tags as allTags } from "@/store/tags";
-import { count as articles } from "@/store/article";
-import { categories as allCategories } from "@/store/categories";
+import { FETCH_SITE_INFO } from "@/store/actions";
 
-export default {
-  components: {
-    CardWidget,
-  },
-  setup() {
-    const { github, mail, author, avatar } = siteInfo;
-    const tags = computed(() => allTags.length);
-    const categories = computed(() =>
-      allCategories.reduce((acc, cur) => acc + cur.children.length + 1, 0)
-    );
-    return {
-      github,
-      mail,
-      author,
-      avatar,
-      tags,
-      categories,
-      articles,
-    };
-  },
-};
+const store = useStore();
+
+store.dispatch(FETCH_SITE_INFO);
+
+const articles = computed(() => store.state.articlesMap.size);
+
+const siteInfo = computed(() => store.state.siteInfo);
+
+const tags = computed(() => store.state.tags.length);
+
+const categories = computed(() =>
+  store.state.categories.reduce((count, c) => count + c.children.length + 1, 0)
+);
 </script>
 
 <style lang="postcss" scoped>

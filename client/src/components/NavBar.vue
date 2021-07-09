@@ -1,7 +1,7 @@
 <template>
   <nav>
     <span class="site-name">
-      <router-link to="/">{{ siteName }}</router-link>
+      <router-link to="/">{{ siteInfo.siteName }}</router-link>
     </span>
     <div class="nav-menus">
       <router-link class="menus-item archive-btn" to="/archives">
@@ -25,8 +25,10 @@
 </template>
 
 <script setup>
-import { siteInfo } from "@/store/site";
-const { siteName } = siteInfo;
+import { computed } from "vue";
+import { useStore } from "vuex";
+const store = useStore();
+const siteInfo = computed(() => store.state.siteInfo);
 </script>
 
 

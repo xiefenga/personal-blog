@@ -10,25 +10,22 @@
       :key="tag.id"
       :style="tag.style"
       :to="`/tags/${tag.name}`"
-    >
-      {{ tag.name }}
-    </router-link>
+    >{{ tag.name }}</router-link>
   </card-widget>
 </template>
 
-<script >
+<script setup>
+import { useStore } from "vuex";
 import CardWidget from "../CardWidget.vue";
+import { FETCH_TAGS } from "@/store/actions";
 import { useTagCloud } from "@/compositions/useTagCloud";
-export default {
-  components: {
-    CardWidget,
-  },
-  setup() {
-    return {
-      tags: useTagCloud(),
-    };
-  },
-};
+
+const tags = useTagCloud();
+
+const store = useStore();
+
+store.dispatch(FETCH_TAGS);
+
 </script>
 
 <style lang="postcss" scoped>

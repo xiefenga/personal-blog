@@ -6,38 +6,19 @@
       <keep-alive>
         <component :is="Component" />
       </keep-alive>
-    </router-view> -->
+    </router-view>-->
     <router-view></router-view>
   </Main>
   <Footer />
 </template>
 
-<script>
+<script setup>
 import { onMounted } from "vue";
 import Main from "@/layout/Main.vue";
 import Header from "@/layout/Header.vue";
 import Footer from "@/layout/Footer.vue";
-import { fetchTags } from "@/store/tags";
-import { fetchQuote } from "@/store/quote";
-import { fetchSiteInfo } from "@/store/site";
-import { fetchArticles } from "@/store/article";
-import { CONSOLE_STR } from "@/utils/constants";
-import { fetchCategories } from "@/store/categories";
+import { CONSOLE_STR, PRODUCTION } from "@/utils/constants";
 
-export default {
-  components: {
-    Main,
-    Header,
-    Footer,
-  },
-  setup() {
-    fetchSiteInfo();
-    fetchArticles();
-    fetchCategories();
-    fetchQuote();
-    fetchTags();
-    onMounted(() => console.log(CONSOLE_STR));
-  },
-};
+onMounted(() => PRODUCTION && console.log(CONSOLE_STR));
 </script>
 

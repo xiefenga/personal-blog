@@ -4,9 +4,7 @@
       <img :src="article.cover" />
     </router-link>
     <div class="article-info">
-      <router-link class="article-title" :to="`/${article.title}`">
-        {{ article.title }}
-      </router-link>
+      <router-link class="article-title" :to="`/${article.title}`">{{ article.title }}</router-link>
       <div class="article-metas">
         <span class="meta-item">
           <i class="iconfont">&#xe72a;</i>
@@ -21,10 +19,13 @@
         <span class="meta-item">
           <i class="iconfont">&#xe6bb;</i>
           <template v-for="(cs, index) in categories" :key="cs[0].id">
-            <span class="category">{{ cs[0].name }}</span>
+            <router-link :to="`/categories/${cs[0].name}`" class="category">{{ cs[0].name }}</router-link>
             <template v-if="cs[1]">
               <i class="iconfont category-level">&#xe72b;</i>
-              <span class="category">{{ cs[1].name }}</span>
+              <router-link
+                :to="`/categories/${cs[0].name}/${cs[1].name}`"
+                class="category"
+              >{{ cs[1].name }}</router-link>
             </template>
             <template v-if="index !== categories.length - 1">
               <span class="item-separator">•</span>
@@ -35,7 +36,7 @@
         <span class="meta-item">
           <i class="iconfont">&#xe606;</i>
           <template v-for="(t, index) in tags" :key="t.id">
-            <span class="tag">{{ t.name }}</span>
+            <router-link :to="`/tags/${t.name}`" class="tag">{{ t.name }}</router-link>
             <template v-if="index !== tags.length - 1">
               <span class="item-separator">•</span>
             </template>
@@ -47,43 +48,31 @@
   </card-widget>
 </template>
 
-<script>
-import { computed } from "vue";
+<script setup>
 import toText from "markdown2text";
+import { computed, defineProps } from "vue";
 import CardWidget from "../CardWidget.vue";
 import { relativeTime2ZHStr } from "@/utils/helper";
 
-export default {
-  components: {
-    CardWidget,
-  },
-  props: {
-    article: {
-      type: Object,
-      required: true,
-    },
-  },
-  setup(props) {
-    const { article } = props;
+const props = defineProps({
+  article: {
+    type: Object,
+    required: true,
+  }
+});
 
-    const preview = computed(() => toText(article.content || "").slice(0, 500));
+const { article } = props;
 
-    const hasPosted = computed(() => relativeTime2ZHStr(article.createdAt));
+const preview = computed(() => toText(article.content || "").slice(0, 500));
 
-    const hasUpdated = computed(() => relativeTime2ZHStr(article.updatedAt));
+const hasPosted = computed(() => relativeTime2ZHStr(article.createdAt));
 
-    const categories = computed(() => article.categories || []);
+const hasUpdated = computed(() => relativeTime2ZHStr(article.updatedAt));
 
-    const tags = computed(() => article.tags || []);
-    return {
-      preview,
-      hasPosted,
-      hasUpdated,
-      categories,
-      tags,
-    };
-  },
-};
+const categories = computed(() => article.categories || []);
+
+const tags = computed(() => article.tags || []);
+
 </script>
 
 <style lang="postcss" scoped>

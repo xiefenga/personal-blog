@@ -17,14 +17,14 @@
               <i class="iconfont">&#xe72a;</i>
               {{ toDate(item.createdAt) }}
             </div>
-            <router-link class="article-title" :to="`/${item.title}`">{{
-              item.title
-            }}</router-link>
+            <router-link class="article-title" :to="`/${item.title}`">
+              {{
+                item.title
+              }}
+            </router-link>
           </div>
         </template>
-        <template v-else>
-          {{ yearAndMonthStr2ZH(item) }}
-        </template>
+        <template v-else>{{ yearAndMonthStr2ZH(item) }}</template>
       </div>
       <div class="no-data" v-if="!list.length">无文章</div>
     </div>
@@ -39,74 +39,58 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Pagination from "./Pagination.vue";
-import { computed, ref, toRefs } from "vue";
+import { computed, defineEmit, defineProps, ref, toRefs } from "vue";
 import { articles2Archives, yearAndMonthStr2ZH } from "@/utils/helper";
-export default {
-  components: {
-    Pagination,
+
+const props = defineProps({
+  title: {
+    type: String,
+    required: true,
   },
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    subtitle: {
-      type: [String, Number],
-      required: true,
-    },
-    articles: {
-      type: Object,
-      required: true,
-    },
-    pagination: {
-      default: false,
-    },
+  subtitle: {
+    type: String,
+    required: true,
   },
-  setup(props, ctx) {
-    const { articles, pagination } = toRefs(props);
-    const toDate = (time) =>
-      new Date(time).toLocaleDateString().replaceAll("/", "-");
-
-    const { emit } = ctx;
-
-    const page = ref(1);
-
-    const showArticles = computed(() => {
-      if (pagination.value) {
-        const { current = page.value, size = 10 } = pagination.value;
-        return articles.value.slice((current - 1) * size, current * size);
-      } else {
-        return articles.value;
-      }
-    });
-
-    const list = computed(() =>
-      [...articles2Archives(showArticles.value)].flat(2)
-    );
-
-    const handlePageChange = (newPage) => {
-      const { current } = pagination;
-      if (current) {
-        emit("page-change", newPage);
-      } else {
-        page.value = newPage;
-        emit("page-change", newPage);
-      }
-    };
-
-    const handlePageError = (page) => emit("page-error", page);
-
-    return {
-      page,
-      list,
-      toDate,
-      yearAndMonthStr2ZH,
-      handlePageChange,
-      handlePageError,
-    };
+  articles: {
+    type: Array,
+    required: true,
   },
+  pagination: {
+    type: Object,
+    default: false,
+  },
+});
+
+
+const { articles, pagination } = toRefs(props);
+
+
+const toDate = (time) => new Date(time).toLocaleDateString().replaceAll("/", "-");
+
+const emit = defineEmit(['page-change', 'page-error']);
+
+const page = ref(1);
+
+const showArticles = computed(() => {
+  if (pagination.value) {
+    const { current = page.value, size = 10 } = pagination.value;
+    return articles.value.slice((current - 1) * size, current * size);
+  } else {
+    return articles.value;
+  }
+});
+
+const list = computed(() => [...articles2Archives(showArticles.value)].flat(2));
+
+const handlePageError = (page) => emit("page-error", page);
+
+const handlePageChange = (newPage) => {
+  emit("page-change", newPage);
+  if (!pagination.value.current) {
+    page.value = newPage;
+  }
 };
 </script>
 

@@ -3,10 +3,14 @@
 </template>
 
 <script setup>
-import { siteInfo } from "@/store/site";
-const { aboutMe } = siteInfo;
-import { mdParser } from "@/utils/helper";
 import { computed } from "vue";
+import { useStore } from "vuex";
+import { mdParser } from "@/utils/helper";
+
+const store = useStore();
+
+const aboutMe = computed(() => store.state.siteInfo.aboutMe);
+
 const about = computed(() =>
   mdParser.render(aboutMe.value.replaceAll("\n", "\n\n"))
 );

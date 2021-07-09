@@ -9,42 +9,35 @@
   />
 </template>
 
-<script>
-import { tags } from "@/store/tags";
-import { ref, watchEffect } from "vue";
+<script setup>
+import { useStore } from "vuex";
 import TimeLine from "./TimeLine.vue";
 import { getTagArticles } from "@/api/tag";
+import { computed, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { usePagination } from "@/compositions/usePagination";
 
-export default {
-  components: {
-    TimeLine,
-  },
-  setup() {
-    const route = useRoute();
+const store = useStore();
 
-    const router = useRouter();
+const route = useRoute();
 
-    const tag = route.params.tag;
+const router = useRouter();
 
-    const articles = ref([]);
+const tag = route.params.tag;
 
-    watchEffect(async () => {
-      const tagInfo = tags.find((t) => t.name === tag);
-      if (tags.length && !tagInfo) {
-        router.replace("/404");
-      } else if (tagInfo) {
-        const { data } = await getTagArticles(tagInfo.id);
-        articles.value = data;
-      }
-    });
+const tags = computed(() => store.state.tags);
 
-    return {
-      tag,
-      articles,
-      ...usePagination("/tags"),
-    };
-  },
-};
+const articles = ref([]);
+
+const { page, pageChange, pageError } = usePagination("/tags");
+
+watchEffect(async () => {
+  const tagInfo = tags.value.find((t) => t.name === tag);
+  if (tags.value.length && !tagInfo) {
+    router.replace("/404");
+  } else if (tagInfo) {
+    const { data } = await getTagArticles(tagInfo.id);
+    articles.value = data;
+  }
+});
 </script>

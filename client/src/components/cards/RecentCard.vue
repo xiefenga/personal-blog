@@ -10,9 +10,11 @@
           <img :src="item.cover" />
         </router-link>
         <div class="info">
-          <router-link class="title" :to="`/${item.title}`">{{
-            item.title
-          }}</router-link>
+          <router-link class="title" :to="`/${item.title}`">
+            {{
+              item.title
+            }}
+          </router-link>
           <div class="post-time">{{ toDate(item.createdAt) }}</div>
         </div>
       </div>
@@ -20,24 +22,19 @@
   </card-widget>
 </template>
 
-<script>
+<script setup>
 import { computed } from "vue";
+import { useStore } from "vuex";
 import CardWidget from "../CardWidget.vue";
-import { allArticles } from "@/store/article";
-export default {
-  components: {
-    CardWidget,
-  },
-  setup() {
-    const rencentPost = computed(() => allArticles.slice(0, 5));
-    const toDate = (time) =>
-      new Date(time).toLocaleDateString().replaceAll("/", "-");
-    return {
-      rencentPost,
-      toDate,
-    };
-  },
-};
+
+const store = useStore();
+
+const allArticles = computed(() => store.getters.allArticles);
+
+const rencentPost = computed(() => allArticles.value.slice(0, 5));
+
+const toDate = (time) => new Date(time).toLocaleDateString().replaceAll("/", "-");
+
 </script>
 
 <style lang="postcss" scoped>

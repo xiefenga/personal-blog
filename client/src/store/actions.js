@@ -1,0 +1,9 @@
+export const FETCH_TAGS = 'FETCH_TAGS';
+
+export const FETCH_ARTICLE = 'FETCH_ARTICLE';
+
+export const FETCH_SITE_INFO = 'FETCH_SITE_INFO';
+
+export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
+
+export const FETCH_ARTICLES_MAP = 'FETCH_ARTICLES_MAP';

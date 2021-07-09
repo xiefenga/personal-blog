@@ -13,29 +13,30 @@
   </card-widget>
 </template>
 
-<script >
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import TreeList from "../TreeList.vue";
 import CardWidget from "../CardWidget.vue";
-import { categories } from "@/store/categories";
-export default {
-  components: {
-    TreeList,
-    CardWidget,
-  },
-  data: () => ({
-    categories,
-  }),
-  methods: {
-    handleClick(category) {
-      if (category.parentId) {
-        const top = this.categories.find((t) => t.id === category.parentId);
-        this.$router.push(`/categories/${top.name}/${category.name}`);
-      } else {
-        this.$router.push(`/categories/${category.name}`);
-      }
-    },
-  },
-};
+import { FETCH_CATEGORIES } from "@/store/actions";
+
+const store = useStore();
+
+store.dispatch(FETCH_CATEGORIES);
+
+const categories = computed(() => store.state.categories);
+
+const router = useRouter();
+
+const handleClick = (category) => {
+  if (category.parentId) {
+    const top = categories.value.find((t) => t.id === category.parentId);
+    router.push(`/categories/${top.name}/${category.name}`);
+  } else {
+    router.push(`/categories/${category.name}`);
+  }
+}
 </script>
 
 <style lang="postcss" scoped>

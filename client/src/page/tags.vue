@@ -8,22 +8,15 @@
         :key="tag.id"
         :style="tag.style"
         :to="`/tags/${tag.name}`"
-      >
-        {{ tag.name }}
-      </router-link>
+      >{{ tag.name }}</router-link>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import { useTagCloud } from "@/compositions/useTagCloud";
-export default {
-  setup() {
-    return {
-      tags: useTagCloud(),
-    };
-  },
-};
+
+const tags = useTagCloud();
 </script>
 
 

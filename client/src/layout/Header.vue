@@ -1,8 +1,5 @@
 <template>
-  <header
-    :class="{ 'article-bg': isArticle }"
-    :style="{ 'background-image': `url(${bg}` }"
-  >
+  <header :class="{ 'article-bg': isArticle }" :style="{ backgroundImage: `url(${bg}` }">
     <nav-bar />
     <page-title />
     <scroll-down v-if="isHome" />
@@ -11,22 +8,29 @@
 
 <script setup>
 import { computed } from "vue";
+import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import NavBar from "@/components/NavBar.vue";
 import PageTitle from "@/components/PageTitle.vue";
 import ScrollDown from "@/components/ScrollDown.vue";
-import { article } from "@/store/article";
+
+const store = useStore();
+
 const route = useRoute();
+
 const isHome = computed(() => route.meta.home);
+
 const isArticle = computed(() => route.meta.article);
+
 const bg = computed(() => {
   if (isHome.value) {
     return "http://xiefeng.tech/custom_assets/img/index_top.jpg";
   } else if (isArticle.value) {
-    return article.cover.value;
+    return store.state.article.cover;
   }
   return "http://xiefeng.tech/custom_assets/img/index_top.jpg";
 });
+
 </script>
 
 <style lang="postcss" scoped>

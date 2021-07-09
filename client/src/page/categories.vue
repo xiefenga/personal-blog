@@ -4,14 +4,18 @@
     <div class="category-list-wrapper">
       <ul class="category-list">
         <li class="list-item" v-for="c1 in categories" :key="c1.id">
-          <router-link :to="`/categories/${c1.name}`">{{
-            c1.name
-          }}</router-link>
+          <router-link :to="`/categories/${c1.name}`">
+            {{
+              c1.name
+            }}
+          </router-link>
           <ul class="category-list" v-if="c1.children">
             <li class="list-item" v-for="c2 in c1.children" :key="c2.id">
-              <router-link :to="`/categories/${c1.name}/${c2.name}`">{{
-                c2.name
-              }}</router-link>
+              <router-link :to="`/categories/${c1.name}/${c2.name}`">
+                {{
+                  c2.name
+                }}
+              </router-link>
             </li>
           </ul>
         </li>
@@ -21,20 +25,17 @@
 </template>
 
 
-<script>
+<script setup>
 import { computed } from "vue";
-import { categories } from "@/store/categories";
-export default {
-  setup() {
-    const count = computed(() =>
-      categories.reduce((acc, cur) => acc + cur.children.length + 1, 0)
-    );
-    return {
-      count,
-      categories,
-    };
-  },
-};
+import { useStore } from "vuex";
+
+const store = useStore();
+
+const categories = computed(() => store.state.categories);
+
+const count = computed(() =>
+  categories.value.reduce((acc, cur) => acc + cur.children.length + 1, 0)
+);
 </script>
 
 <style lang="postcss" scoped>

@@ -3,11 +3,13 @@
 </template>
 
 <script>
+import store from "@/store";
+import { useStore } from "vuex";
 import { computed, watch } from "vue";
 import { mdParser } from "@/utils/helper";
+import { FETCH_ARTICLE } from "@/store/actions";
 import { useRoute, useRouter } from "vue-router";
 import { startLoading, doneLoading } from "@/utils/helper";
-import { fetchArticle, article, allArticles } from "@/store/article";
 
 export default {
   setup() {
@@ -15,48 +17,47 @@ export default {
 
     const router = useRouter();
 
-    if (!allArticles.length) {
-      watch(allArticles, async () => {
+    const store = useStore();
+
+    const map = store.state.articlesMap;
+
+    if (!map.length) {
+      watch(() => store.state.articlesMap, async () => {
         const title = route.params.article;
-        const article = allArticles.find((a) => a.title === title);
-        if (!article) {
+        const success = await store.dispatch(FETCH_ARTICLE, title);
+        if (!success) {
           router.replace("/404");
-        } else {
-          await fetchArticle(article.id);
         }
       });
     }
 
-    const { content } = article;
-
-    const html = computed(() => mdParser.render(content.value));
+    const html = computed(() => mdParser.render(store.state.article.content));
 
     return {
       html,
     };
   },
   async beforeRouteEnter(to) {
-    // 不是直接跳转
-    if (allArticles.length) {
+    const map = store.state.articlesMap;
+    // 不是直接进入该页面需要先加载
+    if (map.size) {
       const title = to.params.article;
-      const article = allArticles.find((a) => a.title === title);
-      if (!article) {
+      startLoading();
+      const success = await store.dispatch(FETCH_ARTICLE, title);
+      doneLoading();
+      if (!success) {
         return { path: "/404", replace: true };
       }
-      startLoading();
-      await fetchArticle(article.id);
-      doneLoading();
     }
   },
   async beforeRouteUpdate(to) {
     const title = to.params.article;
-    const article = allArticles.find((a) => a.title === title);
-    if (!article) {
+    startLoading();
+    const success = await store.dispatch(FETCH_ARTICLE, title);
+    doneLoading();
+    if (!success) {
       return { path: "/404", replace: true };
     }
-    startLoading();
-    await fetchArticle(article.id);
-    doneLoading();
   },
 };
 </script>

@@ -6,23 +6,14 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { onBeforeUnmount } from "vue";
+import { HEADER_HEIGHT } from "@/utils/constants";
 import { useScrollPageY } from "@/compositions/useScroll";
-import { HEADER_HEIGHT, SCROLL_PER_DIS } from "@/utils/constants";
 
-export default {
-  setup() {
-    const [scrollDown, cancelScroll] = useScrollPageY(HEADER_HEIGHT);
+const [scrollDown, cancelScroll] = useScrollPageY(HEADER_HEIGHT);
 
-    onBeforeUnmount(cancelScroll);
-
-    return {
-      scrollDown,
-      SCROLL_PER_DIS,
-    };
-  },
-};
+onBeforeUnmount(cancelScroll);
 </script>
 
 <style lang="postcss" scoped>
