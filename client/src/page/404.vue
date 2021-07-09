@@ -7,19 +7,14 @@
       <div class="error-info">
         <h1 class="error-title">404</h1>
         <div class="error-subtitle">页面没有找到</div>
-        <router-link class="btn" to="/"> 回到主页 </router-link>
+        <router-link class="btn" to="/">回到主页</router-link>
       </div>
     </div>
   </card-widget>
 </template>
 
-<script >
+<script setup>
 import CardWidget from "@/components/CardWidget.vue";
-export default {
-  components: {
-    CardWidget,
-  },
-};
 </script>
 
 <style lang="postcss" scoped>

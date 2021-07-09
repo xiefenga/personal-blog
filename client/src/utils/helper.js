@@ -1,7 +1,7 @@
 import NProgress from "nprogress";
 import MarkdownIt from "markdown-it";
 import highlightjs from 'highlight.js';
-import { MIN, HOUR, DAY, ONE_DAY_MS, ONE_HOUR_MS, ONE_MINUTE_MS, TIME_EN_ZH_TABLE, NUMBER_MONTH_ZH_TABLE, TAG_CLOUG_COLORS, TAG_CLOUG_FONT_SIZE } from './constants'
+import { MIN, HOUR, DAY, ONE_DAY_MS, ONE_HOUR_MS, ONE_MINUTE_MS, TIME_EN_ZH_TABLE, NUMBER_MONTH_ZH_TABLE, TAG_CLOUG_COLORS, TAG_CLOUG_FONT_SIZE } from "./constants";
 
 export const time2TimeStamp = t => new Date(t).getTime();
 
