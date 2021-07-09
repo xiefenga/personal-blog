@@ -2,6 +2,13 @@ import { OSSConfig, SiteConfig } from './configs'
 
 export interface IModel { }
 
+export interface IArticlePreview extends IModel {
+  title: string;
+  views: number;
+  words: number;
+  cover: string;
+}
+
 export interface IArticle extends IModel {
   title: string;
   content: string;
